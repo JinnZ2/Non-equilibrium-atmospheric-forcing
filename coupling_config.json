@@ -1,0 +1,25 @@
+{
+  "simulation_metadata": {
+    "project_name": "Non-Equilibrium Atmospheric Forcing",
+    "lead_analyst_persona": "Logistics-Integrated INTJ",
+    "model_type": "Complexity-Based Phase Transition",
+    "last_updated": "2025-12-16"
+  },
+  "atmospheric_parameters": {
+    "al2o3_residence_time_years": 30,
+    "critical_mass_threshold_mt": 1000.0,
+    "coupling_resonance_mhz": 100.0
+  },
+  "risk_thresholds": {
+    "nominal": { "chi_limit": 0.5, "economic_impact": "Baseline" },
+    "incipient": { "chi_limit": 1.5, "economic_impact": "Increased Insurance Premiums" },
+    "systemic_fragility": { "chi_limit": 3.0, "economic_impact": "JIT Logistics Stutter" },
+    "cascade_failure": { "chi_limit": 5.0, "economic_impact": "Grid/GPS Decoupling" }
+  },
+  "projected_time_series": [
+    { "year": 2025, "burden_mt": 150.2, "chi": 0.02, "regime": "Stable" },
+    { "year": 2030, "burden_mt": 480.5, "chi": 0.23, "regime": "Degraded" },
+    { "year": 2035, "burden_mt": 1250.8, "chi": 2.10, "regime": "Critical" },
+    { "year": 2040, "burden_mt": 3100.4, "chi": 4.85, "regime": "Cascade" }
+  ]
+}
