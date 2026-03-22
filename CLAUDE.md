@@ -6,7 +6,7 @@
 
 This repository models the atmospheric effects of aluminum oxide (Al2O3) nanoparticle accumulation from LEO satellite reentry, using complexity economics and electromagnetic coupling physics to predict cascade failures in critical infrastructure (GPS, power grids, electronics).
 
-**Core hypothesis:** Metallic nanoparticles from satellite disposal remain in the stratosphere for ~30 years, increase atmospheric conductivity, and during solar storms create electromagnetic field amplification (3-5x baseline). Economic damages follow power law scaling (Cost ~ Pollution^alpha, alpha ~ 1.5-2.5), with a critical cascade threshold projected for 2035-2038 at ~1,000 MT cumulative burden.
+**Core hypothesis:** Metallic nanoparticles from satellite disposal remain in the mesosphere/stratosphere for ~5 years (range 3-10; corrected from earlier 30-year estimate), increase atmospheric conductivity, and during solar storms may create electromagnetic field amplification (5-20% typical, up to 1.5-3x in extreme events). Economic damages may follow power law scaling (Cost ~ Pollution^alpha, alpha ~ 1.5-2.5), with potential threshold effects at ~1,000 MT cumulative burden (timeline pushed to ~2045-2055 with corrected residence time).
 
 ## Repository Structure
 
@@ -45,8 +45,8 @@ All files live at the root level — there are no subdirectories.
 ## Key Domain Concepts
 
 - **Chi (coupling coefficient):** Dimensionless measure of EM coupling strength. Risk regimes: Nominal (<0.5), Incipient (0.5-1.5), Systemic Fragility (1.5-3.0), Cascade Failure (>5.0)
-- **A_field:** EM field amplification factor. Cascade threshold at A_field > 3.0
-- **Power law scaling:** Economic damages scale nonlinearly — traditional linear models underestimate by 10-40x
+- **A_field:** EM field amplification factor. Significant effects above A_field > 1.5 (revised from 3.0; see corrected coupling efficiency)
+- **Power law scaling:** Economic damages scale nonlinearly — traditional linear models may underestimate by 2-10x (revised from 10-40x)
 - **LOGOS framework:** Multi-domain dependency mapping across atmospheric, economic, and logistics systems
 - **Regime transitions:** Stable -> Degraded -> Critical -> Cascade
 
@@ -54,9 +54,9 @@ All files live at the root level — there are no subdirectories.
 
 | Parameter | Value |
 |-----------|-------|
-| Al2O3 residence time | 30 years |
-| Critical mass threshold | 1,000 MT |
-| Coupling resonance | 100 MHz |
+| Al2O3 residence time | ~5 years (range 3-10; corrected from 30) |
+| Critical mass threshold | 1,000 MT (speculative) |
+| Coupling resonance | Removed (previous 100 MHz was incorrect by ~5 orders of magnitude) |
 | Satellite Al content | ~15% of mass |
 | Reentry rate baseline | ~730/year |
 

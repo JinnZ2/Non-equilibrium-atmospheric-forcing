@@ -2,7 +2,9 @@
 
 ## Overview
 
-This document provides the mathematical foundation for electromagnetic coupling between aluminum oxide nanoparticles and solar wind in Earth’s atmosphere. All equations use standard atmospheric physics - what’s novel is applying them to satellite-derived metallic pollution.
+This document provides the mathematical foundation for electromagnetic coupling between aluminum oxide nanoparticles and space weather effects in Earth’s atmosphere. All equations use standard atmospheric physics — what’s novel is applying them to satellite-derived metallic pollution and modeling cross-domain cascade effects.
+
+**Important caveats:** Many parameters carry large uncertainties (often order-of-magnitude). Where values are estimated rather than measured, this is noted. The model makes testable predictions that require observational validation. See Section 6 for uncertainty analysis.
 
 -----
 
@@ -62,23 +64,36 @@ Where:
 
 ### 2.1 Solar Wind Energy Flux
 
-Solar wind carries electromagnetic energy that couples to atmospheric particles:
+**Critical note:** The solar wind does not directly reach the mesosphere or stratosphere. It is deflected by Earth's magnetosphere. The energy coupling pathway is:
 
 ```
-Φ_sw = n_sw × v_sw × E_kinetic
+Solar wind → Magnetosphere → Ionosphere (>85 km) → Mesosphere (50-85 km)
+```
+
+Energy reaches the mesosphere primarily through:
+- Energetic particle precipitation (EPP) during geomagnetic storms
+- Joule heating of the thermosphere/ionosphere propagating downward
+- Gravity waves and planetary waves driven by auroral heating
+
+The solar wind kinetic energy flux at 1 AU:
+
+```
+Φ_sw = ½ × n_sw × m_p × v_sw³
 ```
 
 Where:
 
 - Φ_sw = Energy flux (W/m²)
-- n_sw = Solar wind particle density ≈ 7 × 10⁶ particles/m³
+- n_sw = Solar wind proton density ≈ 5-10 × 10⁶ particles/m³
+- m_p = Proton mass = 1.67 × 10⁻²⁷ kg
 - v_sw = Solar wind velocity ≈ 400-800 km/s
-- E_kinetic = Kinetic energy per particle ≈ 1.6 × 10⁻¹⁶ J
 
-**Typical values:**
+**Typical values (at magnetopause, before shielding):**
 
-- Quiet conditions: Φ_sw ≈ 0.002 W/m²
-- Solar storm: Φ_sw ≈ 0.02-0.1 W/m²
+- Quiet conditions: Φ_sw ≈ 0.3-1 mW/m²
+- Solar storm (CME): Φ_sw ≈ 10-100 mW/m²
+
+**Fraction reaching mesosphere:** Only ~0.1-1% of magnetopause energy flux penetrates to mesospheric altitudes during storm conditions, primarily via EPP (Randall et al., 2007).
 
 ### 2.2 Magnetic Field Shielding
 
@@ -119,22 +134,27 @@ Where:
 
 - R_resonance = Resonance factor (0 to 1)
 
-**Resonance occurs when:**
+**Resonance considerations:**
+
+The relevant gyrofrequencies in Earth's magnetic field (B ≈ 50 μT) are:
 
 ```
-f_solar ≈ f_aluminum ± Δf
+f_proton = qB/(2πm_p) ≈ 760 Hz
+f_electron = qB/(2πm_e) ≈ 1.4 MHz
 ```
 
-Where:
+**Note:** Previous versions of this document incorrectly stated gyrofrequencies of 50-150 MHz. Those values are off by ~5 orders of magnitude for protons and ~2 orders for electrons.
 
-- f_solar = Solar wind gyrofrequency = q×B/(2π×m) ≈ 50-150 MHz
-- f_aluminum = Particle resonance frequency ≈ 100-300 MHz
-- Δf = Bandwidth ≈ 20 MHz
+Resonance coupling between precipitating particles and the nanoparticle-modified medium is speculative and would require:
+- Nanoparticle charge oscillation frequencies matching EPP-driven wave modes
+- Sufficient particle density to create a collective electromagnetic response
+- This mechanism remains **unvalidated** and is an area for future research
 
-**When resonance conditions are met:**
+**Conservative estimate:**
 
-- R_resonance → 1
-- ε_coupling can exceed 0.5 (50% energy transfer)
+- R_resonance ≈ 0.01-0.1 (weak coupling, if any)
+- ε_coupling likely < 0.05 (5% energy transfer) under most conditions
+- Higher values possible only during extreme geomagnetic storms (Kp ≥ 8)
 
 -----
 
@@ -154,11 +174,13 @@ Where:
 - β = Amplification coefficient ≈ 10⁴ m³/J
 - n = Particle density (particles/m³)
 
-**Typical scenarios:**
+**Revised estimates (with corrected coupling efficiency):**
 
-- Quiet sun, low aluminum: A_field ≈ 1.1 (10% amplification)
-- Solar storm, high aluminum: A_field ≈ 3-5 (300-500% amplification)
-- Extreme event, weakened magnetosphere: A_field > 10 (>1000% amplification)
+- Quiet sun, low aluminum: A_field ≈ 1.001-1.01 (negligible amplification)
+- Solar storm, moderate aluminum: A_field ≈ 1.05-1.2 (5-20% amplification)
+- Extreme event (Carrington-class) + high aluminum + weakened magnetosphere: A_field ≈ 1.5-3 (speculative upper bound)
+
+**Note:** The previous estimate of A_field = 3-5 under "solar storm, high aluminum" conditions assumed coupling efficiencies ~10× higher than the corrected gyrofrequency analysis supports. The amplification factor is highly sensitive to ε_coupling, which remains the largest source of uncertainty.
 
 ### 3.2 Threshold for Cascade Effects
 
@@ -255,13 +277,13 @@ Where:
 - α = Pollution exponent ≈ 1.5-2.5
 - β = Amplification exponent ≈ 1.2-1.8
 
-**Example calculation (450 tons/year, A_field = 3):**
+**Example calculation (450 tons/year, A_field = 1.2):**
 
 ```
-Cost = 10⁹ × (450)^2.0 × (3)^1.5
-     ≈ 10⁹ × 202,500 × 5.2
-     ≈ $1 trillion/year
+Cost = C₀ × (450)^2.0 × (1.2)^1.5
 ```
+
+**Note:** The value of C₀ is unconstrained by observation and determines whether total costs are in the millions or billions. This formula structure (power-law damage with amplification) is consistent with complexity economics literature (Weitzman, 2009; Bak, 1996), but the specific coefficients require calibration against observed damages — which do not yet exist for this phenomenon. Previous versions used C₀ = $10⁹/ton which produced ~$1T/year estimates; this is almost certainly too high. The cost structure is presented to illustrate *scaling behavior*, not to provide point estimates.
 
 ### 5.2 Threshold Amplification
 
@@ -289,13 +311,16 @@ Where:
 
 ### 6.1 Parameter Uncertainties
 
-|Parameter                   |Best Estimate|Uncertainty Range  |Source                  |
-|----------------------------|-------------|-------------------|------------------------|
-|Particle density (n)        |10⁶ /m³      |10⁵ - 10⁷ /m³      |Satellite reentry models|
-|Conductivity enhancement (α)|10⁻⁶ m²      |10⁻⁷ - 10⁻⁵ m²     |Laboratory measurements |
-|Coupling efficiency (ε)     |0.1-0.5      |0.05-0.8           |Space physics literature|
-|Catalytic rate (k_cat)      |10⁻¹⁶ cm³/s  |10⁻¹⁷ - 10⁻¹⁵ cm³/s|Heterogeneous chemistry |
-|Power law exponent (α)      |2.0          |1.5-2.5            |Complexity economics    |
+|Parameter                   |Best Estimate|Uncertainty Range  |Source                  |Confidence|
+|----------------------------|-------------|-------------------|------------------------|----------|
+|Residence time              |~5 years     |3-10 years         |Meteor smoke particle analogy (Plane, 2012)|Medium|
+|Particle density (n)        |10⁵ /m³      |10⁴ - 10⁶ /m³      |Derived from injection rate + residence time|Low-Medium|
+|Conductivity enhancement (α)|10⁻⁶ m²      |10⁻⁷ - 10⁻⁵ m²     |No direct measurement   |Low       |
+|Coupling efficiency (ε)     |0.01-0.05    |0.001-0.1          |Estimated; no direct measurement|Very Low|
+|Catalytic rate (k_cat)      |10⁻¹⁶ cm³/s  |10⁻¹⁷ - 10⁻¹⁵ cm³/s|Heterogeneous chemistry literature|Medium|
+|Power law exponent (α)      |2.0          |1.5-2.5            |Complexity economics (Weitzman, 2009)|Medium|
+
+**Note on residence time:** The 30-year residence time used in earlier versions of the code was not supported by atmospheric transport literature. Meteor smoke particles (metallic oxide nanoparticles at similar altitudes) have modeled residence times of ~4-5 years from 80 km to ground (Plane, 2012; Megner et al., 2006). The mesospheric meridional circulation transports material to the stratosphere over ~2-4 years, with an additional ~1-2 years of stratospheric residence. This correction reduces the steady-state atmospheric burden by approximately 6×.
 
 ### 6.2 Model Validation Opportunities
 
@@ -332,11 +357,11 @@ Cost_nonlinear = k × (Pollution)^α × A_field^β
 ```
 
 **Divergence:**
-At 450 tons/year:
+At 450 tons/year (with corrected coupling parameters):
 
 - Linear model: $2-5B/year
-- Nonlinear model: $50-200B/year
-- **Underestimate factor: 10-40×**
+- Nonlinear model: $5-50B/year (range reflects large parameter uncertainty)
+- **Potential underestimate factor: 2-10×** (down from previous 10-40× estimate due to corrected coupling efficiency)
 
 ### 7.2 Threshold vs. Continuous Models
 
@@ -352,15 +377,16 @@ At 450 tons/year:
 
 ## 8. Key Citations
 
-[This section would contain actual citations to:]
-
-- Atmospheric conductivity measurements
-- Space weather physics papers
-- Heterogeneous catalysis literature
-- Complexity economics frameworks
-- Power law scaling in environmental systems
-- Electromagnetic coupling in ionosphere
-- Nanoparticle surface chemistry
+1. Murphy, D.M. et al. (2023). "Metals from spacecraft reentry in stratospheric aerosol particles." *PNAS*, 120(43). — First direct detection of satellite reentry metals in stratospheric aerosol.
+2. Plane, J.M.C. (2012). "Cosmic dust in the earth's atmosphere." *Chemical Society Reviews*, 41(19), 6507-6518. — Meteor smoke particle transport and residence times.
+3. Megner, L., Siskind, D.E., Rapp, M., & Gumbel, J. (2008). "Global and temporal distribution of meteoric smoke." *Journal of Geophysical Research*, 113(D3). — Mesospheric nanoparticle transport modeling.
+4. Randall, C.E. et al. (2007). "Energetic particle precipitation effects on the Southern Hemisphere stratosphere in 1992–2005." *Journal of Geophysical Research*, 112(D8). — EPP effects on middle atmosphere.
+5. Weitzman, M.L. (2009). "On modeling and interpreting the economics of catastrophic climate change." *Review of Economics and Statistics*, 91(1), 1-19. — Fat-tailed damage functions.
+6. Bak, P. (1996). *How Nature Works: The Science of Self-Organized Criticality.* Springer. — Power law scaling in complex systems.
+7. Rossi, M.J. (2003). "Heterogeneous reactions on salts." *Chemical Reviews*, 103(12), 4823-4882. — Catalytic reactions on metal oxide surfaces.
+8. Cziczo, D.J. et al. (2001). "Ablation, flux, and atmospheric implications of meteors." *Journal of Geophysical Research*, 106(D10). — Meteoric material in the stratosphere.
+9. Schulz, L. & Glassmeier, K.H. (2021). "On the anthropogenic and natural injection of matter into Earth's atmosphere." *Advances in Space Research*, 67(3). — Satellite reentry mass injection estimates.
+10. Ross, M. & Sheaffer, P. (2014). "Radiative forcing caused by rocket engine emissions." *Earth's Future*, 2(4). — Atmospheric effects of space launch/reentry.
 
 -----
 
@@ -418,15 +444,15 @@ All source files are at the repository root:
 
 -----
 
-**Document Version:** 1.0
-**Last Updated:** December 2024
-**Status:** Draft for peer review
+**Document Version:** 2.0
+**Last Updated:** March 2026
+**Status:** Draft for peer review — major corrections to gyrofrequency, residence time, and coupling efficiency
 
 -----
 
-**Summary:** The electromagnetic coupling between satellite-derived aluminum nanoparticles and solar wind follows established atmospheric physics. What’s novel is recognizing that:
+**Summary:** The electromagnetic coupling between satellite-derived aluminum nanoparticles and space weather effects uses established atmospheric physics, though several key parameters (coupling efficiency, resonance behavior) remain poorly constrained. What’s novel is the framework recognizing that:
 
-1. Coupling efficiency increases nonlinearly with particle density
-1. Threshold effects create regime changes
-1. Economic costs follow power law scaling
-1. Traditional linear models underestimate impacts by 10-40×
+1. Coupling efficiency may increase nonlinearly with particle density
+1. Threshold effects could create regime changes
+1. Economic costs likely follow power law scaling (exact exponents uncertain)
+1. Traditional linear models may underestimate impacts by 2-10× (revised from earlier 10-40× estimate after correcting gyrofrequency and coupling efficiency)

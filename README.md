@@ -2,11 +2,11 @@
 
 ## What This Is (In Plain English)
 
-**The Problem:** Companies are burning up thousands of satellites in our atmosphere to save money on disposal. This releases metallic nanoparticles that can interact with solar radiation and Earth’s magnetic field in ways that aren’t being measured or regulated.
+**The Problem:** Companies are burning up thousands of satellites in our atmosphere to save money on disposal. This releases metallic nanoparticles that can interact with solar radiation and Earth’s magnetic field in ways that aren’t being measured or regulated. Murphy et al. (2023, PNAS) confirmed satellite-derived metals in stratospheric aerosol for the first time.
 
-**Why It Matters:** These particles don’t just “go away” - they accumulate in the stratosphere and can amplify electromagnetic disturbances from space weather. This could disrupt GPS, damage electronics, and affect the ozone layer. The costs aren’t linear - they follow power law scaling, meaning small increases in pollution can trigger disproportionately large economic damages.
+**Why It Matters:** These particles accumulate in the mesosphere/stratosphere with a residence time of ~5 years (range 3-10 years, based on meteor smoke particle analogy). They may amplify electromagnetic disturbances from space weather and catalyze ozone destruction. If costs follow power law scaling — as complexity economics predicts for coupled systems — small increases in pollution could trigger disproportionately large economic damages. The magnitude of these effects remains uncertain and requires observational validation.
 
-**What We’re Doing:** Building models that show how these atmospheric modifications create cascade effects across multiple systems - from satellites to power grids to biological systems. Traditional environmental models treat these as separate issues. We show how they’re connected.
+**What We’re Doing:** Building models that explore how atmospheric modifications could create cascade effects across multiple systems — from satellites to power grids to biological systems. Traditional environmental models treat these as separate issues. We model how they may be connected, while acknowledging large parameter uncertainties.
 
 -----
 
@@ -25,12 +25,12 @@ Traditional cost-benefit analysis: “Atmospheric disposal = $0, Controlled disp
 
 **Reality with coupling effects:**
 
-- Economic damages follow power law scaling: Cost = k × (pollution)^α where α ≈ 1.5-2.5
-- Electromagnetic amplification during solar storms: 3-5× baseline effects
+- Economic damages may follow power law scaling: Cost = k × (pollution)^α where α ≈ 1.5-2.5
+- Electromagnetic amplification during solar storms: 1.05-1.2× baseline (up to 1.5-3× in extreme events, speculative)
 - Critical threshold effects at: ~60% magnetic field strength, ~220 Dobson Units ozone
-- Annual economic impact: $50-200B when coupling effects are included
+- Annual economic impact: $5-50B when coupling effects are included (range reflects large uncertainty in coupling efficiency)
 
-**Bottom Line:** What looks like “free” disposal is actually catastrophically expensive when you account for system-wide effects.
+**Bottom Line:** What looks like “free” disposal may be significantly more expensive than assumed when system-wide coupling effects are accounted for.
 
 -----
 
@@ -56,7 +56,7 @@ Aluminum Oxide Nanoparticles (450 tons/year)
 └─────────────────┴──────────────────┴─────────────────┘
          ↓
 Economic Costs (Power Law Scaling)
-NOT $0 — Actually $50-200B/year
+NOT $0 — Potentially $5-50B/year
 ```
 
 -----
@@ -65,7 +65,7 @@ NOT $0 — Actually $50-200B/year
 
 ### 1. **Your GPS Might Stop Working**
 
-Aluminum particles increase atmospheric conductivity. During solar storms, this can amplify electromagnetic interference by 3-5×, causing:
+Aluminum particles may increase atmospheric conductivity. During solar storms, this could amplify electromagnetic interference by 5-20% (with speculative upper bounds of 1.5-3× during extreme events), potentially causing:
 
 - GPS timing errors (critical for aviation, finance, telecom)
 - Satellite communication dropouts
@@ -96,15 +96,15 @@ Aluminum particles act as catalysts for ozone destruction:
 - Electromagnetic enhancement of existing ozone loss mechanisms
 - Once below critical thresholds (~220 DU), damage accelerates rapidly
 
-### 5. **It’s Permanent**
+### 5. **It’s Long-Lasting**
 
-Unlike most pollution, these nanoparticles:
+These nanoparticles have long atmospheric lifetimes:
 
-- Don’t settle out (too small)
-- Don’t rain out (above weather systems)
-- Don’t decompose (chemically stable)
-- Accumulate continuously
-- Have no natural removal process
+- Settle extremely slowly due to small size (~5 year residence time in mesosphere/stratosphere)
+- Reside above weather systems initially, but are transported downward by meridional circulation
+- Are chemically stable (Al2O3 does not decompose)
+- Accumulate faster than they settle at projected injection rates
+- No *fast* natural removal process exists (eventual settling takes years)
 
 -----
 
@@ -151,7 +151,7 @@ Unlike most pollution, these nanoparticles:
 |--------------------------|--------------------|-------------------------------------------|
 |Linear (Industry)         |$0                  |Atmospheric disposal is “free”             |
 |Linear (Environmental)    |$2-5B               |Direct ozone/health costs                  |
-|**Power Law (This Study)**|**$50-200B**        |**Includes coupling, cascades, thresholds**|
+|**Power Law (This Study)**|**$5-50B**          |**Includes coupling, cascades, thresholds (large uncertainty)**|
 
 -----
 
@@ -275,7 +275,7 @@ We thank the atmospheric science community, space weather researchers, and compl
 
 -----
 
-**TL;DR:** Burning satellites in the atmosphere isn’t free - it creates electromagnetic coupling effects that could cost hundreds of billions annually. We need to measure these effects and regulate accordingly before crossing critical thresholds.
+**TL;DR:** Burning satellites in the atmosphere isn’t free — it creates electromagnetic coupling effects that could cost billions to tens of billions annually. We need to measure these effects and regulate accordingly before crossing critical thresholds.
  
  
  Project "LEO-Atmospheric Coupling"

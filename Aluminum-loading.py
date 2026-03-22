@@ -9,7 +9,11 @@ def simulate_aluminum_accumulation(years_to_run=20, launch_growth_rate=0.15):
     # Constants based on 2024/25 research
     KG_PER_METRIC_TON = 1000
     AL_PER_SATELLITE = 30  # kg of Al2O3 nanoparticles per 250kg satellite
-    RESIDENCE_TIME = 30    # years particles stay in the stratosphere/mesosphere
+    # Residence time corrected from 30 to 5 years based on meteor smoke
+    # particle transport literature (Plane 2012, Megner et al. 2008).
+    # Mesospheric meridional circulation: ~2-4yr to stratosphere + ~1-2yr
+    # stratospheric residence. Range: 3-10 years.
+    RESIDENCE_TIME = 5     # years particles stay in the mesosphere/stratosphere
     
     # Starting conditions (2024 baseline)
     current_annual_satellites_reentering = 730 # Estimated annual burn-rate

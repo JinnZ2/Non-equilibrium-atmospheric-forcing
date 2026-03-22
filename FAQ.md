@@ -40,15 +40,15 @@ We welcome peer review and have structured the work to be falsifiable and testab
 
 ### Q: How certain are you about the cost estimates?
 
-**A:** The $50-200B/year range reflects:
+**A:** The $5-50B/year range (revised from an earlier $50-200B estimate) reflects:
 
-- **High confidence:** Aluminum is accumulating (observable)
-- **High confidence:** It increases conductivity (laboratory verified)
-- **Medium confidence:** Coupling amplification factors (based on space physics)
-- **Medium confidence:** Economic power law exponents (based on complexity theory)
-- **Lower confidence:** Exact threshold locations and cascade probabilities
+- **High confidence:** Aluminum is accumulating (Murphy et al. 2023, PNAS confirmed satellite metals in stratospheric aerosol)
+- **Medium confidence:** It increases conductivity (plausible from materials science, but not yet measured in situ)
+- **Low confidence:** Coupling amplification factors (gyrofrequency analysis was corrected; efficiency is likely much lower than originally estimated)
+- **Medium confidence:** Economic power law exponents (consistent with complexity theory, but coefficients are uncalibrated)
+- **Low confidence:** Exact threshold locations and cascade probabilities
 
-The uncertainty is large, but even the conservative end ($50B/year) is 10× higher than linear models predict.
+The uncertainty is very large. The revised lower bound ($5B/year) is ~2× higher than linear models predict, while the upper bound ($50B/year) assumes coupling effects that remain unvalidated.
 
 -----
 
@@ -128,7 +128,7 @@ Both need rigorous complexity analysis.
 **A:** We can work on multiple problems simultaneously. Aluminum accumulation is:
 
 - Rapidly accelerating (mega-constellations scaling up)
-- Irreversible (no natural removal)
+- Long-lasting (~5 year residence time; no fast removal)
 - Crossing into nonlinear regime (approaching thresholds)
 - Completely unmonitored (regulatory blind spot)
 
@@ -216,7 +216,7 @@ LOGOS doesn’t add complexity - it reveals complexity that was always there but
 - Ozone layer degradation
 - Potential cascade failures
 
-The costs follow power law scaling, meaning they accelerate rapidly as pollution accumulates. Linear models underestimate this by 10-40×.
+If costs follow power law scaling, they accelerate as pollution accumulates. Linear models may underestimate this by 2-10× (revised from earlier 10-40× estimate after correcting coupling parameters).
 
 -----
 

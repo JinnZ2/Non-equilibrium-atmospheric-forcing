@@ -6,9 +6,11 @@ def calculate_coupling_coefficient(burden_mt, solar_activity_index=1.0):
     burden_mt: Total metric tons of Al2O3 in the stratosphere.
     solar_activity_index: 1.0 (baseline) to 5.0 (Extreme solar max).
     """
-    # Threshold: Research suggests ~1,000 metric tons starts changing 
-    # the conductivity of the mesosphere significantly.
-    critical_threshold = 1000 
+    # Threshold: Estimated mass at which conductivity changes become significant.
+    # Note: This value is speculative; no observational constraint exists yet.
+    # With corrected ~5yr residence time, reaching this takes longer than
+    # previously projected with 30yr residence time.
+    critical_threshold = 1000
     
     # Nonlinear scaling: Risk increases quadratically once threshold is crossed
     if burden_mt < critical_threshold:
@@ -24,7 +26,10 @@ def calculate_coupling_coefficient(burden_mt, solar_activity_index=1.0):
 # Integration into your simulation
 years_to_run = 20
 burden = 0
-active_particles = np.zeros(30)
+# Residence time: ~5 years based on meteor smoke particle transport literature
+# (Plane, 2012; Megner et al., 2008). Previous value of 30 was unsupported.
+RESIDENCE_TIME = 5
+active_particles = np.zeros(RESIDENCE_TIME)
 
 print(f"{'Year':<6} | {'Al Burden (MT)':<15} | {'Coupling Coeff (χ)':<20} | {'Risk Level'}")
 print("-" * 60)

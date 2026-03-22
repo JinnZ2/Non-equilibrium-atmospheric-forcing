@@ -3,12 +3,16 @@
     "project_name": "Non-Equilibrium Atmospheric Forcing",
     "lead_analyst_persona": "Logistics-Integrated INTJ",
     "model_type": "Complexity-Based Phase Transition",
-    "last_updated": "2025-12-16"
+    "last_updated": "2026-03-22",
+    "version": "2.0 — corrected residence time, gyrofrequency, coupling efficiency"
   },
   "atmospheric_parameters": {
-    "al2o3_residence_time_years": 30,
+    "al2o3_residence_time_years": 5,
+    "al2o3_residence_time_range": "3-10 years (Plane 2012, Megner et al. 2008)",
+    "al2o3_residence_time_note": "Corrected from 30yr; based on meteor smoke particle transport",
     "critical_mass_threshold_mt": 1000.0,
-    "coupling_resonance_mhz": 100.0
+    "critical_mass_threshold_note": "Speculative — no observational constraint",
+    "coupling_resonance_note": "Removed. Proton gyrofrequency ~760 Hz, electron ~1.4 MHz; previous 100 MHz value was incorrect by ~5 orders of magnitude"
   },
   "risk_thresholds": {
     "nominal": { "chi_limit": 0.5, "economic_impact": "Baseline" },
@@ -16,10 +20,12 @@
     "systemic_fragility": { "chi_limit": 3.0, "economic_impact": "JIT Logistics Stutter" },
     "cascade_failure": { "chi_limit": 5.0, "economic_impact": "Grid/GPS Decoupling" }
   },
+  "projected_time_series_note": "Revised with 5yr residence time (burden ~6x lower than 30yr model)",
   "projected_time_series": [
-    { "year": 2025, "burden_mt": 150.2, "chi": 0.02, "regime": "Stable" },
-    { "year": 2030, "burden_mt": 480.5, "chi": 0.23, "regime": "Degraded" },
-    { "year": 2035, "burden_mt": 1250.8, "chi": 2.10, "regime": "Critical" },
-    { "year": 2040, "burden_mt": 3100.4, "chi": 4.85, "regime": "Cascade" }
+    { "year": 2025, "burden_mt": 25, "chi": 0.001, "regime": "Stable" },
+    { "year": 2030, "burden_mt": 80, "chi": 0.008, "regime": "Stable" },
+    { "year": 2035, "burden_mt": 210, "chi": 0.05, "regime": "Stable-Degraded" },
+    { "year": 2040, "burden_mt": 520, "chi": 0.33, "regime": "Degraded" },
+    { "year": 2045, "burden_mt": 1100, "chi": 1.5, "regime": "Incipient (if growth continues)" }
   ]
 }
