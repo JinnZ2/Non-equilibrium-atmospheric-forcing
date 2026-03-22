@@ -15,6 +15,9 @@ All files live at the root level — there are no subdirectories.
 ```
 ├── Accumulation-with-coupling.py   # EM coupling coefficient calculator (Chi), 20-year forecast
 ├── Aluminum-loading.py             # Al2O3 accumulation simulator (injection rates, atmospheric burden)
+├── Chemical-interactions.py        # Heterogeneous chemistry: Al2O3 catalysis, SAI synergy, EPP-NOx
+├── Geomagnetic-dynamics.py         # Magnetic field evolution, SAA growth, geomagnetic jerks, EPP coupling
+├── Orbital-coupling.py             # Cometary dust, close passes, solar cycle, heliospheric geometry
 ├── Atmospheric-coupling.js         # Agent-based interactive visualization of coupling effects
 ├── Atmospheric-economics.js        # Economic impact simulation (ozone, agriculture, health, climate)
 ├── Satellite-pollution-model.js    # Satellite reentry pollution model with economic cost calculations
@@ -33,7 +36,7 @@ All files live at the root level — there are no subdirectories.
 
 ### Python (simulations)
 - **NumPy** — numerical computation
-- Files: `Accumulation-with-coupling.py`, `Aluminum-loading.py`
+- Files: `Accumulation-with-coupling.py`, `Aluminum-loading.py`, `Chemical-interactions.py`, `Geomagnetic-dynamics.py`, `Orbital-coupling.py`
 
 ### JavaScript / React (interactive visualizations)
 - **React** (`useState`, `useEffect`, `useRef`)

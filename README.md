@@ -227,6 +227,9 @@ All files live at the repository root:
 
 - `Accumulation-with-coupling.py` - EM coupling coefficient (Chi) calculator
 - `Aluminum-loading.py` - Al2O3 accumulation simulator
+- `Chemical-interactions.py` - Heterogeneous chemistry: Al2O3 catalysis, SAI synergy, EPP-NOx-O3
+- `Geomagnetic-dynamics.py` - Magnetic field evolution, South Atlantic Anomaly, geomagnetic jerks
+- `Orbital-coupling.py` - Cometary dust, close gravitational passes, solar cycle geometry
 - `Atmospheric-coupling.js` - Agent-based coupling visualization
 - `Atmospheric-economics.js` - Economic impact simulation
 - `Satellite-pollution-model.js` - Satellite reentry pollution model

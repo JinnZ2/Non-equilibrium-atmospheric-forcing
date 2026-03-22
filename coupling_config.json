@@ -4,7 +4,7 @@
     "lead_analyst_persona": "Logistics-Integrated INTJ",
     "model_type": "Complexity-Based Phase Transition",
     "last_updated": "2026-03-22",
-    "version": "2.0 — corrected residence time, gyrofrequency, coupling efficiency"
+    "version": "2.1 — added chemical, geomagnetic, and orbital coupling domains"
   },
   "atmospheric_parameters": {
     "al2o3_residence_time_years": 5,
@@ -27,5 +27,29 @@
     { "year": 2035, "burden_mt": 210, "chi": 0.05, "regime": "Stable-Degraded" },
     { "year": 2040, "burden_mt": 520, "chi": 0.33, "regime": "Degraded" },
     { "year": 2045, "burden_mt": 1100, "chi": 1.5, "regime": "Incipient (if growth continues)" }
-  ]
+  ],
+  "chemical_parameters": {
+    "gamma_o3_on_al2o3": 1e-5,
+    "gamma_o3_range": "1e-6 to 1e-4 (Rossi 2003)",
+    "so2_enhancement_factor": 2.5,
+    "so2_enhancement_note": "Multiplicative increase in gamma when SO2 is adsorbed on Al2O3 surfaces",
+    "confidence": "MEDIUM for catalysis rates, LOW for SAI synergy magnitude"
+  },
+  "geomagnetic_parameters": {
+    "dipole_decay_rate_per_century": -0.05,
+    "dipole_decay_note": "~5%/century, accelerating (Finlay et al. IGRF-13)",
+    "saa_min_field_fraction": 0.55,
+    "saa_growth_rate_per_decade": 0.07,
+    "shielding_exponent": 1.7,
+    "confidence": "HIGH for field evolution, LOW for EPP-particle coupling"
+  },
+  "orbital_parameters": {
+    "annual_meteoric_input_tons": 19710,
+    "natural_al2o3_fraction": 0.02,
+    "natural_al2o3_tons_per_year": 394,
+    "solar_cycle_length_years": 11,
+    "solar_cycle_25_max_year": 2025,
+    "note": "Natural meteoric Al2O3 (~400 t/yr) >> current satellite Al2O3 (~22 t/yr) but chemically distinct",
+    "confidence": "HIGH for meteoric input, LOW for close-pass scenarios"
+  }
 }

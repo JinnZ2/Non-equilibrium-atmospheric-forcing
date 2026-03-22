@@ -375,7 +375,63 @@ At 450 tons/year (with corrected coupling parameters):
 
 -----
 
-## 8. Key Citations
+## 8. Extended Coupling Domains (v2.1)
+
+The following three domains extend the original EM coupling model to include chemical, geomagnetic, and orbital interactions. Each has its own simulation file with full implementation details.
+
+### 8.1 Upper Atmosphere Heterogeneous Chemistry
+
+**File:** `Chemical-interactions.py`
+
+Al2O3 nanoparticles provide surfaces for heterogeneous catalytic reactions. The key chemistry:
+
+**O3 destruction on Al2O3 surfaces:**
+```
+Loss_rate = (1/4) × γ × v_thermal × S_area × [O3]
+```
+
+Where γ (uptake coefficient) ≈ 10⁻⁵ for O3 on Al2O3 (Rossi, 2003). This is standard heterogeneous chemistry — the same formalism used for PSC-mediated ozone loss.
+
+**SAI synergy:** If stratospheric aerosol injection (SO2) is deployed alongside growing satellite reentry, SO2 adsorbs on Al2O3 surfaces creating sulfate sites with enhanced O3 reactivity (enhancement factor ~2.5×). This is the most policy-relevant coupling — two separate proposals could interact destructively.
+
+**EPP → NOx → O3 loss chain:** Energetic particle precipitation produces NOx in the mesosphere (Jackman et al., 2005), which descends into the stratosphere and catalytically destroys O3. Al2O3 particles may modify this pathway by altering mesospheric ion chemistry. **Confidence: HIGH** for EPP-NOx-O3 chain (well-observed after solar proton events); **LOW** for Al2O3 modification of the chain.
+
+### 8.2 Geomagnetic Field Dynamics
+
+**File:** `Geomagnetic-dynamics.py`
+
+Earth's magnetic field is weakening, reducing its shielding of the atmosphere:
+
+**Dipole moment evolution:**
+```
+M(t) = M_2020 × (1 + a₁t + a₂t²)
+```
+Where a₁ ≈ -0.05/century (current rate), a₂ ≈ -0.01/century² (acceleration). The dipole moment has declined ~9% since 1840 (Finlay et al., IGRF-13).
+
+**South Atlantic Anomaly (SAA):** A region of anomalously weak field (currently ~55% of expected dipole value) that is expanding at ~7%/decade in area. Within the SAA, radiation belt particles precipitate more easily, creating a geographic hotspot for EPP-atmosphere interaction.
+
+**Geomagnetic jerks:** Sudden changes in the secular variation rate, occurring every ~5-15 years (Mandea et al., 2010). These create transient windows where field evolution is unpredictable and local shielding may degrade rapidly.
+
+**Coupling to particle layer:** As the field weakens → EPP rates increase → more ionization in the mesosphere → enhanced interaction with Al2O3 layer → modified atmospheric conductivity. The EPP enhancement factor scales as (B_ref/B_current)^1.7. **Confidence: MEDIUM-HIGH** for the field evolution, **LOW** for the particle layer coupling.
+
+### 8.3 Orbital Interactions
+
+**File:** `Orbital-coupling.py`
+
+Three classes of orbital interaction affect the atmospheric environment:
+
+**Cometary dust and meteor showers:** Natural meteoric input is ~20,000 tons/year (Plane, 2012), of which ~400 tons is natural Al2O3. This dwarfs current satellite Al2O3 (~22 tons/year in 2025), BUT:
+- Satellite Al2O3 is pure alumina (higher catalytic activity than mixed silicate)
+- Satellite injection is growing at ~15%/year
+- Major meteor showers (Perseids, Geminids) create transient 3-4× spikes in dust input
+
+**Close gravitational passes:** A comet passing between Earth and Moon would have negligible gravitational effect (a 10 km comet at lunar distance produces ~10⁻¹¹× the Moon's tidal force). However, Earth passing through a cometary dust tail could transiently multiply the meteoric dust input by 10-1000× depending on distance and comet activity. **Confidence: LOW** for frequency (such close passes are rare), **MEDIUM** for dust deposition physics (well-understood).
+
+**Solar cycle and heliospheric geometry:** The ~11-year solar cycle modulates EPP, CME frequency, and galactic cosmic ray flux. Solar maximum creates vulnerability windows where enhanced space weather coincides with the growing Al2O3 burden. This is the most reliable forcing on the system. **Confidence: HIGH.**
+
+-----
+
+## 9. Key Citations
 
 1. Murphy, D.M. et al. (2023). "Metals from spacecraft reentry in stratospheric aerosol particles." *PNAS*, 120(43). — First direct detection of satellite reentry metals in stratospheric aerosol.
 2. Plane, J.M.C. (2012). "Cosmic dust in the earth's atmosphere." *Chemical Society Reviews*, 41(19), 6507-6518. — Meteor smoke particle transport and residence times.
@@ -387,6 +443,14 @@ At 450 tons/year (with corrected coupling parameters):
 8. Cziczo, D.J. et al. (2001). "Ablation, flux, and atmospheric implications of meteors." *Journal of Geophysical Research*, 106(D10). — Meteoric material in the stratosphere.
 9. Schulz, L. & Glassmeier, K.H. (2021). "On the anthropogenic and natural injection of matter into Earth's atmosphere." *Advances in Space Research*, 67(3). — Satellite reentry mass injection estimates.
 10. Ross, M. & Sheaffer, P. (2014). "Radiative forcing caused by rocket engine emissions." *Earth's Future*, 2(4). — Atmospheric effects of space launch/reentry.
+11. Finlay, C.C. et al. (2010). "International Geomagnetic Reference Field: the eleventh generation." *Geophysical Journal International*, 183(3). — IGRF magnetic field model.
+12. Pavón-Carrasco, F.J. & De Santis, A. (2016). "The South Atlantic Anomaly: The Key for a Possible Geomagnetic Reversal." *Frontiers in Earth Science*, 4. — SAA evolution and field reversal.
+13. Mandea, M. et al. (2010). "Geomagnetic Jerks: Rapid Core Field Variations and Core Dynamics." *Space Science Reviews*, 155, 147-175.
+14. Jackman, C.H. et al. (2005). "Neutral atmospheric influences of the solar proton events in October–November 2003." *Journal of Geophysical Research*, 110(D9). — EPP-NOx-O3 chain.
+15. Solomon, S. (1999). "Stratospheric ozone depletion: A review of concepts and history." *Reviews of Geophysics*, 37(3). — Heterogeneous chemistry context.
+16. Ceplecha, Z. et al. (1998). "Meteor Phenomena and Bodies." *Space Science Reviews*, 84, 327-471. — Meteoric input rates.
+17. Usoskin, I.G. (2017). "A history of solar activity over millennia." *Living Reviews in Solar Physics*, 14(1). — Solar cycle and cosmic ray modulation.
+18. Heirtzler, J.R. (2002). "The future of the South Atlantic Anomaly and implications for radiation damage in space." *Journal of Atmospheric and Solar-Terrestrial Physics*, 64(16). — SAA growth projections.
 
 -----
 
@@ -394,13 +458,19 @@ At 450 tons/year (with corrected coupling parameters):
 
 All source files are at the repository root:
 
+**Python simulations:**
+- `Accumulation-with-coupling.py` - Coupling coefficient (Chi) calculator, 20-year forecast
+- `Aluminum-loading.py` - Al2O3 accumulation simulator
+- `Chemical-interactions.py` - Heterogeneous chemistry: Al2O3 catalysis, SAI synergy, EPP-NOx
+- `Geomagnetic-dynamics.py` - Magnetic field evolution, SAA, geomagnetic jerks, EPP coupling
+- `Orbital-coupling.py` - Cometary dust, close passes, solar cycle, heliospheric geometry
+
+**JavaScript/React visualizations:**
 - `Atmospheric-coupling.js` - Advanced agent-based coupling visualization with resonance
 - `Satellite-pollution-model.js` - Satellite reentry pollution and economic cost model
 - `Atmospheric-economics.js` - Economic impact simulation with optical coupling
 - `Silica-sim.js` - Aluminum vs. silica material comparison
 - `integrated-atmospheric-system.jsx` - Multi-domain system with EM harvesting
-- `Accumulation-with-coupling.py` - Coupling coefficient (Chi) calculator, 20-year forecast
-- `Aluminum-loading.py` - Al2O3 accumulation simulator
 
 -----
 
@@ -444,9 +514,9 @@ All source files are at the repository root:
 
 -----
 
-**Document Version:** 2.0
+**Document Version:** 2.1
 **Last Updated:** March 2026
-**Status:** Draft for peer review — major corrections to gyrofrequency, residence time, and coupling efficiency
+**Status:** Draft for peer review — v2.0 corrected gyrofrequency/residence time/coupling; v2.1 added chemical, geomagnetic, and orbital coupling domains
 
 -----
 
