@@ -85,58 +85,58 @@ const IntegratedAtmosphericSystem = () => {
   // Calculate EM energy available for harvesting
   const calculateEMEnergy = (emFields, harvestingNodes) => {
     let totalHarvested = 0;
-    
-    harvestingNodes.forEach(node => {
+    const updatedNodes = harvestingNodes.map(node => {
       let localEnergy = 0;
       emFields.forEach(field => {
         const dx = field.x - node.x;
         const dy = field.y - node.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        
         if (dist < node.radius) {
           localEnergy += field.strength * (1 - dist / node.radius);
         }
       });
-      
-      node.energy = localEnergy;
-      node.active = localEnergy > 0.5;
       totalHarvested += localEnergy * 0.3; // 30% harvesting efficiency
+      return { ...node, energy: localEnergy, active: localEnergy > 0.5 };
     });
-    
-    return totalHarvested;
+    return { totalHarvested, updatedNodes };
   };
 
   // Precision targeting for cloud formation
   const applyPrecisionTargeting = (silica, water, targetZones, precision) => {
-    targetZones.forEach(zone => {
+    const targetedIndices = new Set();
+    const updatedZones = targetZones.map(zone => {
       let particlesInZone = 0;
       let waterInZone = 0;
-      
+
       // Check silica particles in zone
-      silica.forEach(s => {
+      silica.forEach((s, i) => {
         const dx = s.x - zone.x;
         const dy = s.y - zone.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        
         if (dist < zone.radius && Math.random() < precision) {
-          s.targeted = true;
+          targetedIndices.add(i);
           particlesInZone++;
         }
       });
-      
+
       // Check water vapor in zone
       water.forEach(w => {
         const dx = w.x - zone.x;
         const dy = w.y - zone.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        
         if (dist < zone.radius && w.phase === 'vapor') {
           waterInZone++;
         }
       });
-      
-      zone.active = particlesInZone > 3 && waterInZone > 5;
+
+      return { ...zone, active: particlesInZone > 3 && waterInZone > 5 };
     });
+
+    const updatedSilica = silica.map((s, i) =>
+      targetedIndices.has(i) ? { ...s, targeted: true } : s
+    );
+
+    return { updatedSilica, updatedZones };
   };
 
   // Cloud formation through precision nucleation
@@ -239,16 +239,15 @@ const IntegratedAtmosphericSystem = () => {
           newY = Math.max(200, Math.min(360, newY));
           
           // Randomly start settling
-          if (!s.settling && Math.random() < 0.008) {
-            s.settling = true;
-          }
-          
+          const newSettling = s.settling || Math.random() < 0.008;
+
           return {
             ...s,
             x: newX,
             y: newY,
             vx: newVx * 0.96,
-            vy: newVy * 0.96
+            vy: newVy * 0.96,
+            settling: newSettling
           };
         });
 
@@ -293,46 +292,52 @@ const IntegratedAtmosphericSystem = () => {
           let newY = w.y + newVy;
           
           // Phase changes in target zones
-          if (w.phase === 'vapor') {
+          let newPhase = w.phase;
+          let newSize = w.size;
+          let newTemp = w.temperature;
+
+          if (newPhase === 'vapor') {
             prev.targetZones.forEach(zone => {
               if (zone.active) {
                 const dx = zone.x - w.x;
                 const dy = zone.y - w.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-                
                 if (dist < zone.radius && Math.random() < 0.02) {
-                  w.phase = 'droplet';
-                  w.size *= 2;
+                  newPhase = 'droplet';
+                  newSize = w.size * 2;
                 }
               }
             });
           }
-          
+
           // Droplets fall
-          if (w.phase === 'droplet') {
+          if (newPhase === 'droplet') {
             newVy += 0.15;
           }
-          
+
           if (newX < 0 || newX > 800) newVx *= -0.7;
           if (newY < 200) newVy *= -0.6;
           if (newY > 360) {
             // Evaporation at ground
-            w.phase = 'vapor';
-            w.size = 1.5 + Math.random();
-            w.temperature = 15 + Math.random() * 5;
+            newPhase = 'vapor';
+            newSize = 1.5 + Math.random();
+            newTemp = 15 + Math.random() * 5;
             newY = 350;
             newVy = -Math.abs(newVy) * 0.5;
           }
-          
+
           newX = Math.max(0, Math.min(800, newX));
           newY = Math.max(200, Math.min(360, newY));
-          
+
           return {
             ...w,
             x: newX,
             y: newY,
             vx: newVx * 0.97,
-            vy: newVy * 0.97
+            vy: newVy * 0.97,
+            phase: newPhase,
+            size: newSize,
+            temperature: newTemp
           };
         });
 
@@ -350,10 +355,10 @@ const IntegratedAtmosphericSystem = () => {
         }
 
         // Apply precision targeting
-        applyPrecisionTargeting(updatedSilica, updatedWater, prev.targetZones, systemState.precision);
+        const { updatedSilica: targetedSilica, updatedZones } = applyPrecisionTargeting(updatedSilica, updatedWater, prev.targetZones, systemState.precision);
 
         // Form clouds
-        const newClouds = formClouds(updatedSilica, updatedWater, prev.targetZones);
+        const newClouds = formClouds(targetedSilica, updatedWater, updatedZones);
         const updatedClouds = [...prev.clouds, ...newClouds]
           .filter(c => c.lifetime > 0)
           .map(c => ({
@@ -365,17 +370,18 @@ const IntegratedAtmosphericSystem = () => {
           }));
 
         return {
-          silica: updatedSilica.slice(-60),
+          silica: targetedSilica.slice(-60),
           waterVapor: updatedWater.slice(-70),
           emFields: updatedEMFields,
           harvestingNodes: prev.harvestingNodes,
-          targetZones: prev.targetZones,
+          targetZones: updatedZones,
           clouds: updatedClouds
         };
       });
 
       // Calculate system metrics
-      const energyHarvested = calculateEMEnergy(particles.emFields, particles.harvestingNodes);
+      const { totalHarvested: energyHarvested, updatedNodes } = calculateEMEnergy(particles.emFields, particles.harvestingNodes);
+      setParticles(prev => ({ ...prev, harvestingNodes: updatedNodes }));
       const cloudFormationRate = particles.clouds.length / 5;
       const coolingEffect = particles.clouds.reduce((sum, c) => sum + c.size * c.opacity, 0) / 1000;
 
@@ -420,9 +426,9 @@ const IntegratedAtmosphericSystem = () => {
     // Background gradient
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
     const cooling = systemState.coolingEffect;
-    gradient.addColorStop(0, `rgba(${10 - cooling * 100}, ${10 - cooling * 50}, ${40 + cooling * 50}, 1)`);
-    gradient.addColorStop(0.5, `rgba(${30 - cooling * 150}, ${40 - cooling * 100}, ${90 + cooling * 50}, 1)`);
-    gradient.addColorStop(1, `rgba(${50 - cooling * 100}, ${60 - cooling * 80}, ${100 + cooling * 30}, 1)`);
+    gradient.addColorStop(0, `rgba(${Math.max(0, Math.round(10 - cooling * 100))}, ${Math.max(0, Math.round(10 - cooling * 50))}, ${Math.min(255, Math.round(40 + cooling * 50))}, 1)`);
+    gradient.addColorStop(0.5, `rgba(${Math.max(0, Math.round(30 - cooling * 150))}, ${Math.max(0, Math.round(40 - cooling * 100))}, ${Math.min(255, Math.round(90 + cooling * 50))}, 1)`);
+    gradient.addColorStop(1, `rgba(${Math.max(0, Math.round(50 - cooling * 100))}, ${Math.max(0, Math.round(60 - cooling * 80))}, ${Math.min(255, Math.round(100 + cooling * 30))}, 1)`);
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 800, 400);
 
@@ -603,7 +609,61 @@ const IntegratedAtmosphericSystem = () => {
   }, [particles, systemState]);
 
   const reset = () => {
-    window.location.reload();
+    setIsRunning(false);
+    setTime(0);
+    setSystemState({
+      silicaParticles: 50,
+      waterVaporDensity: 30,
+      emFieldStrength: 15,
+      cloudFormationRate: 0,
+      energyHarvested: 0,
+      totalEnergyGenerated: 0,
+      coolingEffect: 0,
+      precision: 0.7,
+      efficiency: 0.6
+    });
+    setMetrics({
+      atmosphericBalance: 1.0,
+      naturalCycleIntegration: 0.8,
+      resourceDepletion: 0,
+      economicBenefit: 0,
+      sustainabilityScore: 0.75
+    });
+
+    const initSilica = Array.from({ length: 40 }, () => ({
+      x: Math.random() * 800,
+      y: 200 + Math.random() * 150,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.2 + 0.08,
+      charge: Math.random() * 0.3 - 0.15,
+      size: 2 + Math.random() * 1.5,
+      targeted: false,
+      settling: Math.random() < 0.3
+    }));
+    const initWater = Array.from({ length: 50 }, () => ({
+      x: Math.random() * 800,
+      y: 250 + Math.random() * 100,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.3,
+      phase: Math.random() < 0.7 ? 'vapor' : 'droplet',
+      size: 1.5 + Math.random(),
+      temperature: 15 + Math.random() * 5
+    }));
+    setParticles({
+      silica: initSilica,
+      waterVapor: initWater,
+      emFields: [],
+      harvestingNodes: [
+        { x: 150, y: 180, active: false, energy: 0, radius: 60 },
+        { x: 400, y: 150, active: false, energy: 0, radius: 60 },
+        { x: 650, y: 170, active: false, energy: 0, radius: 60 }
+      ],
+      targetZones: [
+        { x: 250, y: 280, radius: 50, active: false, type: 'cloud_formation' },
+        { x: 550, y: 260, radius: 50, active: false, type: 'cloud_formation' }
+      ],
+      clouds: []
+    });
   };
 
   return (

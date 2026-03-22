@@ -258,8 +258,7 @@ The costs follow power law scaling, meaning they accelerate rapidly as pollution
 ## Further Reading
 
 - Repository: [Link to GitHub]
-- Technical documentation: `/docs/COUPLING-PHYSICS.md`
-- LOGOS framework: `/logos/multi-domain-map.md`
-- Simulations: `/simulations/`
+- Technical documentation: `Coupling-Physics.md`
+- Simulations: All source files at repository root (`.js`, `.jsx`, `.py`)
 
 **We welcome questions, critiques, and collaboration. The goal is rigorous analysis, not convincing anyone of predetermined conclusions.**

@@ -223,14 +223,19 @@ This isn’t about stopping progress - it’s about doing it sustainably. We can
 
 ## Repository Structure
 
-```
-/simulations       - Interactive models of coupling effects
-/logos             - Formal system dependency maps  
-/data              - Satellite reentry statistics, atmospheric baselines
-/docs              - Technical documentation and physics derivations
-/policy-analysis   - Regulatory gap analysis and alternatives
-/references        - Citations and validation sources
-```
+All files live at the repository root:
+
+- `Accumulation-with-coupling.py` - EM coupling coefficient (Chi) calculator
+- `Aluminum-loading.py` - Al2O3 accumulation simulator
+- `Atmospheric-coupling.js` - Agent-based coupling visualization
+- `Atmospheric-economics.js` - Economic impact simulation
+- `Satellite-pollution-model.js` - Satellite reentry pollution model
+- `Silica-sim.js` - Aluminum vs. silica comparison
+- `integrated-atmospheric-system.jsx` - Multi-domain integrated system
+- `coupling_config.json` - Simulation parameters and risk thresholds
+- `Coupling-Physics.md` - Mathematical foundations
+- `FAQ.md` - Scientific FAQ
+- `CONTRIBUTING.md` - Contribution guidelines
 
 -----
 
@@ -258,7 +263,7 @@ See <CONTRIBUTING.md> for details.
 
 ## License
 
-[Your chosen license - suggest MIT or CC BY for max accessibility]
+MIT License (c) 2025 JinnZ2 — see `LICENSE.md` for details.
 
 -----
 

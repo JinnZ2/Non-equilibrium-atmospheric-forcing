@@ -366,12 +366,15 @@ At 450 tons/year:
 
 ## 9. Computational Implementation
 
-See `/simulations` directory for:
+All source files are at the repository root:
 
-- `atmospheric-coupling.jsx` - Interactive visualization
-- `satellite-aluminum-pollution.jsx` - Focused satellite model
-- `threshold-analysis.py` - Numerical threshold calculations
-- `economic-scaling.py` - Power law cost projections
+- `Atmospheric-coupling.js` - Advanced agent-based coupling visualization with resonance
+- `Satellite-pollution-model.js` - Satellite reentry pollution and economic cost model
+- `Atmospheric-economics.js` - Economic impact simulation with optical coupling
+- `Silica-sim.js` - Aluminum vs. silica material comparison
+- `integrated-atmospheric-system.jsx` - Multi-domain system with EM harvesting
+- `Accumulation-with-coupling.py` - Coupling coefficient (Chi) calculator, 20-year forecast
+- `Aluminum-loading.py` - Al2O3 accumulation simulator
 
 -----
 

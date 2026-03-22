@@ -33,7 +33,6 @@ All files live at the root level — there are no subdirectories.
 
 ### Python (simulations)
 - **NumPy** — numerical computation
-- **Matplotlib** — visualization
 - Files: `Accumulation-with-coupling.py`, `Aluminum-loading.py`
 
 ### JavaScript / React (interactive visualizations)
@@ -65,7 +64,7 @@ All files live at the root level — there are no subdirectories.
 
 ### Code Style
 - **Python:** Standard scientific Python style. Use NumPy for numerical work.
-- **JavaScript/JSX:** React functional components with hooks. Interactive visualizations use `requestAnimationFrame` for animation loops.
+- **JavaScript/JSX:** React functional components with hooks. Simulations use `setInterval` (50ms) inside `useEffect` for animation loops.
 - Filenames use **Title-Case-with-hyphens** (e.g., `Atmospheric-coupling.js`).
 
 ### Contributing Guidelines (from CONTRIBUTING.md)
@@ -84,9 +83,17 @@ All files live at the root level — there are no subdirectories.
 
 There is no formal build system. To run:
 
-- **Python scripts:** `python Accumulation-with-coupling.py` or `python Aluminum-loading.py` (requires NumPy, Matplotlib)
+- **Python scripts:** `python Accumulation-with-coupling.py` or `python Aluminum-loading.py` (requires NumPy)
 - **JS/JSX files:** These are React components meant to be embedded in a React application. They are not standalone runnable scripts.
 
 ## No Tests or CI
 
 This project currently has no test suite or CI/CD pipeline. Contributions adding validation or testing infrastructure are welcome.
+
+## Known Limitations
+
+- **`coupling_config.json` is not imported by any code file.** All parameters are hardcoded in each file independently. The config file serves as documentation of canonical values.
+- **JS simulations use qualitative approximations** of the equations in `Coupling-Physics.md`, not exact implementations. Coulomb forces use visualization-scaled constants rather than physical Coulomb constant k.
+- **Several documented equations are not yet implemented:** solar wind flux, magnetic shielding, coupling efficiency, full A_field formula (see Coupling-Physics.md sections 2.1-2.3, 3.1).
+- **No shared constants module** — each file defines its own copies of physical constants.
+- **React simulation pattern:** All JS components use `setInterval` inside `useEffect` with state in the dependency array, meaning the interval is recreated each tick. This is functional but not performance-optimal for large particle counts.
