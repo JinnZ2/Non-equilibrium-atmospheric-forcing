@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from ‘react’;
-import { Play, Pause, RotateCcw, Satellite, AlertTriangle, Zap } from ‘lucide-react’;
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, Pause, RotateCcw, Satellite, AlertTriangle, Zap } from 'lucide-react';
 
 const SatelliteAluminumPollutionModel = () => {
 const canvasRef = useRef(null);
@@ -60,13 +60,11 @@ temp: -40 + Math.random() * 20,
 reactivity: Math.random()
 }));
 
-```
 setParticles({
   aluminumOxide: initialParticles,
   ozoneKillers: [],
   satellites: []
 });
-```
 
 }, []);
 
@@ -75,12 +73,10 @@ const aluminumPerStep = (reentryRate / 86400) * avgMass * alContent * timeStep *
 const particleMass = 4.0e-18;
 const newParticles = Math.floor(aluminumPerStep / particleMass);
 
-```
 return {
   massInjected: aluminumPerStep,
   particleCount: newParticles
 };
-```
 
 };
 
@@ -89,7 +85,6 @@ let totalFieldStrength = 0;
 let conductivityChange = 0;
 let electromagneticAmplification = 1.0;
 
-```
 particles.forEach(p => {
   conductivityChange += (p.size * p.size * Math.abs(p.charge)) / 1000;
   totalFieldStrength += Math.abs(p.charge) * (p.size * p.size);
@@ -106,7 +101,6 @@ return {
   conductivityRatio: newConductivity / baseConductivity,
   amplification: electromagneticAmplification
 };
-```
 
 };
 
@@ -114,7 +108,6 @@ const calculateOzoneDestruction = (particles, currentOzone) => {
 let catalyticDestruction = 0;
 let newKillers = [];
 
-```
 particles.forEach(p => {
   const catalyticRate = p.size * p.size * p.reactivity * 0.001;
   catalyticDestruction += catalyticRate;
@@ -146,7 +139,6 @@ return {
   electromagneticContribution: emDestructionRate,
   newKillers: newKillers
 };
-```
 
 };
 
@@ -163,14 +155,12 @@ const radioDisruption = particleDensity * emAmplification * 0.5;
 const gpsDisruption = Math.min(1.0, particleDensity * 0.8);
 const commDisruption = Math.min(1.0, particleDensity * emAmplification * 0.3);
 
-```
 return {
   radioDisruption,
   gpsDisruption,
   commDisruption,
   totalDisruption: (radioDisruption + gpsDisruption + commDisruption) / 3
 };
-```
 
 };
 
@@ -178,7 +168,6 @@ const calculateEconomicImpacts = (atmosphericState, couplingEffects, ionospheric
 const ozoneDeficit = Math.max(0, 280 - atmosphericState.ozoneConcentration);
 const powerLawExponent = 1.5 + (ozoneDeficit / 100);
 
-```
 const ozoneDepletion = 0.4 * Math.pow(ozoneDeficit, powerLawExponent) / 10;
 const navigationDisruption = ionosphericEffects.gpsDisruption * 15 + ionosphericEffects.commDisruption * 8;
 const climateForcing = Math.abs(couplingEffects.radiativeForcing) * 20;
@@ -196,14 +185,12 @@ return {
   agricultureLoss: agricultureLoss * emMultiplier,
   totalCost: (ozoneDepletion + navigationDisruption + climateForcing + healthDamage + agricultureLoss) * emMultiplier
 };
-```
 
 };
 
 useEffect(() => {
 if (!isRunning) return;
 
-```
 const interval = setInterval(() => {
   setTime(t => t + 1);
   
@@ -347,7 +334,6 @@ const interval = setInterval(() => {
 }, 50);
 
 return () => clearInterval(interval);
-```
 
 }, [isRunning, particles, atmosphericState, satelliteParams, couplingEffects]);
 
@@ -355,7 +341,6 @@ useEffect(() => {
 const canvas = canvasRef.current;
 if (!canvas) return;
 
-```
 const ctx = canvas.getContext('2d');
 
 const gradient = ctx.createLinearGradient(0, 0, 0, 400);
@@ -449,7 +434,6 @@ particles.aluminumOxide.forEach(p => {
   ctx.fill();
   ctx.stroke();
 });
-```
 
 }, [particles, atmosphericState]);
 
@@ -458,11 +442,11 @@ window.location.reload();
 };
 
 const getRegime = (ozone) => {
-if (ozone > 260) return { name: ‘Healthy’, color: ‘text-green-400’, desc: ‘Normal ozone levels’ };
-if (ozone > 240) return { name: ‘Concern’, color: ‘text-yellow-400’, desc: ‘Early degradation’ };
-if (ozone > 220) return { name: ‘Warning’, color: ‘text-orange-400’, desc: ‘Significant depletion’ };
-if (ozone > 180) return { name: ‘Danger’, color: ‘text-red-400’, desc: ‘Critical threshold’ };
-return { name: ‘Crisis’, color: ‘text-red-600’, desc: ‘Severe ozone loss’ };
+if (ozone > 260) return { name: 'Healthy', color: 'text-green-400', desc: 'Normal ozone levels' };
+if (ozone > 240) return { name: 'Concern', color: 'text-yellow-400', desc: 'Early degradation' };
+if (ozone > 220) return { name: 'Warning', color: 'text-orange-400', desc: 'Significant depletion' };
+if (ozone > 180) return { name: 'Danger', color: 'text-red-400', desc: 'Critical threshold' };
+return { name: 'Crisis', color: 'text-red-600', desc: 'Severe ozone loss' };
 };
 
 const regime = getRegime(atmosphericState.ozoneConcentration);
@@ -480,7 +464,6 @@ Atmospheric coupling effects from satellite-derived aluminum oxide nanoparticles
 </p>
 </div>
 
-```
   <div className="bg-slate-800 rounded-lg p-4 mb-6">
     <h3 className="text-white font-semibold mb-3">Satellite Reentry Parameters</h3>
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
@@ -754,7 +737,6 @@ Atmospheric coupling effects from satellite-derived aluminum oxide nanoparticles
     </p>
   </div>
 </div>
-```
 
 );
 };

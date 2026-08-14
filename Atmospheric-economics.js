@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from ‘react’;
-import { Play, Pause, RotateCcw, TrendingUp, AlertTriangle } from ‘lucide-react’;
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, Pause, RotateCcw, TrendingUp, AlertTriangle } from 'lucide-react';
 
 const AtmosphericEconomicsSimulation = () => {
 const canvasRef = useRef(null);
@@ -40,7 +40,6 @@ mass: 1.0,
 temp: 15 + Math.random() * 5
 }));
 
-```
 const initialSulfur = Array.from({ length: 60 }, () => ({
   x: Math.random() * 800,
   y: Math.random() * 400,
@@ -66,7 +65,6 @@ setAgents({
   sulfur: initialSulfur,
   photons: initialPhotons
 });
-```
 
 }, []);
 
@@ -74,7 +72,6 @@ setAgents({
 useEffect(() => {
 if (!isRunning) return;
 
-```
 const interval = setInterval(() => {
   setTime(t => t + 1);
   
@@ -301,7 +298,6 @@ const interval = setInterval(() => {
 }, 50);
 
 return () => clearInterval(interval);
-```
 
 }, [isRunning, agents, atmosphericState]);
 
@@ -310,7 +306,6 @@ useEffect(() => {
 const canvas = canvasRef.current;
 if (!canvas) return;
 
-```
 const ctx = canvas.getContext('2d');
 ctx.fillStyle = '#0a0a1a';
 ctx.fillRect(0, 0, 800, 400);
@@ -347,7 +342,6 @@ agents.sulfur.forEach(s => {
   ctx.fill();
   ctx.stroke();
 });
-```
 
 }, [agents]);
 
@@ -368,7 +362,6 @@ Agent-based model of aluminum oxide and SO₂ interactions with electromagnetic,
 </p>
 </div>
 
-```
   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
     <div className="lg:col-span-2">
       <div className="bg-slate-800 rounded-lg p-4">
@@ -515,7 +508,6 @@ Agent-based model of aluminum oxide and SO₂ interactions with electromagnetic,
     </p>
   </div>
 </div>
-```
 
 );
 };

@@ -16,9 +16,18 @@
 
 - ~730 satellites reenter annually (2024)
 - Projected: 8,400+ reentries/year as mega-constellations scale
-- ~450 metric tons of aluminum oxide nanoparticles injected annually
+- ~15–60 metric tons of aluminum oxide nanoparticles injected annually **today**; ~450–460 t/yr is the *projected* rate at full mega-constellation deployment, not the current one
 - Zero comprehensive monitoring of stratospheric accumulation
 - No regulatory framework for electromagnetic coupling effects
+
+> **On that range.** Earlier revisions of this README gave 450 t/yr as a
+> present-day figure; it is the full-deployment projection from the table
+> below. The current-rate estimate is given as a range because this repo's
+> own models disagree about it by a factor of four, depending on the assumed
+> reentry count and per-satellite aluminium yield. That disagreement is
+> unresolved and is tracked as H-02/U-1/U-8 in
+> [`RESEARCH_LOG.md`](RESEARCH_LOG.md) rather than papered over with a single
+> confident number.
 
 **The Hidden Costs:**
 Traditional cost-benefit analysis: “Atmospheric disposal = $0, Controlled disposal = $5M per satellite”
@@ -224,13 +233,45 @@ This isn’t about stopping progress - it’s about doing it sustainably. We can
 ## Repository Structure
 
 ```
-/simulations       - Interactive models of coupling effects
-/logos             - Formal system dependency maps  
-/data              - Satellite reentry statistics, atmospheric baselines
-/docs              - Technical documentation and physics derivations
-/policy-analysis   - Regulatory gap analysis and alternatives
-/references        - Citations and validation sources
+Accumulation-with-coupling.py       Reference model: Al2O3 burden + coupling coefficient (chi)
+reproduce.py                        Regenerates every published number; re-runs the consistency checks
+coupling_config.json                Parameters and the projected series (generated, not hand-edited)
+
+Atmospheric-coupling.js             Agent-based visualisation of coupling effects
+Atmospheric-economics.js            Economic impact simulation (ozone, agriculture, health, climate)
+Satellite-pollution-model.js        Reentry pollution model with economic cost calculations
+Silica-sim.js                       Aluminium vs. silica material comparison
+integrated-atmospheric-system.jsx   Multi-domain system: EM harvesting + atmospheric effects
+
+README.md                           This file
+RESEARCH_LOG.md                     Claim -> run -> result -> revision, plus open unknowns
+Coupling-Physics.md                 Mathematical foundations for the EM coupling physics
+FAQ.md                              Scientific FAQ: skepticism and methodology
+EXECUTIVE_SUMMARY_STRATEGIC_RISK.md Policy-maker brief
+CONTRIBUTING.md                     Contribution guidelines and technical standards
+LICENSE.md                          MIT
+
+legacy/                             Superseded artefacts, kept verbatim for precedence
 ```
+
+**Before citing a number from this repo, check
+[`RESEARCH_LOG.md`](RESEARCH_LOG.md).** Several figures that appeared in
+earlier revisions did not reproduce from the models that were supposed to have
+produced them. The ones that have been re-derived are marked there; the ones
+that are still unsourced are listed as open unknowns. Run `python reproduce.py`
+to regenerate the checks yourself.
+
+### Running things
+
+```bash
+pip install numpy matplotlib
+python Accumulation-with-coupling.py    # burden + chi, 20-year projection
+python reproduce.py                     # regenerate published numbers, re-run checks
+```
+
+The `.js`/`.jsx` files are React components intended to be embedded in a React
+application; there is no build harness in this repo yet. They are verified to
+parse, but have not been rendered or their outputs validated (U-9).
 
 -----
 
@@ -258,7 +299,7 @@ See <CONTRIBUTING.md> for details.
 
 ## License
 
-[Your chosen license - suggest MIT or CC BY for max accessibility]
+MIT — see [LICENSE.md](LICENSE.md). Copyright (c) 2025 JinnZ2.
 
 -----
 

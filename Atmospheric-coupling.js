@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from ‘react’;
-import { Play, Pause, RotateCcw, TrendingDown, Zap, Thermometer, Eye } from ‘lucide-react’;
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, Pause, RotateCcw, TrendingDown, Zap, Thermometer, Eye } from 'lucide-react';
 
 const AdvancedAtmosphericCouplingModel = () => {
 const canvasRef = useRef(null);
@@ -49,7 +49,6 @@ resonanceFreq: 50 + Math.random() * 200, // MHz
 couplingRadius: 15 + Math.random() * 10
 }));
 
-```
 const initialSulfur = Array.from({ length: 50 }, () => ({
   x: Math.random() * 800,
   y: Math.random() * 400,
@@ -67,7 +66,6 @@ setAgents({
   sulfur: initialSulfur,
   ozoneKillers: []
 });
-```
 
 }, []);
 
@@ -79,7 +77,6 @@ let totalPhotoCoupling = 0;
 let geometricResonance = 0;
 let newOzoneKillers = [];
 
-```
 // Electromagnetic coupling with geometric resonance
 for (let i = 0; i < aluminum.length; i++) {
   for (let j = 0; j < sulfur.length; j++) {
@@ -134,7 +131,6 @@ return {
   geometricResonance: geometricResonance,
   newOzoneKillers: newOzoneKillers
 };
-```
 
 };
 
@@ -143,7 +139,6 @@ const calculateThresholdEffects = (ozone, couplingStrength, time) => {
 // Critical thresholds (Dobson Units)
 const criticalThresholds = [280, 250, 220, 180, 150, 100];
 
-```
 // Coupling amplification increases near thresholds
 let amplification = 1.0;
 let cascadeRisk = 0;
@@ -187,7 +182,6 @@ return {
   cascadeRisk: Math.min(cascadeRisk, 1.0),
   powerLawExponent: powerLawExponent
 };
-```
 
 };
 
@@ -197,7 +191,6 @@ const calculateOzoneDepletion = (currentOzone, aluminum, sulfur, killers, coupli
 const aluminumDepletion = aluminum.length * 0.015; // DU per timestep
 const sulfurDepletion = sulfur.length * 0.025;
 
-```
 // Catalytic destruction from coupling-created agents
 const catalyticDepletion = killers.reduce((sum, k) => sum + k.destructionRate, 0);
 
@@ -220,7 +213,6 @@ const totalDepletion = (
 ) * amplification * resonanceMultiplier;
 
 return Math.max(50, currentOzone - totalDepletion); // Floor at 50 DU
-```
 
 };
 
@@ -228,7 +220,6 @@ return Math.max(50, currentOzone - totalDepletion); // Floor at 50 DU
 const calculateEconomicImpact = (ozone, temp, coupling, powerLaw) => {
 const ozoneDeficit = Math.max(0, 280 - ozone);
 
-```
 // Power law scaling for economic damage
 // Damage = k * (deficit)^exponent
 const exponent = Math.max(1.5, powerLaw);
@@ -257,7 +248,6 @@ return {
   systemicRisk,
   totalCost: ozoneDamage + agriculturalLoss + healthCosts + climateDisruption + systemicRisk
 };
-```
 
 };
 
@@ -265,7 +255,6 @@ return {
 useEffect(() => {
 if (!isRunning) return;
 
-```
 const interval = setInterval(() => {
   setTime(t => t + 1);
   
@@ -441,7 +430,6 @@ const interval = setInterval(() => {
 }, 50);
 
 return () => clearInterval(interval);
-```
 
 }, [isRunning, agents, atmosphericState, time]);
 
@@ -450,7 +438,6 @@ useEffect(() => {
 const canvas = canvasRef.current;
 if (!canvas) return;
 
-```
 const ctx = canvas.getContext('2d');
 
 // Background gradient based on ozone level
@@ -522,7 +509,6 @@ agents.sulfur.forEach(s => {
   ctx.fill();
   ctx.stroke();
 });
-```
 
 }, [agents, atmosphericState]);
 
@@ -539,11 +525,11 @@ window.location.reload();
 
 // Determine regime
 const getRegime = (ozone) => {
-if (ozone > 250) return { name: ‘Stable’, color: ‘text-green-400’ };
-if (ozone > 220) return { name: ‘Degraded’, color: ‘text-yellow-400’ };
-if (ozone > 180) return { name: ‘Critical’, color: ‘text-orange-400’ };
-if (ozone > 150) return { name: ‘Cascade’, color: ‘text-red-400’ };
-return { name: ‘Collapse’, color: ‘text-red-600’ };
+if (ozone > 250) return { name: 'Stable', color: 'text-green-400' };
+if (ozone > 220) return { name: 'Degraded', color: 'text-yellow-400' };
+if (ozone > 180) return { name: 'Critical', color: 'text-orange-400' };
+if (ozone > 150) return { name: 'Cascade', color: 'text-red-400' };
+return { name: 'Collapse', color: 'text-red-600' };
 };
 
 const regime = getRegime(atmosphericState.ozoneConcentration);
@@ -559,7 +545,6 @@ Nonlinear threshold effects, power law scaling, and cascade risk modeling
 </p>
 </div>
 
-```
   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
     {/* Main visualization */}
     <div className="lg:col-span-2">
@@ -835,7 +820,6 @@ Nonlinear threshold effects, power law scaling, and cascade risk modeling
     </p>
   </div>
 </div>
-```
 
 );
 };

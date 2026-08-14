@@ -3,7 +3,37 @@
     "project_name": "Non-Equilibrium Atmospheric Forcing",
     "lead_analyst_persona": "Logistics-Integrated INTJ",
     "model_type": "Complexity-Based Phase Transition",
-    "last_updated": "2025-12-16"
+    "last_updated": "2026-08-14",
+    "supersedes": "legacy/coupling_config.2025-12-16.json"
+  },
+  "provenance": {
+    "generated_by": "reproduce.py --write",
+    "model_source": "Accumulation-with-coupling.py",
+    "note": "projected_time_series and threshold_crossings are generated, not hand-authored. Re-run reproduce.py after any model change and commit the diff.",
+    "model_parameters": {
+      "base_reentries_per_year": 500,
+      "al2o3_kg_per_satellite": 30,
+      "growth_rate": 0.18,
+      "solar_activity_index": 1.2,
+      "start_year": 2025
+    },
+    "threshold_crossings": {
+      "incipient": {
+        "year": 2038,
+        "burden_mt": 762.3,
+        "chi": 0.7
+      },
+      "systemic_fragility": {
+        "year": 2040,
+        "burden_mt": 1094.1,
+        "chi": 1.97
+      },
+      "cascade_failure": {
+        "year": 2049,
+        "burden_mt": 5139.1,
+        "chi": 3.09
+      }
+    }
   },
   "atmospheric_parameters": {
     "al2o3_residence_time_years": 30,
@@ -11,15 +41,52 @@
     "coupling_resonance_mhz": 100.0
   },
   "risk_thresholds": {
-    "nominal": { "chi_limit": 0.5, "economic_impact": "Baseline" },
-    "incipient": { "chi_limit": 1.5, "economic_impact": "Increased Insurance Premiums" },
-    "systemic_fragility": { "chi_limit": 3.0, "economic_impact": "JIT Logistics Stutter" },
-    "cascade_failure": { "chi_limit": 5.0, "economic_impact": "Grid/GPS Decoupling" }
+    "_note": "chi_max of each regime is the floor of the next. The 2025-12-16 config gave cascade_failure a chi_limit of 5.0, which left 3.0-5.0 unassigned and disagreed with the model code's own labelling at 3.0. Resolved in favour of the code. See RESEARCH_LOG.md H-05.",
+    "nominal": {
+      "chi_min": 0.0,
+      "chi_max": 0.5,
+      "economic_impact": "Baseline"
+    },
+    "incipient": {
+      "chi_min": 0.5,
+      "chi_max": 1.5,
+      "economic_impact": "Increased Insurance Premiums"
+    },
+    "systemic_fragility": {
+      "chi_min": 1.5,
+      "chi_max": 3.0,
+      "economic_impact": "JIT Logistics Stutter"
+    },
+    "cascade_failure": {
+      "chi_min": 3.0,
+      "chi_max": null,
+      "economic_impact": "Grid/GPS Decoupling"
+    }
   },
   "projected_time_series": [
-    { "year": 2025, "burden_mt": 150.2, "chi": 0.02, "regime": "Stable" },
-    { "year": 2030, "burden_mt": 480.5, "chi": 0.23, "regime": "Degraded" },
-    { "year": 2035, "burden_mt": 1250.8, "chi": 2.10, "regime": "Critical" },
-    { "year": 2040, "burden_mt": 3100.4, "chi": 4.85, "regime": "Cascade" }
+    {
+      "year": 2025,
+      "burden_mt": 15.0,
+      "chi": 0.0,
+      "regime": "Stable"
+    },
+    {
+      "year": 2030,
+      "burden_mt": 141.6,
+      "chi": 0.02,
+      "regime": "Stable"
+    },
+    {
+      "year": 2035,
+      "burden_mt": 431.3,
+      "chi": 0.22,
+      "regime": "Stable"
+    },
+    {
+      "year": 2040,
+      "burden_mt": 1094.1,
+      "chi": 1.97,
+      "regime": "Critical"
+    }
   ]
 }

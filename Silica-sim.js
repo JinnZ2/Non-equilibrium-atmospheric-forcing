@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from ‘react’;
-import { Play, Pause, RotateCcw, Droplet, Zap, AlertTriangle, TrendingDown, TrendingUp } from ‘lucide-react’;
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, Pause, RotateCcw, Droplet, Zap, AlertTriangle, TrendingDown, TrendingUp } from 'lucide-react';
 
 const SilicaAluminumComparison = () => {
 const canvasLeftRef = useRef(null);
 const canvasRightRef = useRef(null);
 const [isRunning, setIsRunning] = useState(false);
 const [time, setTime] = useState(0);
-const [selectedMaterial, setSelectedMaterial] = useState(‘both’); // ‘aluminum’, ‘silica’, ‘both’
+const [selectedMaterial, setSelectedMaterial] = useState('both'); // 'aluminum', 'silica', 'both'
 
 // Atmospheric state for both materials
 const [aluminumState, setAluminumState] = useState({
@@ -48,7 +48,6 @@ age: Math.random() * 500,
 settling: false
 }));
 
-```
 const initSilica = Array.from({ length: 60 }, () => ({
   x: Math.random() * 380,
   y: 150 + Math.random() * 200,
@@ -65,7 +64,6 @@ setParticles({
   silica: initSilica,
   solarWind: []
 });
-```
 
 }, []);
 
@@ -73,7 +71,6 @@ setParticles({
 const calculateAluminumEffects = (particles, currentOzone) => {
 const density = particles.length / 100;
 
-```
 // Electromagnetic coupling
 const conductivity = 1.0 + (density * 0.5);
 const emAmplification = 1.0 + Math.pow(density, 1.3) * 1.5;
@@ -97,7 +94,6 @@ return {
   newOzone,
   costPerYear: totalCost
 };
-```
 
 };
 
@@ -105,7 +101,6 @@ return {
 const calculateSilicaEffects = (particles, currentOzone) => {
 const density = particles.filter(p => !p.settling).length / 100;
 
-```
 // Much lower EM coupling (silica is less conductive)
 const conductivity = 1.0 + (density * 0.05);
 const emAmplification = 1.0 + Math.pow(density, 1.1) * 0.2;
@@ -127,7 +122,6 @@ return {
   costPerYear: totalCost,
   activeParticles: particles.filter(p => !p.settling).length
 };
-```
 
 };
 
@@ -135,7 +129,6 @@ return {
 useEffect(() => {
 if (!isRunning) return;
 
-```
 const interval = setInterval(() => {
   setTime(t => t + 1);
 
@@ -333,7 +326,6 @@ const interval = setInterval(() => {
 }, 50);
 
 return () => clearInterval(interval);
-```
 
 }, [isRunning, particles, aluminumState.ozoneConcentration, silicaState.ozoneConcentration]);
 
@@ -342,7 +334,6 @@ useEffect(() => {
 const canvas = canvasLeftRef.current;
 if (!canvas) return;
 
-```
 const ctx = canvas.getContext('2d');
 
 // Background
@@ -422,7 +413,6 @@ ctx.fillText('ALUMINUM (Al₂O₃)', 10, 30);
 ctx.font = '11px sans-serif';
 ctx.fillStyle = 'rgba(255, 200, 200, 0.8)';
 ctx.fillText('No natural removal • Accumulates continuously', 10, 50);
-```
 
 }, [particles, aluminumState]);
 
@@ -431,7 +421,6 @@ useEffect(() => {
 const canvas = canvasRightRef.current;
 if (!canvas) return;
 
-```
 const ctx = canvas.getContext('2d');
 
 // Background
@@ -522,7 +511,6 @@ ctx.fillText('SILICA (SiO₂)', 10, 30);
 ctx.font = '11px sans-serif';
 ctx.fillStyle = 'rgba(200, 255, 200, 0.8)';
 ctx.fillText('Natural settling • Returns to dust cycle', 10, 50);
-```
 
 }, [particles, silicaState]);
 
@@ -542,7 +530,6 @@ Comparing electromagnetic coupling and atmospheric effects
 </p>
 </div>
 
-```
   {/* Side-by-side visualization */}
   <div className="grid grid-cols-2 gap-4 mb-6">
     <div className="bg-slate-800 rounded-lg p-4">
@@ -757,7 +744,6 @@ Comparing electromagnetic coupling and atmospheric effects
     </p>
   </div>
 </div>
-```
 
 );
 };
