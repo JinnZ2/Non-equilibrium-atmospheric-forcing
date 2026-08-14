@@ -16,18 +16,24 @@
 
 - ~730 satellites reenter annually (2024)
 - Projected: 8,400+ reentries/year as mega-constellations scale
-- ~15–60 metric tons of aluminum oxide nanoparticles injected annually **today**; ~450–460 t/yr is the *projected* rate at full mega-constellation deployment, not the current one
+- **~17 metric tons** of aluminum oxide nanoparticles injected annually (2022, all reentries — Ferreira et al. 2024); **>360 t/yr** in a realised mega-constellation scenario
+- Over **20 elements** from spacecraft reentry now detectable in stratospheric aerosol, not aluminum alone (Murphy et al. 2023)
+- ~10% of stratospheric sulfuric acid particles >120 nm already contain spacecraft metals; projected to approach ~50%
 - Zero comprehensive monitoring of stratospheric accumulation
 - No regulatory framework for electromagnetic coupling effects
 
-> **On that range.** Earlier revisions of this README gave 450 t/yr as a
-> present-day figure; it is the full-deployment projection from the table
-> below. The current-rate estimate is given as a range because this repo's
-> own models disagree about it by a factor of four, depending on the assumed
-> reentry count and per-satellite aluminium yield. That disagreement is
-> unresolved and is tracked as H-02/U-1/U-8 in
-> [`RESEARCH_LOG.md`](RESEARCH_LOG.md) rather than papered over with a single
-> confident number.
+> **Correction.** Earlier revisions of this README gave **450 t/yr as a
+> present-day figure**. That was wrong by roughly 26× — it was the
+> full-deployment projection from the table below, presented as a current rate.
+> The sourced current figure is ~17 t/yr. Notably, this repo's Python model
+> (15 t/yr) was within 12% of the literature all along, so the model was the
+> trustworthy artefact here and the prose was not. See
+> [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-02/H-10.
+
+> **Aluminum is not the only species.** The models in this repo track Al₂O₃ and
+> nothing else — 1 of 13 known species, across only 1 of 2 emission pathways
+> (satellite reentry; rocket launch exhaust is not modelled at all). See
+> [`SPECIES.md`](SPECIES.md).
 
 **The Hidden Costs:**
 Traditional cost-benefit analysis: “Atmospheric disposal = $0, Controlled disposal = $5M per satellite”

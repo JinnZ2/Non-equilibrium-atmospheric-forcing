@@ -129,6 +129,23 @@ the offset is not perfectly clean, but the pattern is unambiguous.
   depend on the reentry baseline (U-8) and the per-satellite yield (U-1).
   Flagged, not papered over.
 
+**Update 2026-08-14 (via H-10).** External sourcing now settles most of this.
+Ferreira et al. (2024) put the 2022 all-reentry Al₂O₃ total at **~17 MT/yr**,
+and the mega-constellation scenario at **>360 MT/yr**. Against that:
+
+| Figure | Verdict |
+|---|---|
+| 15.0 MT/yr (Python model) | **closest to the literature** — within 12% of the 2022 estimate |
+| 21.9 / 40 / 60.2 MT/yr | too high for a current rate; all rest on unsourced inputs |
+| 450 MT/yr as a *current* rate (README exec summary) | **wrong by ~26×** — and it is not even the right projected figure |
+| 460 MT/yr at full deployment (README table) | right order of magnitude vs >360 MT/yr |
+
+So the model was the trustworthy artefact and the prose was not — the reverse
+of what the repo's presentation implied. The README's headline figure overstated
+the present-day rate by more than an order of magnitude.
+
+
+
 ---
 
 ## H-03 — "15% aluminium by mass" and "30 kg per 250 kg satellite" agree
@@ -294,38 +311,172 @@ which preserved the smart quotes and the fences.
 
 ---
 
+## H-09 — Al₂O₃ is the species that matters
+
+> Implicit throughout the repo: aluminium oxide is *the* reentry pollutant.
+> Every model, parameter and headline number is Al₂O₃-only.
+
+- **Run:** literature search, 2026-08-14; `python Multi-species-accumulation.py`
+- **Status:** **`FALSIFIED`** as an exclusive claim.
+
+Murphy et al. (2023, PNAS) report **over 20 elements** from spacecraft reentry
+in stratospheric aerosol, in ratios matching spacecraft alloys. Specifically:
+
+- **~10%** of stratospheric sulfuric acid particles larger than 120 nm already
+  contain aluminium and other spacecraft-reentry elements.
+- The reentry mass of **lithium, aluminium, copper and lead each exceeds the
+  cosmic dust influx** of that same metal. These are not trace contaminants;
+  for these four elements the space industry has overtaken the natural source.
+- **Niobium and hafnium** are the attribution keys: neither occurs as a free
+  element in nature, so their presence is unambiguous spacecraft origin with
+  no meteoric confound.
+- Projection: planned constellation growth could raise the affected fraction
+  to roughly **50%**, comparable to the fraction now containing meteoric metals.
+
+- **Revision:** the species inventory is now explicit in `species_inventory.json`
+  (13 entries), and `Multi-species-accumulation.py` reports across all of them.
+  Al₂O₃ remains the only species with a flux estimate — **1 of 13, or 8%
+  coverage**. The model states that gap in its output rather than hiding it.
+- **What this does *not* say:** that the other species couple electromagnetically.
+  Detection is not coupling. See U-12 — the weights that would let them enter
+  the χ law do not exist, and the model refuses to invent them.
+
+---
+
+## H-10 — The 30 kg/250 kg satellite yield is unsourced (U-1)
+
+- **Status:** **`RESOLVED`** — U-1 closed, and the repo's figure holds up.
+
+The number traces to **Ferreira et al. (2024), GRL** `10.1029/2024GL109280`: a
+typical 250 kg satellite generates ~30 kg of Al₂O₃ nanoparticles on demise.
+It was never invented here — it was just never cited.
+
+Two independent checks now pass:
+
+| Quantity | Repo model | Literature | Agreement |
+|---|---|---|---|
+| Al₂O₃ per 250 kg satellite | 30 kg | 30 kg | exact |
+| Implied current annual flux | 15.0 MT/yr (500 × 30 kg) | ~17 MT/yr (2022, all reentries) | within 12% |
+| Residence time | 30 yr | up to 30 yr, mesosphere → ozone layer | consistent |
+
+- **Consequence for H-02:** the spread of injection figures now resolves in
+  favour of the *Python model*, not the README. See the H-02 revision below.
+- **Caveat on residence time:** the literature figure is a *settling time* —
+  particles descending through the stratosphere, destroying ozone the whole
+  way. This repo implements it as a rectangular kernel: fully inert for 30
+  years, then vanishing. Same number, different physics. U-3 stands and is
+  now better understood: the error is not the duration, it is treating the
+  transit as inert.
+
+---
+
+## H-11 — Satellite reentry is the pathway
+
+> The repo models reentry ablation only. Launch is not mentioned as an
+> emission source anywhere.
+
+- **Status:** **`FALSIFIED`** — there is a second pathway, and it deposits the
+  same species.
+
+Solid rocket motors burn aluminium fuel with an ammonium perchlorate oxidiser.
+They emit **alumina — chemically the same Al₂O₃ the reentry model tracks** —
+plus hydrogen chloride. Published launch emission inventories cover chlorine,
+NOx, H₂O, CO₂, black carbon and alumina.
+
+- **Consequence:** every total-atmospheric-Al₂O₃ figure this repo publishes is
+  an **undercount**, by whatever the launch pathway contributes. That margin is
+  unquantified here.
+- **Revision:** `alumina_launch` is now a distinct inventory entry cross-linked
+  to `al2o3_reentry` via `same_species_as`, so the double pathway is visible in
+  the data rather than buried in prose. The launch pathway is 4 of 13 species
+  and **0 of them are quantified**.
+- **Not claimed:** that the two pathways are interchangeable. They may differ in
+  deposition altitude and particle size distribution, both of which would matter
+  for coupling. Unknown.
+
+---
+
+## H-12 — Al₂O₃ destroys ozone directly
+
+> `Coupling-Physics.md` §4 models catalytic ozone destruction as an Al₂O₃
+> surface process. `README.md`: "Aluminum particles act as catalysts for ozone
+> destruction — direct catalytic reactions."
+
+- **Status:** **`FALSIFIED`** — the mechanism is indirect, and that changes what
+  the model should be coupled to.
+
+Per Ferreira et al. (2024): aluminium oxides **do not react with ozone**. They
+activate **chlorine**, which does the destroying. The alumina is not consumed,
+so one particle keeps catalysing for decades as it settles.
+
+This is the most consequential finding in this round, because of what it implies
+for a project whose entire thesis is coupling:
+
+> **The reentry pathway's ozone impact is co-limited by a launch-pathway
+> species.** Al₂O₃ supplies reaction surface; chlorine supplies the destruction.
+> Doubling alumina against fixed chlorine is not the same as doubling both.
+> Satellite reentry and rocket launches are therefore **not two independent
+> problems** — and this repo models neither the coupling nor the chlorine.
+
+- **Revision:** recorded in `species_inventory.json` under `hcl_launch`
+  (`criticality_note`) and surfaced in every `Multi-species-accumulation.py` run.
+  `Coupling-Physics.md` §4 is now flagged as describing the wrong mechanism.
+- **Tension surfaced, unresolved:** the retrieved chlorine sensitivity is
+  *modest* — a 10× increase in rocket chlorine over 2019 gives <0.1 DU (0.04%)
+  near-global column ozone loss; 52× gives 0.6 DU (0.23%). Those are far smaller
+  than this repo's ozone rhetoric implies. Either the repo's ozone claims are
+  overstated, or they rest on a mechanism the cited work does not cover. This
+  should be settled, not left ambiguous. See U-13.
+
+---
+
 ## Open unknowns
 
 Ranked by how much the repo's conclusions move if the answer changes.
 
 | # | Unknown | Blocks | Why it matters |
 |---|---|---|---|
-| **U-1** | Al₂O₃ yield per satellite. 30 kg/250 kg is unsourced; 15%-of-mass is unsourced and inconsistent with it. | H-02, H-03 | Scales the entire burden curve linearly. A 5× error here is a 5× error in every date. |
+| ~~U-1~~ | ~~Al₂O₃ yield per satellite.~~ **CLOSED 2026-08-14** — sourced to Ferreira et al. 2024 (30 kg per 250 kg satellite); repo figure confirmed. | H-02, H-03, H-10 | The 15%-of-mass figure in the JS remains inconsistent with it (H-03); that part moves to U-12. |
 | **U-2** | The 1,000 MT conductivity threshold. No derivation or citation anywhere in the repo. | H-04, H-06 | It sets the branch point, so it sets the transition year. Everything downstream keys off it. |
 | **U-3** | Residence-time kernel. Implemented as rectangular (30 yr, then instant removal); documented as "linear decay". Neither is defended. | H-08 | Tested: swapping in an exponential kernel (τ = 30 yr) moves the 1,000 MT crossing only 2040 → 2041. **Less consequential than expected** — 18%/yr growth dominates the kernel during the growth phase. Still a docs/code mismatch worth fixing, but low priority. |
 | **U-4** | The 100 MHz coupling resonance in the config. Not derived, not used by any model in the repo. | H-00 | Either it is load-bearing and missing from the code, or it is decorative. Currently unclear which. |
 | **U-5** | Power-law exponent α ≈ 1.5–2.5. No fit, no data, no source. | economics | The $50–200B/yr headline is an α-driven number; the range is asserted, not estimated. |
 | **U-6** | `solar_activity_index = 1.2`. Scale undefined — 1.0 "baseline" of what? | all χ values | χ is directly proportional to it. |
 | **U-7** | No sedimentation, coagulation, or transport physics. Particles are inert until they age out. | H-00 | Real removal processes would lower the burden; their absence biases the model toward alarm. |
-| **U-8** | Reentry baseline: 500/yr (Python) vs ~730/yr (README, 2024). Neither cited. 18%/yr growth is unsourced. | H-02, H-06 | Sets both the level and the slope of the burden curve. |
+| **U-8** | Reentry baseline: 500/yr (Python) vs ~730/yr (README, 2024). **Partly resolved** — the ~17 MT/yr 2022 literature total implies ~567 reentries at 30 kg each, so 500/yr is close for 2022 and 730/yr may simply be a later year. The 18%/yr growth rate is still unsourced, and growth rate matters more than baseline over 20 years. | H-02, H-06 | Sets both the level and the slope of the burden curve. |
+| **U-11** | Per-element fluxes for the 20+ detected reentry elements. Only six are named in the sources available here, and none is quantified. | H-09 | Without fluxes there is no multi-species burden, so the inventory stays a list rather than a model. |
+| **U-12** | `em_coupling_weight` per species — how much each contributes to conductivity relative to Al₂O₃. **Nothing is measured.** Also absorbs the unresolved half of U-1: the 15%-Al-by-mass figure in the JS vs 30 kg Al₂O₃ per satellite (H-03). | H-09, χ generally | This is the blocker on the whole multi-species idea. Until weights exist, χ can only ever describe one species. |
+| **U-13** | Tension between this repo's ozone claims and the retrieved chlorine sensitivity (52× rocket chlorine → 0.6 DU, 0.23%). | H-12 | If the published sensitivity is right, the repo's ozone rhetoric is overstated. Needs resolving in one direction or the other. |
+| **U-14** | **None of the citations added on 2026-08-14 were verified against primary sources.** Publisher domains were blocked by network egress policy; abstracts and secondary summaries were all that could be reached. | H-09…H-12 | Every externally sourced number in this round inherits this caveat. First thing to fix from an unrestricted network. |
+| **U-15** | The Al/S catalytic synergism claim (README, executive summary) has no supporting run, model, or citation anywhere in the repo. | policy brief | It is stated as a central mechanism and is entirely unbacked. |
+| **U-16** | Effect of "Design for Demise" and the 5-year deorbit rule on injection rates. Debris-mitigation policy deliberately increases ablation and shortens orbital lifetimes. | H-09, projections | Policy designed to fix the debris problem may be increasing the atmospheric one. Nobody here has modelled the sign, let alone the size. |
 | **U-9** | The five React simulations parse but have never been run. Their economic and coupling outputs are unverified. | H-07 | They are the repo's most visible artefacts and nothing confirms their numbers. |
 | **U-10** | The $50–200B/yr damage figure has no derivation in the repo. | policy brief | It is the number a policymaker will quote. |
 
 ### Suggested next runs
 
-1. **U-2** — either derive the 1,000 MT threshold or replace the piecewise χ
+1. **U-14** — re-verify every 2026-08-14 citation against the primary papers
+   from an unrestricted network. Cheapest item on the list and everything
+   added this round depends on it.
+2. **U-2** — either derive the 1,000 MT threshold or replace the piecewise χ
    law with a continuous one and see whether any threshold behaviour survives
-   (H-04). Single most consequential open item: it decides whether the
-   project's central "phase transition" claim has anything behind it.
-2. **U-1 / U-8** — source the per-satellite yield and reentry count against
-   the published reentry record, then rerun. Cheapest fix, second-largest
-   effect; U-8 alone moves the headline date by two years.
-3. **U-9** — stand up a minimal `package.json` + Vite harness so the React
+   (H-04). Most consequential open item: it decides whether the project's
+   central "phase transition" claim has anything behind it.
+3. **U-13 / H-12** — resolve the ozone tension. The repo says catastrophic;
+   the retrieved chlorine sensitivity says 0.23% at 52× emissions. One of
+   those is wrong, and it is the claim a policymaker will act on.
+4. **U-11 / U-12** — the multi-species model is built and empty. Per-element
+   fluxes would fill it; coupling weights would make χ meaningful across
+   species. Weights are the harder and more valuable of the two.
+5. **U-8** — source the 18%/yr growth rate. Over a 20-year projection the
+   growth rate dominates the baseline, and it is still a bare assertion.
+6. **U-9** — stand up a minimal `package.json` + Vite harness so the React
    models can actually be rendered and their outputs checked.
-4. **U-5 / U-10** — write down the damage-function derivation, or mark the
-   figure as an order-of-magnitude placeholder in the policy brief.
-5. **U-3** — demoted after testing (see table). Fix the comment; the kernel
-   swap can wait.
+7. **U-5 / U-10 / U-15** — write down the damage-function and Al/S synergism
+   derivations, or mark them as placeholders in the policy brief.
+8. **U-3** — demoted after testing (see table). Fix the comment; note the
+   sharper framing from H-10 — the error is treating the 30-year descent as
+   inert when the source describes it as the destructive phase.
 
 ---
 
@@ -335,3 +486,4 @@ Ranked by how much the repo's conclusions move if the answer changes.
 |---|---|
 | 2025-12-16 | Initial models, config, README, executive summary committed. |
 | 2026-08-14 | H-01 through H-08 run and recorded. `legacy/` created. Config series made generated-not-authored. Five React sources repaired to parse. Unknowns U-1…U-10 opened. |
+| 2026-08-14 | H-09 through H-12 added from external sourcing. Species inventory widened from 1 to 13 across both emission pathways (`species_inventory.json`, `Multi-species-accumulation.py`). **U-1 closed** — the 30 kg/satellite figure is Ferreira et al. 2024 and the model's implied flux is within 12% of the published 2022 total. U-8 partly resolved. U-11…U-16 opened, including U-14: none of this round's citations could be verified against primary sources from this environment. |

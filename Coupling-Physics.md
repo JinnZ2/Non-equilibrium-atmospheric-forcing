@@ -179,6 +179,31 @@ At this threshold:
 
 ## 4. Ozone Destruction Coupling
 
+> ### ⚠ This section describes the wrong mechanism
+>
+> **Flagged 2026-08-14. See [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-12.**
+>
+> The rate law below treats Al₂O₃ as reacting with ozone directly. Per Ferreira
+> et al. (2024), aluminium oxides **do not react with ozone**. They activate
+> **chlorine**, which does the destroying, and are **not consumed** — so one
+> particle keeps catalysing for decades as it settles.
+>
+> Three consequences for what follows:
+>
+> 1. The rate should be **co-limited by available chlorine**, which does not
+>    appear in the equation at all.
+> 2. Chlorine comes largely from solid rocket motors — the **launch** pathway,
+>    which this repo does not model. Reentry and launch are therefore coupled,
+>    not independent.
+> 3. `S_aluminum` should not deplete with reaction, since the catalyst survives.
+>
+> **The corrected law is not written here, because deriving it is real work and
+> inventing one would be worse than leaving the error visible.** Tracked as
+> H-12/U-13. Do not use the numbers below.
+>
+> Separately: the worked example is keyed to "450 tons/year", a figure retracted
+> as a present-day rate — the sourced 2022 value is ~17 t/yr (H-02/H-10).
+
 ### 4.1 Catalytic Ozone Destruction
 
 Aluminum oxide acts as a heterogeneous catalyst:
@@ -352,26 +377,69 @@ At 450 tons/year:
 
 ## 8. Key Citations
 
-[This section would contain actual citations to:]
+This section was an empty placeholder ("[This section would contain actual
+citations to:]") from first commit until 2026-08-14. The following are the
+citations the project actually has. Everything not listed here is still
+uncited — see the gaps below, and `RESEARCH_LOG.md` U-14.
 
-- Atmospheric conductivity measurements
-- Space weather physics papers
-- Heterogeneous catalysis literature
-- Complexity economics frameworks
-- Power law scaling in environmental systems
-- Electromagnetic coupling in ionosphere
-- Nanoparticle surface chemistry
+**Reentry composition and detection**
+
+- Murphy, D. M., et al. (2023). Metals from spacecraft reentry in stratospheric
+  aerosol particles. *PNAS* 120(43), e2313374120. doi:10.1073/pnas.2313374120
+
+**Al₂O₃ yield and ozone mechanism**
+
+- Ferreira, J. P., et al. (2024). Potential Ozone Depletion From Satellite
+  Demise During Atmospheric Reentry in the Era of Mega-Constellations.
+  *Geophysical Research Letters* 51. doi:10.1029/2024GL109280
+  — source of the 30 kg/250 kg satellite yield used throughout this repo, and
+  of the chlorine-activation mechanism that supersedes §4 above.
+
+**Launch emissions**
+
+- Maloney, C. M., et al. (2022). The Climate and Ozone Impacts of Black Carbon
+  Emissions From Global Rocket Launches. *JGR Atmospheres*.
+  doi:10.1029/2021JD036373
+- Ryan, R. G., et al. (2022). Impact of Rocket Launch and Space Debris Air
+  Pollutant Emissions on Stratospheric Ozone and Global Climate. *Earth's
+  Future*. doi:10.1029/2021EF002612
+- The impact of rocket-emitted chlorine on stratospheric ozone. *ACP* 26,
+  3621 (2026).
+
+> **All of the above are unverified against primary sources.** They were
+> gathered by web search; publisher access was blocked by network egress
+> policy, so abstracts and secondary summaries were the sources. U-14.
+
+**Still uncited — these underpin sections 1–3, 5 and 6 and have no source:**
+
+- Atmospheric conductivity measurements (the α enhancement in §1.2)
+- The 1,000 MT conductivity threshold (U-2) — the branch point of the whole model
+- Coupling efficiency ε in §2.3
+- Power-law damage exponent α ≈ 1.5–2.5 in §5.1 (U-5)
+- The $50–200B/yr damage figure (U-10)
+- Resonance frequency 100 MHz (U-4)
+
+The "Source" column in §6.1 gives category labels ("Laboratory measurements",
+"Space physics literature"), not references. Those are not citations.
 
 -----
 
 ## 9. Computational Implementation
 
-See `/simulations` directory for:
+There is no `/simulations` directory, and `threshold-analysis.py` and
+`economic-scaling.py` have never existed in this repository. Corrected
+2026-08-14. The actual files:
 
-- `atmospheric-coupling.jsx` - Interactive visualization
-- `satellite-aluminum-pollution.jsx` - Focused satellite model
-- `threshold-analysis.py` - Numerical threshold calculations
-- `economic-scaling.py` - Power law cost projections
+- `Accumulation-with-coupling.py` — reference model: Al₂O₃ burden and χ
+- `Multi-species-accumulation.py` — full species inventory, both pathways
+- `reproduce.py` — regenerates published numbers, re-runs consistency checks
+- `Atmospheric-coupling.js` — interactive coupling visualisation
+- `Satellite-pollution-model.js` — focused satellite reentry model
+
+The threshold and economic-scaling calculations described in §3.2 and §5 are
+**not implemented anywhere.** The power-law damage function in §5.1 exists only
+as an equation in this document; no code evaluates it and no run produces the
+$50–200B/yr figure (U-5, U-10).
 
 -----
 

@@ -16,6 +16,8 @@ This repository models the atmospheric effects of aluminum oxide (Al2O3) nanopar
 
 **Working rules for this repo:**
 - Run `python reproduce.py` before quoting a projected figure.
+- **Never invent a coupling weight or a flux to make a calculation runnable.** `species_inventory.json` uses explicit `status` fields (`sourced` / `repo_assumption` / `unquantified` / `speculative`); leave a field `null` with status `unquantified` rather than filling it. `Multi-species-accumulation.py` deliberately refuses to produce a combined Chi for this reason — the blank is the finding (U-11, U-12).
+- Al2O3 is 1 of 13 known species and reentry is 1 of 2 pathways. Don't write "total atmospheric burden" when you mean Al2O3-from-reentry (H-09, H-11).
 - `coupling_config.json`'s `projected_time_series` is **generated** by `reproduce.py --write`, not hand-authored. Never hand-edit it; change the model and regenerate.
 - When a claim is revised, add or update its `RESEARCH_LOG.md` entry with the run that settled it. Don't silently edit numbers.
 - Superseded artefacts go to `legacy/` verbatim via `git mv` — never deleted, never tidied on the way in. Precedence carries. See `legacy/README.md`.
@@ -24,8 +26,11 @@ This repository models the atmospheric effects of aluminum oxide (Al2O3) nanopar
 
 ```
 ├── Accumulation-with-coupling.py   # Reference model: Al2O3 burden + coupling coefficient (Chi)
+├── Multi-species-accumulation.py   # All 13 species, both emission pathways; reports coverage gaps
 ├── reproduce.py                    # Regenerates published numbers; re-runs the consistency checks
 ├── coupling_config.json            # Parameters, risk thresholds, generated projected series
+├── species_inventory.json          # Species across reentry + launch pathways, with per-field epistemic status
+├── SPECIES.md                      # Narrative: pathways, the chlorine coupling, industry proposals
 ├── Atmospheric-coupling.js         # Agent-based interactive visualization of coupling effects
 ├── Atmospheric-economics.js        # Economic impact simulation (ozone, agriculture, health, climate)
 ├── Satellite-pollution-model.js    # Satellite reentry pollution model with economic cost calculations
