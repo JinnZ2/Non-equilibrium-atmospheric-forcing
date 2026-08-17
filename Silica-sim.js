@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from ‘react’;
-import { Play, Pause, RotateCcw, Droplet, Zap, AlertTriangle, TrendingDown, TrendingUp } from ‘lucide-react’;
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, Pause, RotateCcw, Droplet, Zap, AlertTriangle, TrendingDown, TrendingUp } from 'lucide-react';
 
 const SilicaAluminumComparison = () => {
 const canvasLeftRef = useRef(null);
 const canvasRightRef = useRef(null);
 const [isRunning, setIsRunning] = useState(false);
 const [time, setTime] = useState(0);
-const [selectedMaterial, setSelectedMaterial] = useState(‘both’); // ‘aluminum’, ‘silica’, ‘both’
 
 // Atmospheric state for both materials
 const [aluminumState, setAluminumState] = useState({
@@ -48,7 +47,6 @@ age: Math.random() * 500,
 settling: false
 }));
 
-```
 const initSilica = Array.from({ length: 60 }, () => ({
   x: Math.random() * 380,
   y: 150 + Math.random() * 200,
@@ -65,7 +63,6 @@ setParticles({
   silica: initSilica,
   solarWind: []
 });
-```
 
 }, []);
 
@@ -73,7 +70,6 @@ setParticles({
 const calculateAluminumEffects = (particles, currentOzone) => {
 const density = particles.length / 100;
 
-```
 // Electromagnetic coupling
 const conductivity = 1.0 + (density * 0.5);
 const emAmplification = 1.0 + Math.pow(density, 1.3) * 1.5;
@@ -97,7 +93,6 @@ return {
   newOzone,
   costPerYear: totalCost
 };
-```
 
 };
 
@@ -105,7 +100,6 @@ return {
 const calculateSilicaEffects = (particles, currentOzone) => {
 const density = particles.filter(p => !p.settling).length / 100;
 
-```
 // Much lower EM coupling (silica is less conductive)
 const conductivity = 1.0 + (density * 0.05);
 const emAmplification = 1.0 + Math.pow(density, 1.1) * 0.2;
@@ -127,7 +121,6 @@ return {
   costPerYear: totalCost,
   activeParticles: particles.filter(p => !p.settling).length
 };
-```
 
 };
 
@@ -135,7 +128,6 @@ return {
 useEffect(() => {
 if (!isRunning) return;
 
-```
 const interval = setInterval(() => {
   setTime(t => t + 1);
 
@@ -159,14 +151,14 @@ const interval = setInterval(() => {
     const updatedAluminum = prev.aluminum.map(p => {
       let newVx = p.vx;
       let newVy = p.vy;
-      
+
       // Strong EM interactions
       prev.aluminum.forEach(other => {
         if (other !== p) {
           const dx = other.x - p.x;
           const dy = other.y - p.y;
           const dist = Math.sqrt(dx * dx + dy * dy) + 1;
-          
+
           if (dist < 40) {
             const force = (p.charge * other.charge) / (dist * dist) * 0.08;
             newVx += force * dx / dist;
@@ -174,7 +166,7 @@ const interval = setInterval(() => {
           }
         }
       });
-      
+
       // Solar wind coupling
       updatedSolarWind.forEach(sw => {
         const dx = sw.x - p.x;
@@ -184,17 +176,17 @@ const interval = setInterval(() => {
           newVy += sw.energy * Math.abs(p.charge) * 0.02;
         }
       });
-      
+
       let newX = p.x + newVx;
       let newY = p.y + newVy;
-      
+
       if (newX < 0 || newX > 380) newVx *= -0.8;
       if (newY < 150) newVy *= -0.8;
       if (newY > 350) newVy *= -0.9;
-      
+
       newX = Math.max(0, Math.min(380, newX));
       newY = Math.max(150, Math.min(350, newY));
-      
+
       return {
         ...p,
         x: newX,
@@ -221,21 +213,20 @@ const interval = setInterval(() => {
 
     // Update silica particles (natural settling, aggregation, recycling)
     const updatedSilica = prev.silica.map(p => {
-      // Check if should start settling
-      if (!p.settling && Math.random() < 0.01) {
-        p.settling = true;
-      }
-      
+      // Check if should start settling (avoid mutating p directly)
+      const shouldSettle = !p.settling && Math.random() < 0.01;
+      const isSettling = p.settling || shouldSettle;
+
       let newVx = p.vx;
-      let newVy = p.vy + (p.settling ? 0.15 : 0.05); // Gravity + enhanced settling
-      
+      let newVy = p.vy + (isSettling ? 0.15 : 0.05); // Gravity + enhanced settling
+
       // Weaker EM interactions
       prev.silica.forEach(other => {
-        if (other !== p && !p.settling && !other.settling) {
+        if (other !== p && !isSettling && !other.settling) {
           const dx = other.x - p.x;
           const dy = other.y - p.y;
           const dist = Math.sqrt(dx * dx + dy * dy) + 1;
-          
+
           if (dist < 30) {
             const force = (p.charge * other.charge) / (dist * dist) * 0.02;
             newVx += force * dx / dist;
@@ -243,22 +234,22 @@ const interval = setInterval(() => {
           }
         }
       });
-      
+
       // Minimal solar wind coupling
       updatedSolarWind.forEach(sw => {
         const dx = sw.x - (p.x + 400);
         const dy = sw.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 30 && !p.settling) {
+        if (dist < 30 && !isSettling) {
           newVy += sw.energy * Math.abs(p.charge) * 0.005;
         }
       });
-      
+
       let newX = p.x + newVx;
       let newY = p.y + newVy;
-      
+
       if (newX < 0 || newX > 380) newVx *= -0.8;
-      if (newY < 150 && !p.settling) newVy *= -0.8;
+      if (newY < 150 && !isSettling) newVy *= -0.8;
       if (newY > 350) {
         // Particle settled out - recycle it
         return {
@@ -272,17 +263,18 @@ const interval = setInterval(() => {
           settling: false
         };
       }
-      
+
       newX = Math.max(0, Math.min(380, newX));
       newY = Math.max(150, Math.min(350, newY));
-      
+
       return {
         ...p,
         x: newX,
         y: newY,
         vx: newVx * 0.95,
         vy: newVy * 0.95,
-        age: p.age + 1
+        age: p.age + 1,
+        settling: isSettling
       };
     }).filter(p => p.age < 1000); // Remove very old particles
 
@@ -308,6 +300,8 @@ const interval = setInterval(() => {
   });
 
   // Update atmospheric states
+  // Note: `particles` is read from the closure here. The deps array includes `particles`,
+  // so the interval is recreated each tick, which mitigates staleness.
   const alEffects = calculateAluminumEffects(particles.aluminum, aluminumState.ozoneConcentration);
   setAluminumState(prev => ({
     particleDensity: particles.aluminum.length / 10,
@@ -319,6 +313,8 @@ const interval = setInterval(() => {
     costPerYear: alEffects.costPerYear
   }));
 
+  // Note: `particles` is read from the closure here. The deps array includes `particles`,
+  // so the interval is recreated each tick, which mitigates staleness.
   const siEffects = calculateSilicaEffects(particles.silica, silicaState.ozoneConcentration);
   setSilicaState(prev => ({
     particleDensity: siEffects.activeParticles / 10,
@@ -333,7 +329,6 @@ const interval = setInterval(() => {
 }, 50);
 
 return () => clearInterval(interval);
-```
 
 }, [isRunning, particles, aluminumState.ozoneConcentration, silicaState.ozoneConcentration]);
 
@@ -342,7 +337,6 @@ useEffect(() => {
 const canvas = canvasLeftRef.current;
 if (!canvas) return;
 
-```
 const ctx = canvas.getContext('2d');
 
 // Background
@@ -394,7 +388,7 @@ particles.solarWind.forEach(sw => {
 // Aluminum particles
 particles.aluminum.forEach(p => {
   const chargeMag = Math.abs(p.charge);
-  
+
   // Glow
   if (chargeMag > 0.7) {
     const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 8);
@@ -405,7 +399,7 @@ particles.aluminum.forEach(p => {
     ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
     ctx.fill();
   }
-  
+
   ctx.fillStyle = `rgba(220, ${200 - chargeMag * 50}, 240, 0.9)`;
   ctx.strokeStyle = `rgba(255, ${180 - chargeMag * 80}, 255, 0.9)`;
   ctx.lineWidth = 1;
@@ -422,7 +416,6 @@ ctx.fillText('ALUMINUM (Al₂O₃)', 10, 30);
 ctx.font = '11px sans-serif';
 ctx.fillStyle = 'rgba(255, 200, 200, 0.8)';
 ctx.fillText('No natural removal • Accumulates continuously', 10, 50);
-```
 
 }, [particles, aluminumState]);
 
@@ -431,7 +424,6 @@ useEffect(() => {
 const canvas = canvasRightRef.current;
 if (!canvas) return;
 
-```
 const ctx = canvas.getContext('2d');
 
 // Background
@@ -485,22 +477,22 @@ particles.solarWind.forEach(sw => {
 particles.silica.forEach(p => {
   const chargeMag = Math.abs(p.charge);
   const alpha = p.settling ? 0.4 : 0.9;
-  
+
   // Settling particles are dimmer
-  ctx.fillStyle = p.settling 
-    ? `rgba(150, 180, 150, ${alpha * 0.6})` 
+  ctx.fillStyle = p.settling
+    ? `rgba(150, 180, 150, ${alpha * 0.6})`
     : `rgba(180, ${220 - chargeMag * 40}, 180, ${alpha})`;
-  
+
   ctx.strokeStyle = p.settling
     ? `rgba(120, 150, 120, ${alpha * 0.7})`
     : `rgba(150, ${240 - chargeMag * 60}, 150, ${alpha})`;
-  
+
   ctx.lineWidth = 0.8;
   ctx.beginPath();
   ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
-  
+
   // Downward arrow for settling particles
   if (p.settling) {
     ctx.strokeStyle = `rgba(100, 150, 100, ${alpha * 0.8})`;
@@ -522,12 +514,51 @@ ctx.fillText('SILICA (SiO₂)', 10, 30);
 ctx.font = '11px sans-serif';
 ctx.fillStyle = 'rgba(200, 255, 200, 0.8)';
 ctx.fillText('Natural settling • Returns to dust cycle', 10, 50);
-```
 
 }, [particles, silicaState]);
 
 const reset = () => {
-window.location.reload();
+  setTime(0);
+  setIsRunning(false);
+  setAluminumState({
+    particleDensity: 50,
+    conductivityMultiplier: 1.2,
+    emAmplification: 1.15,
+    ozoneConcentration: 280,
+    settlingRate: 0,
+    recyclingEfficiency: 0,
+    costPerYear: 0
+  });
+  setSilicaState({
+    particleDensity: 50,
+    conductivityMultiplier: 1.02,
+    emAmplification: 1.02,
+    ozoneConcentration: 280,
+    settlingRate: 0.8,
+    recyclingEfficiency: 0.6,
+    costPerYear: 0
+  });
+  const initAluminum = Array.from({ length: 60 }, () => ({
+    x: Math.random() * 380,
+    y: 150 + Math.random() * 200,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.2,
+    charge: Math.random() * 2 - 1,
+    size: 2 + Math.random() * 2,
+    age: Math.random() * 500,
+    settling: false
+  }));
+  const initSilica = Array.from({ length: 60 }, () => ({
+    x: Math.random() * 380,
+    y: 150 + Math.random() * 200,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.2 + 0.05,
+    charge: Math.random() * 0.4 - 0.2,
+    size: 2 + Math.random() * 2,
+    age: Math.random() * 500,
+    settling: Math.random() < 0.3
+  }));
+  setParticles({ aluminum: initAluminum, silica: initSilica, solarWind: [] });
 };
 
 return (
@@ -542,21 +573,20 @@ Comparing electromagnetic coupling and atmospheric effects
 </p>
 </div>
 
-```
   {/* Side-by-side visualization */}
   <div className="grid grid-cols-2 gap-4 mb-6">
     <div className="bg-slate-800 rounded-lg p-4">
-      <canvas 
-        ref={canvasLeftRef} 
-        width={400} 
+      <canvas
+        ref={canvasLeftRef}
+        width={400}
         height={400}
         className="w-full rounded border-2 border-red-900/50"
       />
     </div>
     <div className="bg-slate-800 rounded-lg p-4">
-      <canvas 
-        ref={canvasRightRef} 
-        width={400} 
+      <canvas
+        ref={canvasRightRef}
+        width={400}
         height={400}
         className="w-full rounded border-2 border-green-900/50"
       />
@@ -701,7 +731,7 @@ Comparing electromagnetic coupling and atmospheric effects
           Aluminum amplifies {((aluminumState.emAmplification / silicaState.emAmplification)).toFixed(1)}× more than silica
         </div>
       </div>
-      
+
       <div className="bg-slate-700 rounded p-3">
         <div className="text-slate-400 mb-2">Ozone Impact Ratio:</div>
         <div className="text-2xl font-bold text-yellow-400">
@@ -711,7 +741,7 @@ Comparing electromagnetic coupling and atmospheric effects
           Aluminum depletes ozone {((280 - aluminumState.ozoneConcentration) / Math.max(0.1, 280 - silicaState.ozoneConcentration)).toFixed(0)}× faster
         </div>
       </div>
-      
+
       <div className="bg-slate-700 rounded p-3">
         <div className="text-slate-400 mb-2">Cost Ratio:</div>
         <div className="text-2xl font-bold text-red-400">
@@ -757,7 +787,6 @@ Comparing electromagnetic coupling and atmospheric effects
     </p>
   </div>
 </div>
-```
 
 );
 };

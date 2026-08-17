@@ -49,7 +49,6 @@ resonanceFreq: 50 + Math.random() * 200, // MHz
 couplingRadius: 15 + Math.random() * 10
 }));
 
-```
 const initialSulfur = Array.from({ length: 50 }, () => ({
   x: Math.random() * 800,
   y: Math.random() * 400,
@@ -67,7 +66,6 @@ setAgents({
   sulfur: initialSulfur,
   ozoneKillers: []
 });
-```
 
 }, []);
 
@@ -79,7 +77,6 @@ let totalPhotoCoupling = 0;
 let geometricResonance = 0;
 let newOzoneKillers = [];
 
-```
 // Electromagnetic coupling with geometric resonance
 for (let i = 0; i < aluminum.length; i++) {
   for (let j = 0; j < sulfur.length; j++) {
@@ -134,7 +131,6 @@ return {
   geometricResonance: geometricResonance,
   newOzoneKillers: newOzoneKillers
 };
-```
 
 };
 
@@ -143,7 +139,6 @@ const calculateThresholdEffects = (ozone, couplingStrength, time) => {
 // Critical thresholds (Dobson Units)
 const criticalThresholds = [280, 250, 220, 180, 150, 100];
 
-```
 // Coupling amplification increases near thresholds
 let amplification = 1.0;
 let cascadeRisk = 0;
@@ -187,7 +182,6 @@ return {
   cascadeRisk: Math.min(cascadeRisk, 1.0),
   powerLawExponent: powerLawExponent
 };
-```
 
 };
 
@@ -197,7 +191,6 @@ const calculateOzoneDepletion = (currentOzone, aluminum, sulfur, killers, coupli
 const aluminumDepletion = aluminum.length * 0.015; // DU per timestep
 const sulfurDepletion = sulfur.length * 0.025;
 
-```
 // Catalytic destruction from coupling-created agents
 const catalyticDepletion = killers.reduce((sum, k) => sum + k.destructionRate, 0);
 
@@ -220,7 +213,6 @@ const totalDepletion = (
 ) * amplification * resonanceMultiplier;
 
 return Math.max(50, currentOzone - totalDepletion); // Floor at 50 DU
-```
 
 };
 
@@ -228,7 +220,6 @@ return Math.max(50, currentOzone - totalDepletion); // Floor at 50 DU
 const calculateEconomicImpact = (ozone, temp, coupling, powerLaw) => {
 const ozoneDeficit = Math.max(0, 280 - ozone);
 
-```
 // Power law scaling for economic damage
 // Damage = k * (deficit)^exponent
 const exponent = Math.max(1.5, powerLaw);
@@ -257,7 +248,6 @@ return {
   systemicRisk,
   totalCost: ozoneDamage + agriculturalLoss + healthCosts + climateDisruption + systemicRisk
 };
-```
 
 };
 
@@ -265,7 +255,6 @@ return {
 useEffect(() => {
 if (!isRunning) return;
 
-```
 const interval = setInterval(() => {
   setTime(t => t + 1);
   
@@ -340,11 +329,13 @@ const interval = setInterval(() => {
       });
 
       const newTemp = s.temp + heatGain;
-      let newX = s.x + s.vx + fx * 0.1;
-      let newY = s.y + s.vy + fy * 0.1;
+      let newVx = s.vx + fx * 0.1;
+      let newVy = s.vy + fy * 0.1;
+      let newX = s.x + newVx;
+      let newY = s.y + newVy;
 
-      if (newX < 0 || newX > 800) s.vx *= -0.7;
-      if (newY < 0 || newY > 400) s.vy *= -0.7;
+      if (newX < 0 || newX > 800) newVx *= -0.7;
+      if (newY < 0 || newY > 400) newVy *= -0.7;
       newX = Math.max(0, Math.min(800, newX));
       newY = Math.max(0, Math.min(400, newY));
 
@@ -352,6 +343,8 @@ const interval = setInterval(() => {
         ...s,
         x: newX,
         y: newY,
+        vx: newVx,
+        vy: newVy,
         temp: newTemp
       };
     });
@@ -441,7 +434,6 @@ const interval = setInterval(() => {
 }, 50);
 
 return () => clearInterval(interval);
-```
 
 }, [isRunning, agents, atmosphericState, time]);
 
@@ -450,7 +442,6 @@ useEffect(() => {
 const canvas = canvasRef.current;
 if (!canvas) return;
 
-```
 const ctx = canvas.getContext('2d');
 
 // Background gradient based on ozone level
@@ -522,7 +513,6 @@ agents.sulfur.forEach(s => {
   ctx.fill();
   ctx.stroke();
 });
-```
 
 }, [agents, atmosphericState]);
 
@@ -534,7 +524,49 @@ atmosphericState.powerLawExponent
 );
 
 const reset = () => {
-window.location.reload();
+  setTime(0);
+  setIsRunning(false);
+  setAtmosphericState({
+    ozoneConcentration: 280,
+    temperature: 15,
+    aluminumDensity: 0,
+    sulfurDensity: 0,
+    emFieldStrength: 0,
+    couplingAmplification: 1.0,
+    cascadeRisk: 0,
+    powerLawExponent: 0
+  });
+  setCouplingMetrics({
+    electromagneticCoupling: 0,
+    thermodynamicCoupling: 0,
+    photochemicalCoupling: 0,
+    geometricResonance: 0,
+    nonlinearityIndex: 0
+  });
+  setThresholdData([]);
+  const initialAluminum = Array.from({ length: 40 }, () => ({
+    x: Math.random() * 800,
+    y: Math.random() * 400,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    charge: Math.random() * 2 - 1,
+    mass: 1.0,
+    temp: 15 + Math.random() * 3,
+    resonanceFreq: 50 + Math.random() * 200,
+    couplingRadius: 15 + Math.random() * 10
+  }));
+  const initialSulfur = Array.from({ length: 50 }, () => ({
+    x: Math.random() * 800,
+    y: Math.random() * 400,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4,
+    charge: Math.random() * 1.5 - 0.75,
+    mass: 0.8,
+    temp: 15 + Math.random() * 3,
+    reactivity: Math.random(),
+    ozoneDestructionRate: 0.02 + Math.random() * 0.03
+  }));
+  setAgents({ aluminum: initialAluminum, sulfur: initialSulfur, ozoneKillers: [] });
 };
 
 // Determine regime
@@ -559,7 +591,6 @@ Nonlinear threshold effects, power law scaling, and cascade risk modeling
 </p>
 </div>
 
-```
   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
     {/* Main visualization */}
     <div className="lg:col-span-2">
@@ -835,7 +866,6 @@ Nonlinear threshold effects, power law scaling, and cascade risk modeling
     </p>
   </div>
 </div>
-```
 
 );
 };

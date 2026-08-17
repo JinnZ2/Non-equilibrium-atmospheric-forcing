@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+
 
 def simulate_aluminum_accumulation(years_to_run=20, launch_growth_rate=0.15):
     """
@@ -9,10 +9,14 @@ def simulate_aluminum_accumulation(years_to_run=20, launch_growth_rate=0.15):
     # Constants based on 2024/25 research
     KG_PER_METRIC_TON = 1000
     AL_PER_SATELLITE = 30  # kg of Al2O3 nanoparticles per 250kg satellite
-    RESIDENCE_TIME = 30    # years particles stay in the stratosphere/mesosphere
+    # Residence time corrected from 30 to 5 years based on meteor smoke
+    # particle transport literature (Plane 2012, Megner et al. 2008).
+    # Mesospheric meridional circulation: ~2-4yr to stratosphere + ~1-2yr
+    # stratospheric residence. Range: 3-10 years.
+    RESIDENCE_TIME = 5     # years particles stay in the mesosphere/stratosphere
     
     # Starting conditions (2024 baseline)
-    current_annual_satellites_reentering = 500 # Estimated annual burn-rate
+    current_annual_satellites_reentering = 730 # Estimated annual burn-rate
     
     # Data storage
     time_series = np.arange(2024, 2024 + years_to_run)
@@ -40,13 +44,13 @@ def simulate_aluminum_accumulation(years_to_run=20, launch_growth_rate=0.15):
         
         # 4. Age the particles (Move them toward the "fallout" limit)
         # Shift the array: particles at index 29 fall out this year
-        active_particles = np.roll(active_particles, 1)
-        active_particles[0] = 0 
+        active_particles[1:] = active_particles[:-1]  # Shift right, oldest falls off
+        active_particles[0] = 0
         
     return time_series, annual_injection, total_atmospheric_burden
 
 # Run Simulation
-years, injection, burden = simulate_aluminum_accumulation(years_to_run=25, launch_growth_rate=0.20)
+years, injection, burden = simulate_aluminum_accumulation(years_to_run=25, launch_growth_rate=0.15)
 
 # Output for your GitHub findings
 print(f"2040 Forecasted Annual Al2O3 Injection: {injection[16]:.2f} Metric Tons")
