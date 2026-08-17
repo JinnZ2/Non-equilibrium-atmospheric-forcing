@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from ‘react’;
-import { Play, Pause, RotateCcw, TrendingDown, Zap, Thermometer, Eye } from ‘lucide-react’;
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, Pause, RotateCcw, TrendingDown, Zap, Thermometer, Eye } from 'lucide-react';
 
 const AdvancedAtmosphericCouplingModel = () => {
 const canvasRef = useRef(null);
@@ -571,11 +571,11 @@ const reset = () => {
 
 // Determine regime
 const getRegime = (ozone) => {
-if (ozone > 250) return { name: ‘Stable’, color: ‘text-green-400’ };
-if (ozone > 220) return { name: ‘Degraded’, color: ‘text-yellow-400’ };
-if (ozone > 180) return { name: ‘Critical’, color: ‘text-orange-400’ };
-if (ozone > 150) return { name: ‘Cascade’, color: ‘text-red-400’ };
-return { name: ‘Collapse’, color: ‘text-red-600’ };
+if (ozone > 250) return { name: 'Stable', color: 'text-green-400' };
+if (ozone > 220) return { name: 'Degraded', color: 'text-yellow-400' };
+if (ozone > 180) return { name: 'Critical', color: 'text-orange-400' };
+if (ozone > 150) return { name: 'Cascade', color: 'text-red-400' };
+return { name: 'Collapse', color: 'text-red-600' };
 };
 
 const regime = getRegime(atmosphericState.ozoneConcentration);

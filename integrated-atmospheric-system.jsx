@@ -1,4 +1,3 @@
- integrated-atmospheric-system.jsx 
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, RotateCcw, Zap, Droplet, Target, TrendingUp, Wind, Sparkles } from 'lucide-react';
 
@@ -927,7 +926,7 @@ const IntegratedAtmosphericSystem = () => {
               <ul className="space-y-1 ml-4 list-disc text-slate-300">
                 <li>Controlled precision injection</li>
                 <li>Natural settling & recycling</li>
-                <li>EM amplification <1.1×</li>
+                <li>EM amplification &lt;1.1×</li>
                 <li>No ozone chemistry effects</li>
                 <li>Benefit: +${metrics.economicBenefit.toFixed(0)}M/year</li>
                 <li>Zero resource depletion</li>

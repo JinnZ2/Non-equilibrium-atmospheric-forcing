@@ -16,9 +16,24 @@
 
 - ~730 satellites reenter annually (2024)
 - Projected: 8,400+ reentries/year as mega-constellations scale
-- ~450 metric tons of aluminum oxide nanoparticles injected annually
+- **~17 metric tons** of aluminum oxide nanoparticles injected annually (2022, all reentries — Ferreira et al. 2024); **>360 t/yr** in a realised mega-constellation scenario
+- Over **20 elements** from spacecraft reentry now detectable in stratospheric aerosol, not aluminum alone (Murphy et al. 2023)
+- ~10% of stratospheric sulfuric acid particles >120 nm already contain spacecraft metals; projected to approach ~50%
 - Zero comprehensive monitoring of stratospheric accumulation
 - No regulatory framework for electromagnetic coupling effects
+
+> **Correction.** Earlier revisions of this README gave **450 t/yr as a
+> present-day figure**. That was wrong by roughly 26× — it was the
+> full-deployment projection from the table below, presented as a current rate.
+> The sourced current figure is ~17 t/yr. Notably, this repo's Python model
+> (15 t/yr) was within 12% of the literature all along, so the model was the
+> trustworthy artefact here and the prose was not. See
+> [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-02/H-10.
+
+> **Aluminum is not the only species.** The models in this repo track Al₂O₃ and
+> nothing else — 1 of 13 known species, across only 1 of 2 emission pathways
+> (satellite reentry; rocket launch exhaust is not modelled at all). See
+> [`SPECIES.md`](SPECIES.md).
 
 **The Hidden Costs:**
 Traditional cost-benefit analysis: “Atmospheric disposal = $0, Controlled disposal = $5M per satellite”
@@ -223,22 +238,52 @@ This isn’t about stopping progress - it’s about doing it sustainably. We can
 
 ## Repository Structure
 
-All files live at the repository root:
+```
+Accumulation-with-coupling.py       Reference model: Al2O3 burden + coupling coefficient (chi)
+Multi-species-accumulation.py       All 13 species, both emission pathways; reports coverage gaps
+Chemical-interactions.py            Heterogeneous chemistry: Al2O3 catalysis, SAI synergy, EPP-NOx-O3
+Geomagnetic-dynamics.py             Field evolution, South Atlantic Anomaly, geomagnetic jerks
+Orbital-coupling.py                 Cometary dust, close gravitational passes, solar cycle geometry
+reproduce.py                        Regenerates every published number; re-runs the consistency checks
+coupling_config.json                Parameters and the projected series (generated, not hand-edited)
+species_inventory.json              Species across both pathways, with per-field epistemic status
 
-- `Accumulation-with-coupling.py` - EM coupling coefficient (Chi) calculator
-- `Aluminum-loading.py` - Al2O3 accumulation simulator
-- `Chemical-interactions.py` - Heterogeneous chemistry: Al2O3 catalysis, SAI synergy, EPP-NOx-O3
-- `Geomagnetic-dynamics.py` - Magnetic field evolution, South Atlantic Anomaly, geomagnetic jerks
-- `Orbital-coupling.py` - Cometary dust, close gravitational passes, solar cycle geometry
-- `Atmospheric-coupling.js` - Agent-based coupling visualization
-- `Atmospheric-economics.js` - Economic impact simulation
-- `Satellite-pollution-model.js` - Satellite reentry pollution model
-- `Silica-sim.js` - Aluminum vs. silica comparison
-- `integrated-atmospheric-system.jsx` - Multi-domain integrated system
-- `coupling_config.json` - Simulation parameters and risk thresholds
-- `Coupling-Physics.md` - Mathematical foundations
-- `FAQ.md` - Scientific FAQ
-- `CONTRIBUTING.md` - Contribution guidelines
+Atmospheric-coupling.js             Agent-based visualisation of coupling effects
+Atmospheric-economics.js            Economic impact simulation (ozone, agriculture, health, climate)
+Satellite-pollution-model.js        Reentry pollution model with economic cost calculations
+Silica-sim.js                       Aluminium vs. silica material comparison
+integrated-atmospheric-system.jsx   Multi-domain system: EM harvesting + atmospheric effects
+
+README.md                           This file
+RESEARCH_LOG.md                     Claim -> run -> result -> revision, plus open unknowns
+SPECIES.md                          Pathways, the chlorine coupling, industry proposals
+Coupling-Physics.md                 Mathematical foundations for the EM coupling physics
+FAQ.md                              Scientific FAQ: skepticism and methodology
+EXECUTIVE_SUMMARY_STRATEGIC_RISK.md Policy-maker brief
+CONTRIBUTING.md                     Contribution guidelines and technical standards
+LICENSE.md                          MIT
+
+legacy/                             Superseded artefacts, kept verbatim for precedence
+```
+
+**Before citing a number from this repo, check
+[`RESEARCH_LOG.md`](RESEARCH_LOG.md).** Several figures that appeared in
+earlier revisions did not reproduce from the models that were supposed to have
+produced them. The ones that have been re-derived are marked there; the ones
+that are still unsourced are listed as open unknowns. Run `python reproduce.py`
+to regenerate the checks yourself.
+
+### Running things
+
+```bash
+pip install numpy matplotlib
+python Accumulation-with-coupling.py    # burden + chi, 20-year projection
+python reproduce.py                     # regenerate published numbers, re-run checks
+```
+
+The `.js`/`.jsx` files are React components intended to be embedded in a React
+application; there is no build harness in this repo yet. They are verified to
+parse, but have not been rendered or their outputs validated (U-9).
 
 -----
 
@@ -266,7 +311,7 @@ See <CONTRIBUTING.md> for details.
 
 ## License
 
-MIT License (c) 2025 JinnZ2 — see `LICENSE.md` for details.
+MIT License (c) 2025 JinnZ2 — see [LICENSE.md](LICENSE.md) for details.
 
 -----
 

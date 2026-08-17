@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from ‘react’;
-import { Play, Pause, RotateCcw, Satellite, AlertTriangle, Zap } from ‘lucide-react’;
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, Pause, RotateCcw, Satellite, AlertTriangle, Zap } from 'lucide-react';
 
 const SatelliteAluminumPollutionModel = () => {
 const canvasRef = useRef(null);
@@ -483,11 +483,11 @@ const reset = () => {
 };
 
 const getRegime = (ozone) => {
-if (ozone > 260) return { name: ‘Healthy’, color: ‘text-green-400’, desc: ‘Normal ozone levels’ };
-if (ozone > 240) return { name: ‘Concern’, color: ‘text-yellow-400’, desc: ‘Early degradation’ };
-if (ozone > 220) return { name: ‘Warning’, color: ‘text-orange-400’, desc: ‘Significant depletion’ };
-if (ozone > 180) return { name: ‘Danger’, color: ‘text-red-400’, desc: ‘Critical threshold’ };
-return { name: ‘Crisis’, color: ‘text-red-600’, desc: ‘Severe ozone loss’ };
+if (ozone > 260) return { name: 'Healthy', color: 'text-green-400', desc: 'Normal ozone levels' };
+if (ozone > 240) return { name: 'Concern', color: 'text-yellow-400', desc: 'Early degradation' };
+if (ozone > 220) return { name: 'Warning', color: 'text-orange-400', desc: 'Significant depletion' };
+if (ozone > 180) return { name: 'Danger', color: 'text-red-400', desc: 'Critical threshold' };
+return { name: 'Crisis', color: 'text-red-600', desc: 'Severe ozone loss' };
 };
 
 const regime = getRegime(atmosphericState.ozoneConcentration);

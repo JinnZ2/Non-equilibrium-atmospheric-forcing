@@ -3,36 +3,120 @@
     "project_name": "Non-Equilibrium Atmospheric Forcing",
     "lead_analyst_persona": "Logistics-Integrated INTJ",
     "model_type": "Complexity-Based Phase Transition",
-    "last_updated": "2026-03-22",
-    "version": "2.1 — added chemical, geomagnetic, and orbital coupling domains"
+    "last_updated": "2026-08-17",
+    "version": "2.2 \u2014 chemical/geomagnetic/orbital domains, plus generated series and species inventory",
+    "supersedes": "legacy/coupling_config.2025-12-16.json"
+  },
+  "provenance": {
+    "generated_by": "reproduce.py --write",
+    "model_source": "Accumulation-with-coupling.py",
+    "note": "projected_time_series and threshold_crossings are GENERATED, not hand-authored. Re-run reproduce.py after any model change and commit the diff. Two successive hand-authored revisions of this series failed to reproduce from the model they were attributed to (RESEARCH_LOG H-01, H-14) \u2014 that is why this block exists.",
+    "model_parameters": {
+      "base_reentries_per_year": 730,
+      "al2o3_kg_per_satellite": 30,
+      "growth_rate": 0.15,
+      "solar_activity_index": 1.2,
+      "residence_time_years": 5,
+      "start_year": 2025
+    },
+    "threshold_crossings": {
+      "incipient": {
+        "year": 2040,
+        "burden_mt": 687.0,
+        "chi": 0.57
+      },
+      "systemic_fragility": {
+        "year": 2043,
+        "burden_mt": 1044.8,
+        "chi": 1.95
+      },
+      "pre_cascade": {
+        "year": 2054,
+        "burden_mt": 4860.8,
+        "chi": 3.04
+      },
+      "cascade_failure": {
+        "year": 2069,
+        "burden_mt": 39552.2,
+        "chi": 5.06
+      }
+    }
   },
   "atmospheric_parameters": {
     "al2o3_residence_time_years": 5,
     "al2o3_residence_time_range": "3-10 years (Plane 2012, Megner et al. 2008)",
     "al2o3_residence_time_note": "Corrected from 30yr; based on meteor smoke particle transport",
+    "al2o3_residence_time_conflict": "CONTESTED. Ferreira et al. 2024 \u2014 the source of the 30 kg/satellite yield used in this same model \u2014 describes Al2O3 taking up to 30 years to settle from the top of the mesosphere into the ozone layer. That is 6x this value and scales steady-state burden almost proportionally. Unresolved: see RESEARCH_LOG.md H-13. reproduce.py reports both.",
     "critical_mass_threshold_mt": 1000.0,
-    "critical_mass_threshold_note": "Speculative — no observational constraint",
-    "coupling_resonance_note": "Removed. Proton gyrofrequency ~760 Hz, electron ~1.4 MHz; previous 100 MHz value was incorrect by ~5 orders of magnitude"
+    "critical_mass_threshold_note": "Speculative \u2014 no observational constraint (U-2)",
+    "coupling_resonance_note": "Removed. Proton gyrofrequency ~760 Hz, electron ~1.4 MHz; previous 100 MHz value was incorrect by ~5 orders of magnitude. This closes RESEARCH_LOG U-4."
   },
   "risk_thresholds": {
-    "nominal": { "chi_limit": 0.5, "economic_impact": "Baseline" },
-    "incipient": { "chi_limit": 1.5, "economic_impact": "Increased Insurance Premiums" },
-    "systemic_fragility": { "chi_limit": 3.0, "economic_impact": "JIT Logistics Stutter" },
-    "cascade_failure": { "chi_limit": 5.0, "economic_impact": "Grid/GPS Decoupling" }
+    "_note": "chi_max of each regime is the floor of the next. The 2025-12-16 config gave cascade_failure a chi_limit of 5.0 while the model code labelled cascade at 3.0, leaving 3.0-5.0 unassigned. Resolved by naming that band Pre-Cascade rather than by redefining either boundary. See RESEARCH_LOG.md H-05.",
+    "nominal": {
+      "chi_min": 0.0,
+      "chi_max": 0.5,
+      "economic_impact": "Baseline"
+    },
+    "incipient": {
+      "chi_min": 0.5,
+      "chi_max": 1.5,
+      "economic_impact": "Increased Insurance Premiums"
+    },
+    "systemic_fragility": {
+      "chi_min": 1.5,
+      "chi_max": 3.0,
+      "economic_impact": "JIT Logistics Stutter"
+    },
+    "pre_cascade": {
+      "chi_min": 3.0,
+      "chi_max": 5.0,
+      "economic_impact": "Sustained PNT degradation"
+    },
+    "cascade_failure": {
+      "chi_min": 5.0,
+      "chi_max": null,
+      "economic_impact": "Grid/GPS Decoupling"
+    }
   },
-  "projected_time_series_note": "Revised with 5yr residence time (burden ~6x lower than 30yr model)",
   "projected_time_series": [
-    { "year": 2025, "burden_mt": 25, "chi": 0.001, "regime": "Stable" },
-    { "year": 2030, "burden_mt": 80, "chi": 0.008, "regime": "Stable" },
-    { "year": 2035, "burden_mt": 210, "chi": 0.05, "regime": "Stable-Degraded" },
-    { "year": 2040, "burden_mt": 520, "chi": 0.33, "regime": "Degraded" },
-    { "year": 2045, "burden_mt": 1100, "chi": 1.5, "regime": "Incipient (if growth continues)" }
+    {
+      "year": 2025,
+      "burden_mt": 21.9,
+      "chi": 0.001,
+      "regime": "Nominal"
+    },
+    {
+      "year": 2030,
+      "burden_mt": 169.8,
+      "chi": 0.035,
+      "regime": "Nominal"
+    },
+    {
+      "year": 2035,
+      "burden_mt": 341.5,
+      "chi": 0.14,
+      "regime": "Nominal"
+    },
+    {
+      "year": 2040,
+      "burden_mt": 687.0,
+      "chi": 0.566,
+      "regime": "Incipient Coupling"
+    },
+    {
+      "year": 2045,
+      "burden_mt": 1381.7,
+      "chi": 2.105,
+      "regime": "Systemic Fragility"
+    }
   ],
   "chemical_parameters": {
-    "gamma_o3_on_al2o3": 1e-5,
+    "gamma_o3_on_al2o3": 1e-05,
     "gamma_o3_range": "1e-6 to 1e-4 (Rossi 2003)",
     "so2_enhancement_factor": 2.5,
     "so2_enhancement_note": "Multiplicative increase in gamma when SO2 is adsorbed on Al2O3 surfaces",
+    "mechanism_note": "Ferreira et al. 2024 report that Al2O3 does not react with ozone directly \u2014 it activates chlorine and is not consumed. Any direct-catalysis rate here is therefore incomplete: the chlorine supply, largely from solid rocket motors, is co-limiting and is not modelled. See RESEARCH_LOG.md H-12.",
     "confidence": "MEDIUM for catalysis rates, LOW for SAI synergy magnitude"
   },
   "geomagnetic_parameters": {
@@ -50,6 +134,11 @@
     "solar_cycle_length_years": 11,
     "solar_cycle_25_max_year": 2025,
     "note": "Natural meteoric Al2O3 (~400 t/yr) >> current satellite Al2O3 (~22 t/yr) but chemically distinct",
+    "context_note": "Baseline offset, NOT a competing source. The satellite contribution ADDS to this population, so any threshold is reached sooner than a satellite-only model shows, not later. Two consequences. (1) At 5-yr residence the natural steady-state burden is ~1,970 MT \u2014 roughly 2x the 1,000 MT critical_mass_threshold_mt \u2014 so that threshold cannot be an absolute total-burden figure; it would have been permanently crossed long before satellites existed. It must be an anthropogenic-excess threshold, a threshold on something other than bulk mass, or wrong (U-2). (2) Mass fraction is the wrong metric for a conductivity question: Murphy et al. 2023 find spacecraft metals inside the SAME sulfate particles as meteoric metals, making the anthropogenic material a dopant in an existing host population, and dopant effects on conductivity are not mass-weighted. Note also that the ~18x natural:satellite ratio is a 2025 snapshot: satellite flux grows 15%/yr against constant meteoric input and crosses over around 2046. See RESEARCH_LOG.md H-15.",
     "confidence": "HIGH for meteoric input, LOW for close-pass scenarios"
+  },
+  "species_inventory": {
+    "see": "species_inventory.json",
+    "note": "Al2O3 is 1 of 13 known species, across 1 of 2 emission pathways. Every parameter in this file describes that one species on that one pathway."
   }
 }

@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node — only needed locally for the JSX parse check documented in CLAUDE.md
+node_modules/
+package-lock.json
+
+# Matplotlib / simulation output
+*.png
+*.pdf
+*.svg
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/

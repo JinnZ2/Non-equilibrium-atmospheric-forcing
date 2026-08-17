@@ -201,6 +201,31 @@ At this threshold:
 
 ## 4. Ozone Destruction Coupling
 
+> ### ⚠ This section describes the wrong mechanism
+>
+> **Flagged 2026-08-14. See [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-12.**
+>
+> The rate law below treats Al₂O₃ as reacting with ozone directly. Per Ferreira
+> et al. (2024), aluminium oxides **do not react with ozone**. They activate
+> **chlorine**, which does the destroying, and are **not consumed** — so one
+> particle keeps catalysing for decades as it settles.
+>
+> Three consequences for what follows:
+>
+> 1. The rate should be **co-limited by available chlorine**, which does not
+>    appear in the equation at all.
+> 2. Chlorine comes largely from solid rocket motors — the **launch** pathway,
+>    which this repo does not model. Reentry and launch are therefore coupled,
+>    not independent.
+> 3. `S_aluminum` should not deplete with reaction, since the catalyst survives.
+>
+> **The corrected law is not written here, because deriving it is real work and
+> inventing one would be worse than leaving the error visible.** Tracked as
+> H-12/U-13. Do not use the numbers below.
+>
+> Separately: the worked example is keyed to "450 tons/year", a figure retracted
+> as a present-day rate — the sourced 2022 value is ~17 t/yr (H-02/H-10).
+
 ### 4.1 Catalytic Ozone Destruction
 
 Aluminum oxide acts as a heterogeneous catalyst:
@@ -452,15 +477,44 @@ Three classes of orbital interaction affect the atmospheric environment:
 17. Usoskin, I.G. (2017). "A history of solar activity over millennia." *Living Reviews in Solar Physics*, 14(1). — Solar cycle and cosmic ray modulation.
 18. Heirtzler, J.R. (2002). "The future of the South Atlantic Anomaly and implications for radiation damage in space." *Journal of Atmospheric and Solar-Terrestrial Physics*, 64(16). — SAA growth projections.
 
+19. Ferreira, J.P. et al. (2024). "Potential Ozone Depletion From Satellite Demise During Atmospheric Reentry in the Era of Mega-Constellations." *Geophysical Research Letters*, 51. doi:10.1029/2024GL109280 — **Source of the 30 kg Al2O3 per 250 kg satellite yield used throughout this repo**, the ~17 t/yr 2022 total, and the chlorine-activation mechanism that supersedes Section 4.
+20. Maloney, C.M. et al. (2022). "The Climate and Ozone Impacts of Black Carbon Emissions From Global Rocket Launches." *JGR Atmospheres*. doi:10.1029/2021JD036373 — Launch-pathway black carbon.
+21. Ryan, R.G. et al. (2022). "Impact of Rocket Launch and Space Debris Air Pollutant Emissions on Stratospheric Ozone and Global Climate." *Earth's Future*. doi:10.1029/2021EF002612 — Launch emission inventories.
+22. "The impact of rocket-emitted chlorine on stratospheric ozone." *Atmospheric Chemistry and Physics*, 26, 3621 (2026). — Chlorine sensitivity; see RESEARCH_LOG U-13.
+
+> **Citations 19-22 are unverified against primary sources.** They were gathered
+> by web search on 2026-08-14; publisher domains were blocked by network egress
+> policy, so abstracts and secondary summaries were the sources. See
+> `RESEARCH_LOG.md` U-14.
+
+### Still uncited
+
+These underpin Sections 1-3, 5 and 6 and have no source in this document:
+
+- Atmospheric conductivity enhancement α (Section 1.2)
+- The 1,000 MT conductivity threshold (U-2) — the branch point of the whole model
+- Coupling efficiency ε (Section 2.3)
+- Power-law damage exponent α ≈ 1.5-2.5 (Section 5.1, U-5)
+- The headline annual damage figure (U-10)
+
+The "Source" column in Section 6.1 gives category labels ("Laboratory
+measurements", "Space physics literature"), not references. Those are not
+citations.
+
 -----
 
-## 9. Computational Implementation
+## 10. Computational Implementation
 
 All source files are at the repository root:
 
+> Corrected 2026-08-14: earlier revisions pointed at a `/simulations` directory
+> and at `threshold-analysis.py` / `economic-scaling.py`, none of which have
+> ever existed in this repository.
+
 **Python simulations:**
-- `Accumulation-with-coupling.py` - Coupling coefficient (Chi) calculator, 20-year forecast
-- `Aluminum-loading.py` - Al2O3 accumulation simulator
+- `Accumulation-with-coupling.py` - Coupling coefficient (Chi) calculator, 20-year forecast; single source of truth for Chi
+- `Multi-species-accumulation.py` - All 13 species across both emission pathways; reports coverage gaps
+- `reproduce.py` - Regenerates every published number and re-runs the consistency checks
 - `Chemical-interactions.py` - Heterogeneous chemistry: Al2O3 catalysis, SAI synergy, EPP-NOx
 - `Geomagnetic-dynamics.py` - Magnetic field evolution, SAA, geomagnetic jerks, EPP coupling
 - `Orbital-coupling.py` - Cometary dust, close passes, solar cycle, heliospheric geometry
@@ -474,7 +528,7 @@ All source files are at the repository root:
 
 -----
 
-## 10. Future Refinements
+## 11. Future Refinements
 
 **High priority:**
 
@@ -526,3 +580,18 @@ All source files are at the repository root:
 1. Threshold effects could create regime changes
 1. Economic costs likely follow power law scaling (exact exponents uncertain)
 1. Traditional linear models may underestimate impacts by 2-10× (revised from earlier 10-40× estimate after correcting gyrofrequency and coupling efficiency)
+
+-----
+
+## Appendix B: What Is Not Implemented
+
+The threshold and economic-scaling calculations described in Sections 3.2 and 5
+are **not implemented anywhere in this repository.** The power-law damage
+function in Section 5.1 exists only as an equation in this document; no code
+evaluates it, and no run produces the headline annual damage figure (U-5, U-10).
+
+Section 4's ozone rate law describes a mechanism that Ferreira et al. (2024)
+supersede — Al2O3 activates chlorine rather than reacting with ozone directly,
+and chlorine supply is co-limiting. No corrected rate law is supplied here,
+because deriving one is real work and inventing one would be worse than leaving
+the error visible. See `RESEARCH_LOG.md` H-12 and U-13.

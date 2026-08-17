@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from ‘react’;
-import { Play, Pause, RotateCcw, TrendingUp, AlertTriangle } from ‘lucide-react’;
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, Pause, RotateCcw, TrendingUp, AlertTriangle } from 'lucide-react';
 
 const AtmosphericEconomicsSimulation = () => {
 const canvasRef = useRef(null);
