@@ -40,6 +40,6 @@ Four cautions for anyone acting on these numbers:
 1. The modelled "phase transition" is produced by a **discontinuity in the coupling function**, not by modelled physics (H-04).
 2. The residence time underpinning this timeline is **contested between two cited sources by 6x** (H-13).
 3. Al2O3 **does not destroy ozone directly** — it activates chlorine, whose main source is rocket launches, a pathway this repo does not model (H-12).
-4. **Natural meteoric Al2O3 (~400 t/yr) exceeds the satellite contribution (~22 t/yr) by ~18x.** This is the strongest single argument against the thesis and is not yet answered by any model here (H-15).
+4. **A large natural meteoric population already exists (~394 t/yr), and the model ignores it.** It is a baseline the satellite contribution *adds to*, so thresholds arrive sooner than a satellite-only model shows — not later. Its steady-state burden (~1,970 MT at 5-year residence) already sits at ~2x the 1,000 MT threshold, which means that threshold cannot be an absolute total-burden figure: it would have been permanently crossed long before satellites existed. What the threshold actually refers to is unresolved (H-15, U-2).
 
 Full accounting in [`RESEARCH_LOG.md`](RESEARCH_LOG.md).

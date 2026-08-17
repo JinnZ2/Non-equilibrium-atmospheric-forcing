@@ -11,6 +11,7 @@ how a claim gets revised rather than quietly drifting.
 import argparse
 import importlib.util
 import json
+import math
 import pathlib
 import sys
 
@@ -87,6 +88,36 @@ def residence_time_conflict(years=60):
     return rows
 
 
+def natural_background(years=60):
+    """H-15: the meteoric population is a baseline offset, not a rival source.
+
+    Returns the natural steady-state burden, how it compares with the
+    critical threshold, and the anthropogenic share of total particle mass
+    over time. Computed on every run because the additive reading is the
+    correct default, and an earlier revision of this repo got that backwards.
+    """
+    cfg = json.loads(CONFIG_PATH.read_text())
+    nat_flux = cfg["orbital_parameters"]["natural_al2o3_tons_per_year"]
+    thr = model.CRITICAL_THRESHOLD_MT
+    out = {"natural_flux_t_per_yr": nat_flux, "threshold_mt": thr, "cases": []}
+    for rt in (model.RESIDENCE_TIME_YEARS, model.RESIDENCE_TIME_ALT_YEARS):
+        base = nat_flux * rt          # rectangular kernel steady state
+        s = full_series(years, residence_time=rt)
+        shares = {y: 100 * s[y][0] / (s[y][0] + base)
+                  for y in (2025, 2045, 2064) if y in s}
+        out["cases"].append({
+            "residence_time_years": rt,
+            "natural_steady_state_mt": round(base, 1),
+            "multiple_of_threshold": round(base / thr, 1),
+            "anthropogenic_share_pct": {y: round(v, 1) for y, v in shares.items()},
+        })
+    # flux crossover: satellite flux grows, meteoric input does not
+    sat0 = (model.BASE_REENTRIES_PER_YEAR * model.AL2O3_KG_PER_SATELLITE) / 1000
+    n = math.log(nat_flux / sat0) / math.log(1 + model.GROWTH_RATE)
+    out["flux_crossover_year"] = int(round(model.START_YEAR + n))
+    return out
+
+
 def check_discontinuity():
     t = model.CRITICAL_THRESHOLD_MT
     s = model.SOLAR_ACTIVITY_INDEX
@@ -134,6 +165,39 @@ def main():
     print("=" * 68)
     for name, x in threshold_crossings(series).items():
         print(f"  {name:<20} {x['year']}   burden {x['burden_mt']:>9.1f} MT   chi {x['chi']:.2f}")
+
+    print()
+    print("=" * 68)
+    print("H-15  natural meteoric background — A BASELINE OFFSET, NOT A RIVAL")
+    print("=" * 68)
+    nb = natural_background()
+    print(f"  Meteoric Al2O3 input: {nb['natural_flux_t_per_yr']:,.0f} t/yr (constant)")
+    print(f"  Critical threshold:   {nb['threshold_mt']:,.0f} MT")
+    print()
+    for c in nb["cases"]:
+        print(f"  residence {c['residence_time_years']:>2} yr -> natural steady-state burden "
+              f"{c['natural_steady_state_mt']:>10,.0f} MT "
+              f"= {c['multiple_of_threshold']:>4.1f}x the threshold")
+    print()
+    print("  The threshold is already exceeded by the natural population alone,")
+    print("  and has been throughout geological history with no phase transition.")
+    print("  So the 1,000 MT figure cannot be an absolute total-burden threshold:")
+    print("  it is either an anthropogenic-EXCESS threshold, a threshold on")
+    print("  something other than bulk mass, or wrong. It is unsourced (U-2).")
+    print()
+    print("  Anthropogenic share of total particle mass (satellite / [satellite+natural]):")
+    for c in nb["cases"]:
+        shares = "  ".join(f"{y}: {v:>5.1f}%"
+                           for y, v in sorted(c["anthropogenic_share_pct"].items()))
+        print(f"    residence {c['residence_time_years']:>2} yr   {shares}")
+    print(f"\n  Flux crossover (satellite overtakes meteoric): ~{nb['flux_crossover_year']}")
+    print("  The often-quoted 18x natural:satellite ratio is a 2025 snapshot of a")
+    print("  quantity growing 15%/yr against a constant one — not a standing fact.")
+    print()
+    print("  NOTE: mass fraction is the wrong metric for a conductivity question.")
+    print("  Murphy et al. 2023 find spacecraft metals INSIDE the same sulfate")
+    print("  particles as meteoric metals — one doped population, not two. Trace")
+    print("  dopants shift conductivity by orders of magnitude. See H-15, U-18.")
 
     print()
     print("=" * 68)

@@ -512,33 +512,113 @@ code it was attributed to.
 
 ---
 
-## H-15 — Satellite Al₂O₃ is the dominant source of stratospheric alumina
+## H-15 — Natural meteoric Al₂O₃ is a counter-argument to the thesis
 
-> Implicit in the framing throughout: satellite reentry is *the* alumina input.
+> As first written here on 2026-08-17: natural meteoric Al₂O₃ (~394 t/yr)
+> exceeds the satellite contribution (~22 t/yr) by ~18x, and this is "the
+> strongest single argument against the project's thesis."
 
-- **Status:** **`FALSIFIED`** — by this repo's own newly added parameters.
-- **Finding:** natural meteoric input is ~19,710 t/yr, of which ~2% is Al₂O₃ —
-  **~394 t/yr of natural alumina, against ~22 t/yr from satellites.** Natural
-  exceeds anthropogenic by roughly **18×** (`coupling_config.json` →
-  `orbital_parameters`, added on `main` via `Orbital-coupling.py`).
+- **Status:** **`FALSIFIED` — this entry was wrong, and wrong in the specific
+  way this repo exists to catch.** Corrected 2026-08-17 after challenge.
+- **Run:** `python reproduce.py` (section H-15)
 
-This is the strongest single argument against the project's thesis, and it
-arrived from inside the project. It deserves to be stated plainly rather than
-left in a parameter block.
+The natural background is not a competing explanation. It is a **baseline
+offset** and a **coupling factor**. Three separate errors:
 
-- **The counter-argument, which is real but unmodelled:** the two populations
-  may not be equivalent. Murphy et al. (2023) find that reentry mass of Li, Al,
-  Cu and Pb *already exceeds the cosmic dust influx of those same metals* — a
-  direct tension with the ~18× figure that turns on how "Al₂O₃" is being
-  counted versus elemental Al. Meteoric smoke and satellite ablation products
-  also differ in particle morphology, size distribution, and deposition
-  altitude, all of which plausibly matter for both conductivity and catalysis.
-- **Status of that counter-argument: asserted, not demonstrated.** Nothing in
-  this repo models the distinction. Until something does, the ~18× ratio is the
-  better-supported number and the thesis has to live with it.
-- **Next run:** reconcile the two figures. If Murphy's element-wise result and
-  the 394 t/yr bulk figure are both right, the difference is in the accounting,
-  and finding out which is the single most informative thing left to do here.
+### 1. Additivity — background makes thresholds arrive sooner, not later
+
+The model starts burden at zero in 2025 and accumulates satellite material
+only. If a persistent natural population exists, the physically relevant
+quantity is `natural + anthropogenic`. A large baseline puts the system
+*closer* to any threshold, not further from it. I had the sign backwards.
+
+### 2. The threshold is already exceeded — by nature, permanently
+
+| Residence time | Natural steady-state burden | vs the 1,000 MT critical threshold |
+|---|---|---|
+| 5 yr | **1,970 MT** | **2.0x — already over** |
+| 30 yr | **11,820 MT** | **11.8x — already over** |
+
+At 394 t/yr against a 5-year residence, the natural burden alone sits at
+roughly twice the threshold the entire model is built around — and has done
+for all of geological history, with no phase transition on record.
+
+**This is a much bigger finding than the one it replaces, and it lands on
+U-2, not on the thesis.** The 1,000 MT threshold cannot be an absolute
+total-burden figure; if it were, it would have been crossed permanently long
+before satellites existed. So it must be one of:
+
+- an **anthropogenic-excess** threshold (in which case the model is right as
+  written but badly mislabelled, and every "total burden" phrasing is wrong), or
+- a threshold on something that is **not bulk mass** — composition, particle
+  number, surface area, or dopant fraction, or
+- simply **wrong**.
+
+Nobody in this repo knows which, because the value was never sourced. U-2 was
+already the highest-priority unknown; it is now also demonstrably inconsistent
+with the repo's own natural-background parameter.
+
+### 3. Mass fraction is the wrong metric for a conductivity question
+
+Murphy et al. (2023) found spacecraft metals **inside the same sulfuric acid
+particles** as meteoric metals — one particle population, not two parallel
+inventories. Meteoric smoke is the established condensation substrate for
+stratospheric sulfate.
+
+So the anthropogenic material is a **dopant in an existing host population**,
+and the conductivity of a doped medium is not the mass-weighted average of its
+constituents. Trace metallic dopants routinely shift electrical properties by
+orders of magnitude — that is the entire basis of semiconductor engineering.
+Asking "what fraction of the mass is anthropogenic?" answers a question nobody
+needed answered.
+
+Worse, the framing assumed chi scales with mass fraction — i.e. **linearity** —
+inside a project whose premise is that the system is nonlinear with thresholds,
+and whose `CONTRIBUTING.md` says in as many words not to smooth away
+nonlinearities. In a threshold system the marginal input that crosses the
+threshold is fully responsible for the crossing, however small it is next to
+the baseline.
+
+### 4. And the 18x is a snapshot of a moving quantity
+
+Satellite flux grows at 15%/yr against a constant meteoric input:
+
+| Year | Satellite | Natural | Ratio nat/sat |
+|---|---|---|---|
+| 2025 | 22 t/yr | 394 t/yr | 18.0x |
+| 2035 | 89 t/yr | 394 t/yr | 4.5x |
+| 2045 | 358 t/yr | 394 t/yr | 1.1x |
+| 2055 | 1,450 t/yr | 394 t/yr | 0.27x |
+
+**Flux crossover: ~2046.** As a share of total particle burden, the
+anthropogenic fraction goes 1.1% (2025) -> 41% (2045) -> 91% (2064) at 5-year
+residence. Quoting a present-day ratio as though it were a standing fact
+described a trajectory by one of its early points.
+
+### What survives
+
+One narrow version of the original point is still worth testing, and it is a
+useful one:
+
+> **If** natural and satellite-derived particles are equivalent for coupling
+> purposes, **then** the absence of any observed coupling effect across
+> geological time, at burdens already exceeding the threshold, puts a real
+> **upper bound on chi**.
+
+That is a quantitative constraint the repo could actually use — turning the
+natural background into a calibration dataset rather than a rival hypothesis.
+It is entirely conditional on the equivalence assumption (U-18), which
+Murphy's compositional results give reason to doubt: the tracer elements Nb and
+Hf have no meteoric source at all, and morphology, oxidation state and
+deposition altitude all plausibly differ.
+
+- **Revision:** the executive summary and `coupling_config.json` both carried
+  the wrong framing and have been corrected. `reproduce.py` now computes the
+  baseline offset and the doping fraction on every run, so the additive
+  reading is the default one a reader meets.
+- **Lesson recorded:** the error was applying linear, share-of-total reasoning
+  to a nonlinear threshold model — exactly the failure mode this project was
+  built to point out in other people's models.
 
 ---
 
@@ -591,33 +671,45 @@ Ranked by how much the repo's conclusions move if the answer changes.
 | **U-14** | **None of the citations added on 2026-08-14 were verified against primary sources.** Publisher domains were blocked by network egress policy; abstracts and secondary summaries were all that could be reached. | H-09…H-12 | Every externally sourced number in this round inherits this caveat. First thing to fix from an unrestricted network. |
 | **U-15** | The Al/S catalytic synergism claim (README, executive summary) has no supporting run, model, or citation anywhere in the repo. | policy brief | It is stated as a central mechanism and is entirely unbacked. |
 | **U-16** | Effect of "Design for Demise" and the 5-year deorbit rule on injection rates. Debris-mitigation policy deliberately increases ablation and shortens orbital lifetimes. | H-09, projections | Policy designed to fix the debris problem may be increasing the atmospheric one. Nobody here has modelled the sign, let alone the size. |
-| **U-17** | Reconcile natural meteoric Al₂O₃ (~394 t/yr) against Murphy et al.'s finding that reentry Al already exceeds cosmic dust influx. | H-15 | The two cannot both be straightforwardly true. Whichever way it resolves, it decides whether the anthropogenic signal is ~5% of the natural background or larger than it — i.e. whether the thesis has a subject. |
-| **U-18** | Whether meteoric and satellite-derived particles are equivalent for coupling purposes (morphology, size distribution, deposition altitude, oxidation state). | H-15 | This is the only available answer to U-17's bulk-mass argument, and it is currently an assertion with no model behind it. |
+| **U-17** | **What does the 1,000 MT threshold actually measure?** Natural burden alone (~1,970 MT at 5-yr residence) already exceeds it by ~2x, permanently and throughout geological history. So it cannot be absolute total burden. Anthropogenic excess? Particle number? Surface area? Dopant fraction? | H-15, U-2 | Promoted from a sub-point to a headline unknown. The model's central parameter is not merely unsourced — as an absolute burden figure it is inconsistent with the repo's own natural-background number. Everything downstream of the branch point depends on this. |
+| **U-19** | Reconcile the ~394 t/yr bulk meteoric Al₂O₃ figure against Murphy et al.'s element-wise finding that reentry Li/Al/Cu/Pb already exceed cosmic dust influx. | H-15 | The two cannot both be straightforwardly true as stated. The difference is probably in the accounting — bulk Al₂O₃ versus elemental Al, or different altitude bands — and finding out which is cheap and clarifying. |
+| **U-18** | Whether meteoric and satellite-derived particles are equivalent for coupling purposes (morphology, size distribution, deposition altitude, oxidation state) — and whether the anthropogenic fraction acts as a **dopant** in the meteoric host population rather than as added bulk. | H-15 | Murphy et al. find spacecraft metals inside the SAME sulfate particles as meteoric metals, so this is one doped population, not two. Dopant effects on conductivity are not mass-weighted. Cuts both ways: if the populations ARE equivalent, then geological-time exposure at above-threshold burdens with no observed transition puts a hard upper bound on chi — turning the natural background into a calibration dataset. |
 | **U-9** | The five React simulations parse but have never been run. Their economic and coupling outputs are unverified. | H-07 | They are the repo's most visible artefacts and nothing confirms their numbers. |
 | **U-10** | The headline annual damage figure has no derivation in the repo. Now $5–50B after `main`'s revision, still underived; the power-law damage function in Coupling-Physics.md §5.1 is not implemented in any code. | policy brief | It is the number a policymaker will quote. |
 
 ### Suggested next runs
 
-1. **U-14** — re-verify every 2026-08-14 citation against the primary papers
+1. **U-17 / U-2** — establish what the 1,000 MT threshold measures. The
+   natural population already sits at ~2x it, permanently, with no phase
+   transition on record, so as an absolute burden figure it cannot be right.
+   Until this is settled every date the repo prints is keyed to a number whose
+   meaning is unknown. Newly the sharpest item on the list, and it came from
+   taking the natural background seriously as a baseline rather than as a
+   rival (H-15).
+2. **U-18** — test the doping hypothesis: does a small anthropogenic fraction
+   inside a meteoric host population change conductivity disproportionately?
+   If yes, the whole mass-fraction framing is beside the point and chi should
+   be a function of composition, not burden. If no, geological-time exposure
+   gives a hard upper bound on chi. **Either answer is worth more than another
+   burden projection**, because both are decisive and neither is expensive.
+3. **U-14** — re-verify every 2026-08-14 citation against the primary papers
    from an unrestricted network. Cheapest item on the list and everything
-   added this round depends on it.
-2. **U-2** — either derive the 1,000 MT threshold or replace the piecewise χ
-   law with a continuous one and see whether any threshold behaviour survives
-   (H-04). Most consequential open item: it decides whether the project's
-   central "phase transition" claim has anything behind it.
-3. **U-13 / H-12** — resolve the ozone tension. The repo says catastrophic;
+   added that round depends on it.
+4. **U-2 (χ law)** — replace the piecewise χ law with a continuous one and see
+   whether any threshold behaviour survives (H-04).
+5. **U-13 / H-12** — resolve the ozone tension. The repo says catastrophic;
    the retrieved chlorine sensitivity says 0.23% at 52× emissions. One of
    those is wrong, and it is the claim a policymaker will act on.
-4. **U-11 / U-12** — the multi-species model is built and empty. Per-element
+6. **U-11 / U-12** — the multi-species model is built and empty. Per-element
    fluxes would fill it; coupling weights would make χ meaningful across
    species. Weights are the harder and more valuable of the two.
-5. **U-8** — source the 18%/yr growth rate. Over a 20-year projection the
+7. **U-8** — source the 15%/yr growth rate. Over a 20-year projection the
    growth rate dominates the baseline, and it is still a bare assertion.
-6. **U-9** — stand up a minimal `package.json` + Vite harness so the React
+8. **U-9** — stand up a minimal `package.json` + Vite harness so the React
    models can actually be rendered and their outputs checked.
-7. **U-5 / U-10 / U-15** — write down the damage-function and Al/S synergism
+9. **U-5 / U-10 / U-15** — write down the damage-function and Al/S synergism
    derivations, or mark them as placeholders in the policy brief.
-8. **U-3** — demoted after testing (see table). Fix the comment; note the
+10. **U-3** — demoted after testing (see table). Fix the comment; note the
    sharper framing from H-10 — the error is treating the 30-year descent as
    inert when the source describes it as the destructive phase.
 
@@ -629,5 +721,6 @@ Ranked by how much the repo's conclusions move if the answer changes.
 |---|---|
 | 2025-12-16 | Initial models, config, README, executive summary committed. |
 | 2026-08-14 | H-01 through H-08 run and recorded. `legacy/` created. Config series made generated-not-authored. Five React sources repaired to parse. Unknowns U-1…U-10 opened. |
+| 2026-08-17 | **H-15 corrected after challenge.** The natural meteoric population was written up as a counter-argument to the thesis; it is a baseline offset and a coupling factor. Corrected framing shows the natural burden alone already exceeds the 1,000 MT threshold by ~2x, which reframes U-2 into U-17: the threshold cannot mean absolute total burden. Also opened U-19 and rewrote U-18 around the doping hypothesis. `reproduce.py` now computes the baseline offset every run. |
 | 2026-08-17 | Merged with `main` (PR #2). Adopted `main`'s physics corrections: residence time 30→5 yr, gyrofrequency fix (closes U-4), Pre-Cascade regime (settles H-05 as anticipated), 730/yr and 15%/yr standardisation, revised economic ranges. Kept this branch's structure: `legacy/`, generated series, species inventory. New findings from the merge itself — H-13 (residence time contested 6×), H-14 (H-01 recurred independently on `main`), H-15 (natural meteoric Al₂O₃ ~18× the satellite contribution), H-16 (`main`'s claimed np.roll bug was not a bug). U-17, U-18 opened. |
 | 2026-08-14 | H-09 through H-12 added from external sourcing. Species inventory widened from 1 to 13 across both emission pathways (`species_inventory.json`, `Multi-species-accumulation.py`). **U-1 closed** — the 30 kg/satellite figure is Ferreira et al. 2024 and the model's implied flux is within 12% of the published 2022 total. U-8 partly resolved. U-11…U-16 opened, including U-14: none of this round's citations could be verified against primary sources from this environment. |
