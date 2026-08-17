@@ -26,9 +26,29 @@ hypothesis ID given below.
 | | |
 |---|---|
 | **First committed** | 2025-12-16 (`f1eaa8d`, "Create Aluminum-loading.py") |
-| **Retired** | 2026-08-14 |
+| **Last modified** | 2026-03-22 on `main` (`2876b0a`) — see note below |
+| **Retired** | 2026-08-14, archived at its final state 2026-08-17 |
 | **Superseded by** | `../Accumulation-with-coupling.py` |
-| **Log entry** | H-08 |
+| **Log entry** | H-08, H-16 |
+
+> **Archived at its final state, not its original one.** This file was retired
+> on a branch while parallel work on `main` was still actively maintaining it.
+> The version here is `main`'s last one — the file as it stood when retirement
+> actually took effect — because that is what "the artefact as retired" means.
+> The 2025-12-16 original remains in git history at `f1eaa8d`.
+>
+> That concurrent maintenance is itself the argument for retiring it. `main`'s
+> commit had to "standardize satellite reentry baseline to 730/year across
+> Python files" and "standardize growth rate to 15% across Python files" —
+> manually syncing constants duplicated between this file and its successor.
+> That is the cost duplication imposes, and it is exactly the drift H-01 and
+> H-14 are about. The successor now carries those parameters as named module
+> constants, so there is one place to change them.
+>
+> One of `main`'s changes here was described as fixing an `np.roll` wrap-around
+> bug. Tested: there was no bug — both forms are numerically identical and both
+> match a direct cohort-sum reference. The clearer `a[1:] = a[:-1]` form was
+> adopted in the successor anyway. See H-16.
 
 The first written statement of the Al₂O₃ accumulation model, and the origin of
 three parameters the project still relies on: 30 kg of Al₂O₃ per reentering

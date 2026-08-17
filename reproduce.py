@@ -24,34 +24,36 @@ _spec = importlib.util.spec_from_file_location(
 model = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(model)
 
-REPORT_YEARS = [2025, 2030, 2035, 2040]
-REGIME_NAMES = {
-    "Nominal": "Stable",
-    "Incipient Coupling": "Degraded",
-    "Systemic Fragility": "Critical",
-    "CASCADE FAILURE": "Cascade",
-}
+REPORT_YEARS = [2025, 2030, 2035, 2040, 2045]
 
 
-def full_series(years=60):
-    return {y: (b, c, r) for y, b, c, r in model.run(years_to_run=years)}
+def full_series(years=60, residence_time=None):
+    kw = {} if residence_time is None else {"residence_time": residence_time}
+    return {y: (b, c, r) for y, b, c, r in model.run(years_to_run=years, **kw)}
 
 
 def projected_series(series):
-    """The four-point series published in coupling_config.json."""
+    """The series published in coupling_config.json.
+
+    Regime labels are the model's own, verbatim. An earlier revision
+    translated them into a second vocabulary (Stable/Degraded/Critical);
+    that translation layer was a place for the two to drift apart, so it
+    is gone.
+    """
     return [
         {
             "year": y,
             "burden_mt": round(series[y][0], 1),
-            "chi": round(series[y][1], 2),
-            "regime": REGIME_NAMES[series[y][2]],
+            "chi": round(series[y][1], 3),
+            "regime": series[y][2],
         }
         for y in REPORT_YEARS
     ]
 
 
 def threshold_crossings(series):
-    limits = [("incipient", 0.5), ("systemic_fragility", 1.5), ("cascade_failure", 3.0)]
+    limits = [("incipient", 0.5), ("systemic_fragility", 1.5),
+              ("pre_cascade", 3.0), ("cascade_failure", 5.0)]
     out, prev = {}, 0.0
     for y in sorted(series):
         chi = series[y][1]
@@ -61,6 +63,28 @@ def threshold_crossings(series):
                              "chi": round(chi, 2)}
         prev = chi
     return out
+
+
+def residence_time_conflict(years=60):
+    """H-13: two cited sources disagree about residence time by 6x.
+
+    Reported on every run rather than resolved, because resolving it by
+    picking a favourite would hide a live disagreement between the source
+    of our yield figure and the source of our transport figure.
+    """
+    rows = []
+    for label, rt in (("5 yr (Plane 2012, Megner 2008)", model.RESIDENCE_TIME_YEARS),
+                      ("30 yr (Ferreira 2024)", model.RESIDENCE_TIME_ALT_YEARS)):
+        s = full_series(years, residence_time=rt)
+        cross = next((y for y in sorted(s)
+                      if s[y][0] >= model.CRITICAL_THRESHOLD_MT), None)
+        rows.append({
+            "label": label,
+            "residence_time_years": rt,
+            "burden_2045": round(s[2045][0], 1) if 2045 in s else None,
+            "crossing_1000mt": cross,
+        })
+    return rows
 
 
 def check_discontinuity():
@@ -110,6 +134,21 @@ def main():
     print("=" * 68)
     for name, x in threshold_crossings(series).items():
         print(f"  {name:<20} {x['year']}   burden {x['burden_mt']:>9.1f} MT   chi {x['chi']:.2f}")
+
+    print()
+    print("=" * 68)
+    print("H-13  residence time — TWO CITED SOURCES, 6x APART, UNRESOLVED")
+    print("=" * 68)
+    print(f"  {'assumption':<34}{'burden 2045':>14}{'1000 MT crossed':>18}")
+    for r in residence_time_conflict():
+        b = f"{r['burden_2045']:.1f} MT" if r["burden_2045"] is not None else "n/a"
+        c = r["crossing_1000mt"] or "not within run"
+        print(f"  {r['label']:<34}{b:>14}{str(c):>18}")
+    print("  The model defaults to 5 yr. Both are cited; neither is settled here.")
+    print("  Measured effect: a 6x disagreement in residence time moves the 2045")
+    print("  burden by only ~1.9x and the 1000 MT crossing by 4 years. Under 15%/yr")
+    print("  growth the recent cohorts dominate, so the older ones matter less than")
+    print("  the 6x gap suggests. Worth resolving, but not the biggest lever.")
 
     print()
     print("=" * 68)

@@ -178,11 +178,11 @@ const agricultureLoss = 0.7 * Math.pow(ozoneDeficit, powerLawExponent + 0.2) / 9
 const emMultiplier = couplingEffects.electromagneticAmplification;
 
 return {
-  ozoneDepletion: ozoneDepletion * emMultiplier,
+  ozoneDepletion: ozoneDepletion,
   navigationDisruption,
   climateForcing,
-  healthDamage: healthDamage * emMultiplier,
-  agricultureLoss: agricultureLoss * emMultiplier,
+  healthDamage: healthDamage,
+  agricultureLoss: agricultureLoss,
   totalCost: (ozoneDepletion + navigationDisruption + climateForcing + healthDamage + agricultureLoss) * emMultiplier
 };
 
@@ -438,7 +438,48 @@ particles.aluminumOxide.forEach(p => {
 }, [particles, atmosphericState]);
 
 const reset = () => {
-window.location.reload();
+  setTime(0);
+  setIsRunning(false);
+  setAtmosphericState({
+    ozoneConcentration: 280,
+    aluminumDensity: 0,
+    totalAluminumMass: 0,
+    emFieldStrength: 0,
+    temperature: 15,
+    conductivityChange: 0,
+    polarizationDistortion: 0
+  });
+  setCouplingEffects({
+    electromagneticAmplification: 1.0,
+    catalyticDestruction: 0,
+    radiativeForcing: 0,
+    thermosphereHeating: 0,
+    ionosphericDisruption: 0
+  });
+  setEconomicImpact({
+    ozoneDepletion: 0,
+    navigationDisruption: 0,
+    climateForcing: 0,
+    healthDamage: 0,
+    agricultureLoss: 0,
+    totalCost: 0
+  });
+  const initialParticles = Array.from({ length: 30 }, () => ({
+    x: Math.random() * 800,
+    y: 200 + Math.random() * 150,
+    vx: (Math.random() - 0.5) * 0.2,
+    vy: (Math.random() - 0.5) * 0.1,
+    charge: Math.random() * 2 - 1,
+    size: 0.02 + Math.random() * 0.08,
+    age: Math.random() * 1000,
+    temp: -40 + Math.random() * 20,
+    reactivity: Math.random()
+  }));
+  setParticles({
+    aluminumOxide: initialParticles,
+    ozoneKillers: [],
+    satellites: []
+  });
 };
 
 const getRegime = (ozone) => {
@@ -472,7 +513,10 @@ Atmospheric coupling effects from satellite-derived aluminum oxide nanoparticles
         <input
           type="number"
           value={satelliteParams.reentryRate}
-          onChange={(e) => setSatelliteParams({...satelliteParams, reentryRate: parseFloat(e.target.value)})}
+          onChange={(e) => {
+            const val = parseFloat(e.target.value);
+            if (!isNaN(val)) setSatelliteParams({...satelliteParams, reentryRate: val});
+          }}
           className="w-full bg-slate-700 text-white px-3 py-2 rounded"
           min="0"
           max="10"
@@ -485,7 +529,10 @@ Atmospheric coupling effects from satellite-derived aluminum oxide nanoparticles
         <input
           type="number"
           value={satelliteParams.averageMass}
-          onChange={(e) => setSatelliteParams({...satelliteParams, averageMass: parseFloat(e.target.value)})}
+          onChange={(e) => {
+            const val = parseFloat(e.target.value);
+            if (!isNaN(val)) setSatelliteParams({...satelliteParams, averageMass: val});
+          }}
           className="w-full bg-slate-700 text-white px-3 py-2 rounded"
           min="100"
           max="2000"
@@ -498,7 +545,10 @@ Atmospheric coupling effects from satellite-derived aluminum oxide nanoparticles
         <input
           type="number"
           value={satelliteParams.aluminumContent * 100}
-          onChange={(e) => setSatelliteParams({...satelliteParams, aluminumContent: parseFloat(e.target.value) / 100})}
+          onChange={(e) => {
+            const val = parseFloat(e.target.value);
+            if (!isNaN(val)) setSatelliteParams({...satelliteParams, aluminumContent: val / 100});
+          }}
           className="w-full bg-slate-700 text-white px-3 py-2 rounded"
           min="5"
           max="30"

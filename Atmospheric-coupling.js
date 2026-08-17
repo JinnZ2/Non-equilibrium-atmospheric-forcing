@@ -329,11 +329,13 @@ const interval = setInterval(() => {
       });
 
       const newTemp = s.temp + heatGain;
-      let newX = s.x + s.vx + fx * 0.1;
-      let newY = s.y + s.vy + fy * 0.1;
+      let newVx = s.vx + fx * 0.1;
+      let newVy = s.vy + fy * 0.1;
+      let newX = s.x + newVx;
+      let newY = s.y + newVy;
 
-      if (newX < 0 || newX > 800) s.vx *= -0.7;
-      if (newY < 0 || newY > 400) s.vy *= -0.7;
+      if (newX < 0 || newX > 800) newVx *= -0.7;
+      if (newY < 0 || newY > 400) newVy *= -0.7;
       newX = Math.max(0, Math.min(800, newX));
       newY = Math.max(0, Math.min(400, newY));
 
@@ -341,6 +343,8 @@ const interval = setInterval(() => {
         ...s,
         x: newX,
         y: newY,
+        vx: newVx,
+        vy: newVy,
         temp: newTemp
       };
     });
@@ -520,7 +524,49 @@ atmosphericState.powerLawExponent
 );
 
 const reset = () => {
-window.location.reload();
+  setTime(0);
+  setIsRunning(false);
+  setAtmosphericState({
+    ozoneConcentration: 280,
+    temperature: 15,
+    aluminumDensity: 0,
+    sulfurDensity: 0,
+    emFieldStrength: 0,
+    couplingAmplification: 1.0,
+    cascadeRisk: 0,
+    powerLawExponent: 0
+  });
+  setCouplingMetrics({
+    electromagneticCoupling: 0,
+    thermodynamicCoupling: 0,
+    photochemicalCoupling: 0,
+    geometricResonance: 0,
+    nonlinearityIndex: 0
+  });
+  setThresholdData([]);
+  const initialAluminum = Array.from({ length: 40 }, () => ({
+    x: Math.random() * 800,
+    y: Math.random() * 400,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    charge: Math.random() * 2 - 1,
+    mass: 1.0,
+    temp: 15 + Math.random() * 3,
+    resonanceFreq: 50 + Math.random() * 200,
+    couplingRadius: 15 + Math.random() * 10
+  }));
+  const initialSulfur = Array.from({ length: 50 }, () => ({
+    x: Math.random() * 800,
+    y: Math.random() * 400,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4,
+    charge: Math.random() * 1.5 - 0.75,
+    mass: 0.8,
+    temp: 15 + Math.random() * 3,
+    reactivity: Math.random(),
+    ozoneDestructionRate: 0.02 + Math.random() * 0.03
+  }));
+  setAgents({ aluminum: initialAluminum, sulfur: initialSulfur, ozoneKillers: [] });
 };
 
 // Determine regime

@@ -21,7 +21,7 @@ photons: []
 });
 
 const [atmosphericState, setAtmosphericState] = useState({
-ozoneConcentration: 100,
+ozoneConcentration: 280,
 temperature: 15,
 emFieldStrength: 0,
 refractiveIndex: 1.0,
@@ -72,6 +72,9 @@ setAgents({
 useEffect(() => {
 if (!isRunning) return;
 
+// Note: deps include [isRunning, agents, atmosphericState] so the interval is
+// recreated each tick. This avoids stale closures at the cost of extra setInterval
+// churn, which is acceptable at the 50ms tick rate used here.
 const interval = setInterval(() => {
   setTime(t => t + 1);
   
@@ -112,8 +115,8 @@ const interval = setInterval(() => {
       });
 
       const newTemp = al.temp + heatGain;
-      const newVx = al.vx + fx * 0.1;
-      const newVy = al.vy + fy * 0.1;
+      let newVx = al.vx + fx * 0.1;
+      let newVy = al.vy + fy * 0.1;
       
       let newX = al.x + newVx;
       let newY = al.y + newVy;
@@ -154,8 +157,8 @@ const interval = setInterval(() => {
       });
 
       const newTemp = s.temp + heatGain;
-      const newVx = s.vx + fx * 0.1;
-      const newVy = s.vy + fy * 0.1;
+      let newVx = s.vx + fx * 0.1;
+      let newVy = s.vy + fy * 0.1;
       
       let newX = s.x + newVx;
       let newY = s.y + newVy;
@@ -188,7 +191,7 @@ const interval = setInterval(() => {
         
         if (dist < 20) {
           // Rayleigh scattering effect
-          const scatterProb = 1 / (p.wavelength * p.wavelength) * 0.001;
+          const scatterProb = 1 / Math.pow(p.wavelength / 400, 4) * 0.001;
           scatterX += (Math.random() - 0.5) * scatterProb * 5;
           scatterY += (Math.random() - 0.5) * scatterProb * 5;
           
@@ -273,7 +276,7 @@ const interval = setInterval(() => {
 
   // Calculate economic impacts
   setEconomicImpact(prev => {
-    const ozoneDepletion = 100 - atmosphericState.ozoneConcentration;
+    const ozoneDepletion = 280 - atmosphericState.ozoneConcentration;
     const tempAnomaly = Math.abs(atmosphericState.temperature - 15);
     const emDisruption = atmosphericState.emFieldStrength;
     const opticalDisruption = Math.abs(atmosphericState.refractiveIndex - 1.0) + atmosphericState.polarizationDistortion;
@@ -346,9 +349,50 @@ agents.sulfur.forEach(s => {
 }, [agents]);
 
 const reset = () => {
-setTime(0);
-setIsRunning(false);
-window.location.reload();
+  setTime(0);
+  setIsRunning(false);
+  setAtmosphericState({
+    ozoneConcentration: 280,
+    temperature: 15,
+    emFieldStrength: 0,
+    refractiveIndex: 1.0,
+    polarizationDistortion: 0
+  });
+  setEconomicImpact({
+    ozoneDamage: 0,
+    agriculturalLoss: 0,
+    healthCosts: 0,
+    climateDisruption: 0,
+    totalCost: 0
+  });
+  const initialAluminum = Array.from({ length: 50 }, () => ({
+    x: Math.random() * 800,
+    y: Math.random() * 400,
+    vx: (Math.random() - 0.5) * 0.5,
+    vy: (Math.random() - 0.5) * 0.5,
+    charge: Math.random() * 2 - 1,
+    mass: 1.0,
+    temp: 15 + Math.random() * 5
+  }));
+  const initialSulfur = Array.from({ length: 60 }, () => ({
+    x: Math.random() * 800,
+    y: Math.random() * 400,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    charge: Math.random() * 1.5 - 0.75,
+    mass: 0.8,
+    temp: 15 + Math.random() * 5
+  }));
+  const initialPhotons = Array.from({ length: 40 }, () => ({
+    x: Math.random() * 800,
+    y: 0,
+    vx: (Math.random() - 0.5) * 0.2,
+    vy: 2 + Math.random() * 1,
+    wavelength: 400 + Math.random() * 300,
+    polarization: Math.random() * Math.PI * 2,
+    intensity: 1.0
+  }));
+  setAgents({ aluminum: initialAluminum, sulfur: initialSulfur, photons: initialPhotons });
 };
 
 return (

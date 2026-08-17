@@ -20,7 +20,16 @@ hypothesise -> run -> result -> falsified? -> edit the claim
 ```
 
 **How to rerun everything here:** `python reproduce.py`
-(needs NumPy; `pip install numpy matplotlib`)
+(needs NumPy; `pip install numpy`)
+
+**Merge note, 2026-08-17.** This branch was merged with parallel work on `main`
+(PR #2), which independently audited the repo, corrected several physics errors,
+and added three coupling-domain modules. Where the two lines of work disagreed,
+each disagreement was resolved on the merits and recorded — see H-05, H-13,
+H-14, H-16. Two of `main`'s findings closed unknowns here (U-4); one of this
+branch's checks falsified one of `main`'s claimed fixes (H-16); and `main`'s new
+orbital parameters produced the strongest counter-argument to the project's own
+thesis (H-15).
 
 **Status vocabulary**
 
@@ -96,6 +105,9 @@ the offset is not perfectly clean, but the pattern is unambiguous.
   `reproduce.py --write` and carries a `provenance` block naming the model
   and its parameters. It is no longer hand-authored. The original series is
   preserved at `legacy/coupling_config.2025-12-16.json`.
+- **Recurred.** A later hand-authored revision on `main` failed to reproduce
+  too, independently — see **H-14**. That second occurrence is what turns this
+  from "someone made a mistake" into a structural rule.
 - **Unknown surfaced:** the offset's origin is not recoverable from git
   history — one commit, no intermediate state. It may have been a start-year
   mismatch (2020 vs 2025 baseline) or a hand-transcribed table. Unresolved.
@@ -213,12 +225,17 @@ with no physics involved.
   cascade starts where systemic fragility ends, at 3.0. This matches the code
   that actually produced every published number. `risk_thresholds` now uses
   explicit `chi_min`/`chi_max`.
-- **Unresolved:** what the original 5.0 referred to is not recoverable. It may
-  have been a distinct "hard cascade" marker rather than the regime floor. If
-  so it should come back as a fifth named regime, not as a redefinition of
-  this one.
-- **Effect on dates:** χ ≥ 3.0 is first reached in **2049** (5,139 MT). Under
-  the old 5.0 reading it would be 2061 (37,793 MT).
+- **Superseded 2026-08-17 — and the anticipated fix is the one that landed.**
+  This entry originally speculated: *"the original 5.0 may have been a distinct
+  hard-cascade marker rather than the regime floor. If so it should come back
+  as a fifth named regime, not as a redefinition of this one."* Work on `main`
+  did exactly that, independently, adding a **Pre-Cascade** band for 3.0–5.0.
+  That is the better fix — it preserves both boundaries instead of discarding
+  one — and it is what the merged code and config now use.
+- **Final regimes:** Nominal <0.5 · Incipient 0.5–1.5 · Systemic Fragility
+  1.5–3.0 · **Pre-Cascade 3.0–5.0** · Cascade Failure ≥5.0.
+- **Effect on dates (merged model):** Pre-Cascade first reached **2054**,
+  Cascade Failure **2069**.
 
 ---
 
@@ -430,6 +447,130 @@ for a project whose entire thesis is coupling:
 
 ---
 
+## H-13 — Al₂O₃ residence time is 30 years
+
+> Original repo value, and the basis of every burden figure through 2026-08-14.
+
+- **Status:** **`CONTESTED`** — two cited sources, 6× apart, unresolved.
+
+| Source | Value | Basis |
+|---|---|---|
+| Plane (2012); Megner et al. (2008) | **~5 yr** (range 3–10) | Meteor smoke transport: ~2–4 yr mesospheric meridional circulation to the stratosphere, plus ~1–2 yr stratospheric residence |
+| Ferreira et al. (2024) | **up to 30 yr** | Time for Al₂O₃ reentry products to settle from the top of the mesosphere into the ozone layer |
+
+These are not obviously measuring different things — both describe mesosphere →
+stratosphere transport plus residence. The awkward part is that Ferreira is the
+**same source** the repo relies on for its 30 kg/satellite yield (H-10). We are
+taking one number from that paper and rejecting another.
+
+- **Resolution:** the model defaults to **5 yr**, following the change made on
+  `main`. Not treated as settled: `reproduce.py` reports both on every run, and
+  `RESIDENCE_TIME_ALT_YEARS` keeps the alternative live in the code.
+- **Measured effect — smaller than the 6× gap suggests:**
+
+| Residence time | Burden 2045 | 1,000 MT crossed |
+|---|---|---|
+| 5 yr | 1,381.7 MT | 2043 |
+| 30 yr | 2,601.9 MT | 2039 |
+
+  A 6× parameter change moves the 2045 burden by only ~1.9× and the crossing
+  year by 4. Under 15%/yr growth the recent cohorts dominate the sum, so old
+  material contributes far less than its residence time implies. **This
+  demotes the question**: worth resolving, but it is not the biggest lever on
+  the headline dates. Growth rate (U-8) matters more.
+
+---
+
+## H-14 — The H-01 failure mode recurred, independently
+
+- **Status:** **`FALSIFIED`** (second occurrence) — and this one is the reason
+  the generated-series rule exists.
+
+`main` revised `coupling_config.json`'s `projected_time_series` by hand on
+2026-03-22, with corrected physics. That revised series does not reproduce from
+the revised model either:
+
+| Year | Published on `main` | `main`'s own model | Ratio |
+|---|---|---|---|
+| 2025 | 25 MT, χ 0.001 | 21.9 MT, χ 0.001 | 1.14× |
+| 2030 | 80 MT, χ 0.008 | 169.8 MT, χ 0.035 | 0.47× |
+| 2035 | 210 MT, χ 0.05 | 341.5 MT, χ 0.14 | 0.61× |
+| 2040 | 520 MT, χ 0.33 | 687.0 MT, χ 0.566 | 0.76× |
+| 2045 | 1,100 MT, χ 1.5 | 1,381.7 MT, χ 2.105 | 0.80× |
+
+Understated by 20–53%, with χ off by up to 4×. Not the same arithmetic error as
+H-01 — a different, independent divergence between a hand-written table and the
+code it was attributed to.
+
+- **What this establishes:** H-01 was not a one-off mistake by one author. Two
+  independent revisions, months apart, both drifted the same way. The failure
+  is structural — hand-maintaining a table next to the code that generates it
+  will not hold, however careful the author.
+- **Revision:** the series is generated by `reproduce.py --write` and the
+  `provenance` block in the config now names the model and its parameters.
+  This entry is the justification for that rule; it is not bureaucratic.
+
+---
+
+## H-15 — Satellite Al₂O₃ is the dominant source of stratospheric alumina
+
+> Implicit in the framing throughout: satellite reentry is *the* alumina input.
+
+- **Status:** **`FALSIFIED`** — by this repo's own newly added parameters.
+- **Finding:** natural meteoric input is ~19,710 t/yr, of which ~2% is Al₂O₃ —
+  **~394 t/yr of natural alumina, against ~22 t/yr from satellites.** Natural
+  exceeds anthropogenic by roughly **18×** (`coupling_config.json` →
+  `orbital_parameters`, added on `main` via `Orbital-coupling.py`).
+
+This is the strongest single argument against the project's thesis, and it
+arrived from inside the project. It deserves to be stated plainly rather than
+left in a parameter block.
+
+- **The counter-argument, which is real but unmodelled:** the two populations
+  may not be equivalent. Murphy et al. (2023) find that reentry mass of Li, Al,
+  Cu and Pb *already exceeds the cosmic dust influx of those same metals* — a
+  direct tension with the ~18× figure that turns on how "Al₂O₃" is being
+  counted versus elemental Al. Meteoric smoke and satellite ablation products
+  also differ in particle morphology, size distribution, and deposition
+  altitude, all of which plausibly matter for both conductivity and catalysis.
+- **Status of that counter-argument: asserted, not demonstrated.** Nothing in
+  this repo models the distinction. Until something does, the ~18× ratio is the
+  better-supported number and the thesis has to live with it.
+- **Next run:** reconcile the two figures. If Murphy's element-wise result and
+  the 394 t/yr bulk figure are both right, the difference is in the accounting,
+  and finding out which is the single most informative thing left to do here.
+
+---
+
+## H-16 — `main`'s np.roll "particle aging bug"
+
+> `main`'s commit 2876b0a: "Fix np.roll particle aging bug in both Python files
+> (particles now properly fall out after 30-year residence time instead of
+> wrapping around)".
+
+- **Status:** **`FALSIFIED`** — there was no bug. The change is a readability
+  improvement, and was adopted as such.
+- **Run:** both forms tested against a direct cohort-sum reference
+  (`burden(y) = sum of the last N injections`):
+
+```
+roll == slice     : True
+roll == reference : True
+slice == reference: True
+```
+
+`np.roll(a, 1)` does move the oldest cohort to index 0, but the very next line
+sets `a[0] = 0`, which discards it. No wrap-around ever reached the burden sum.
+
+- **Why record a fix that was not needed:** an inaccurate bug-fix claim in the
+  history is itself a drift risk. Someone later reading "we fixed a wrap-around
+  bug" would reasonably conclude that pre-fix burden figures were wrong and
+  post-fix ones corrected — and would be wrong on both counts. The pre-fix
+  numbers were right. `main`'s `a[1:] = a[:-1]` form is clearer about intent
+  and is now what the model uses.
+
+---
+
 ## Open unknowns
 
 Ranked by how much the repo's conclusions move if the answer changes.
@@ -439,8 +580,8 @@ Ranked by how much the repo's conclusions move if the answer changes.
 | ~~U-1~~ | ~~Al₂O₃ yield per satellite.~~ **CLOSED 2026-08-14** — sourced to Ferreira et al. 2024 (30 kg per 250 kg satellite); repo figure confirmed. | H-02, H-03, H-10 | The 15%-of-mass figure in the JS remains inconsistent with it (H-03); that part moves to U-12. |
 | **U-2** | The 1,000 MT conductivity threshold. No derivation or citation anywhere in the repo. | H-04, H-06 | It sets the branch point, so it sets the transition year. Everything downstream keys off it. |
 | **U-3** | Residence-time kernel. Implemented as rectangular (30 yr, then instant removal); documented as "linear decay". Neither is defended. | H-08 | Tested: swapping in an exponential kernel (τ = 30 yr) moves the 1,000 MT crossing only 2040 → 2041. **Less consequential than expected** — 18%/yr growth dominates the kernel during the growth phase. Still a docs/code mismatch worth fixing, but low priority. |
-| **U-4** | The 100 MHz coupling resonance in the config. Not derived, not used by any model in the repo. | H-00 | Either it is load-bearing and missing from the code, or it is decorative. Currently unclear which. |
-| **U-5** | Power-law exponent α ≈ 1.5–2.5. No fit, no data, no source. | economics | The $50–200B/yr headline is an α-driven number; the range is asserted, not estimated. |
+| ~~U-4~~ | ~~The 100 MHz coupling resonance.~~ **CLOSED 2026-08-17** — it was simply wrong. Proton gyrofrequency is ~760 Hz, electron ~1.4 MHz; the published value was ~5 orders of magnitude too high. Removed from the config. | H-00 | Resolved on `main` (commit 3cf0f44). Decorative *and* incorrect — it was never used by any model, which is why nobody noticed. |
+| **U-5** | Power-law exponent α ≈ 1.5–2.5. No fit, no data, no source. | economics | Still unsourced. `main` revised the headline damage figure downward ($50–200B → $5–50B) and the underestimate factor (10–40× → 2–10×), but those are revised *assertions*, not derivations. |
 | **U-6** | `solar_activity_index = 1.2`. Scale undefined — 1.0 "baseline" of what? | all χ values | χ is directly proportional to it. |
 | **U-7** | No sedimentation, coagulation, or transport physics. Particles are inert until they age out. | H-00 | Real removal processes would lower the burden; their absence biases the model toward alarm. |
 | **U-8** | Reentry baseline: 500/yr (Python) vs ~730/yr (README, 2024). **Partly resolved** — the ~17 MT/yr 2022 literature total implies ~567 reentries at 30 kg each, so 500/yr is close for 2022 and 730/yr may simply be a later year. The 18%/yr growth rate is still unsourced, and growth rate matters more than baseline over 20 years. | H-02, H-06 | Sets both the level and the slope of the burden curve. |
@@ -450,8 +591,10 @@ Ranked by how much the repo's conclusions move if the answer changes.
 | **U-14** | **None of the citations added on 2026-08-14 were verified against primary sources.** Publisher domains were blocked by network egress policy; abstracts and secondary summaries were all that could be reached. | H-09…H-12 | Every externally sourced number in this round inherits this caveat. First thing to fix from an unrestricted network. |
 | **U-15** | The Al/S catalytic synergism claim (README, executive summary) has no supporting run, model, or citation anywhere in the repo. | policy brief | It is stated as a central mechanism and is entirely unbacked. |
 | **U-16** | Effect of "Design for Demise" and the 5-year deorbit rule on injection rates. Debris-mitigation policy deliberately increases ablation and shortens orbital lifetimes. | H-09, projections | Policy designed to fix the debris problem may be increasing the atmospheric one. Nobody here has modelled the sign, let alone the size. |
+| **U-17** | Reconcile natural meteoric Al₂O₃ (~394 t/yr) against Murphy et al.'s finding that reentry Al already exceeds cosmic dust influx. | H-15 | The two cannot both be straightforwardly true. Whichever way it resolves, it decides whether the anthropogenic signal is ~5% of the natural background or larger than it — i.e. whether the thesis has a subject. |
+| **U-18** | Whether meteoric and satellite-derived particles are equivalent for coupling purposes (morphology, size distribution, deposition altitude, oxidation state). | H-15 | This is the only available answer to U-17's bulk-mass argument, and it is currently an assertion with no model behind it. |
 | **U-9** | The five React simulations parse but have never been run. Their economic and coupling outputs are unverified. | H-07 | They are the repo's most visible artefacts and nothing confirms their numbers. |
-| **U-10** | The $50–200B/yr damage figure has no derivation in the repo. | policy brief | It is the number a policymaker will quote. |
+| **U-10** | The headline annual damage figure has no derivation in the repo. Now $5–50B after `main`'s revision, still underived; the power-law damage function in Coupling-Physics.md §5.1 is not implemented in any code. | policy brief | It is the number a policymaker will quote. |
 
 ### Suggested next runs
 
@@ -486,4 +629,5 @@ Ranked by how much the repo's conclusions move if the answer changes.
 |---|---|
 | 2025-12-16 | Initial models, config, README, executive summary committed. |
 | 2026-08-14 | H-01 through H-08 run and recorded. `legacy/` created. Config series made generated-not-authored. Five React sources repaired to parse. Unknowns U-1…U-10 opened. |
+| 2026-08-17 | Merged with `main` (PR #2). Adopted `main`'s physics corrections: residence time 30→5 yr, gyrofrequency fix (closes U-4), Pre-Cascade regime (settles H-05 as anticipated), 730/yr and 15%/yr standardisation, revised economic ranges. Kept this branch's structure: `legacy/`, generated series, species inventory. New findings from the merge itself — H-13 (residence time contested 6×), H-14 (H-01 recurred independently on `main`), H-15 (natural meteoric Al₂O₃ ~18× the satellite contribution), H-16 (`main`'s claimed np.roll bug was not a bug). U-17, U-18 opened. |
 | 2026-08-14 | H-09 through H-12 added from external sourcing. Species inventory widened from 1 to 13 across both emission pathways (`species_inventory.json`, `Multi-species-accumulation.py`). **U-1 closed** — the 30 kg/satellite figure is Ferreira et al. 2024 and the model's implied flux is within 12% of the published 2022 total. U-8 partly resolved. U-11…U-16 opened, including U-14: none of this round's citations could be verified against primary sources from this environment. |
