@@ -35,11 +35,18 @@ thesis (H-15).
 
 | Status | Meaning |
 |---|---|
+| `CHALLENGED` | A specific, checkable objection stands unrebutted. Stronger than open, weaker than falsified. |
 | `OPEN` | Stated, not yet tested. |
 | `SUPPORTED` | Reproduces from the repo's own model/code. |
 | `FALSIFIED` | Ran it; the result contradicts the claim. Claim edited below. |
 | `REVISED` | A falsified claim restated so it matches what the run produced. |
 | `UNTESTED` | Cannot be settled with what is in this repo. Needs outside data. |
+
+**Two registers.** This file tracks **parametric** unknowns (U-n): *we don't
+know this number.* `STRUCTURAL_LIMITS.md` tracks **structural** ones (S-n): *the
+model has no variable for this,* which no parameter value fixes. The second
+register was opened on 2026-08-21 after H-18 — until then every improvement here
+ran along the parametric axis while the structural axis stayed where it started.
 
 **Scope note.** Everything settled below is *internal consistency* — does the
 repo reproduce its own numbers. None of these findings test the core physical
@@ -651,6 +658,350 @@ sets `a[0] = 0`, which discards it. No wrap-around ever reached the burden sum.
 
 ---
 
+## H-17 — The repo accounts for natural climate variability
+
+> Implicit: the models describe the system well enough for their output to be
+> compared against observations.
+
+- **Run:** `python ENSO-coupling.py`; repo-wide grep for ENSO/QBO/seasonality
+- **Status:** **`FALSIFIED`** — there is no interannual variability of any kind.
+
+Before 2026-08-21 this repo contained **zero** references to ENSO, the QBO, or
+any seasonal cycle. Every model runs on annual steps with fixed parameters.
+That was invisible until a very strong El Niño made it consequential.
+
+### The state, as of 2026-08-21
+
+| Quantity | Value |
+|---|---|
+| CPC alert status | **El Niño Advisory** |
+| Niño-3.4 weekly (centred 12 Aug 2026) | **+2.7 °C** |
+| Niño-3.4 monthly (Jul 2026) | +2.03 °C |
+| Niño-3.4 seasonal mean (May–Jul 2026) | +1.51 °C |
+| ONI (May–Jul 2026) | +1.39 °C |
+| Very strong, fall/winter 2026-27 | **>90%** |
+| Very strong, OND 2026 | 81% |
+| **Historic** (RONI ≥ +2.5 °C), OND 2026 | **69%** — would exceed every El Niño back to 1950 |
+
+### The finding that matters: the model rules itself out
+
+`ENSO-coupling.py` puts the repo's own model against the same window:
+
+| Year | Burden | χ | Regime |
+|---|---|---|---|
+| 2026 | 47.1 MT | **0.0027** | Nominal |
+| 2027 | 76.0 MT | **0.0069** | Nominal |
+
+Peak χ over the window is **0.0069**, a factor of **~72** below the 0.5 floor of
+the *lowest* risk regime.
+
+> **The model therefore rules out satellite-driven attribution for anything
+> observed in 2026-27** — ozone anomalies, PNT degradation, supply-chain
+> disruption. Against a possible record El Niño, some of those are likely to
+> occur. This project's own arithmetic says they are not its subject.
+
+Recording that *in advance* is the point. A project forecasting cascade risk,
+during a year when a natural driver is about to produce cascade-shaped effects,
+is in an obvious position to claim vindication it has not earned. The model's
+own output is the cleanest defence against that, and it costs nothing to state
+now — whereas stating it afterwards would be worthless.
+
+### Mechanisms identified, none implemented
+
+| Mechanism | Status | Wired in? |
+|---|---|---|
+| Brewer–Dobson / tropical upwelling → aerosol residence time | mechanism established, magnitude unquantified | No |
+| ENSO-driven column ozone variability | mechanism established, magnitude unquantified | No |
+| Drought/flood teleconnections → supply chain | mechanism established, magnitude unquantified | No |
+| Ionospheric modulation → PNT | speculative | No |
+
+**0 of 4.** The first is the sharpest: ENSO modulates stratospheric transport
+and therefore residence time — the parameter already unresolved by 6× under
+H-13. An ENSO term would ride on top of a baseline nobody has pinned down.
+
+- **Revision:** `enso_state.json` records the state with per-field status;
+  `ENSO-coupling.py` reports it, prints the attribution finding, and provides a
+  residence-time sensitivity table so that a sourced BDC perturbation can be
+  converted into a burden consequence. **No χ modifier was added** — the same
+  rule that stops `Multi-species-accumulation.py` inventing coupling weights
+  (U-11, U-12), applied here (U-21).
+- **Model limit surfaced:** the rectangular kernel indexes whole years, so it
+  cannot represent a sub-year residence change. Any ENSO perturbation smaller
+  than ~1 year of residence is **invisible to this model by construction** —
+  a concrete reason to care about U-3 beyond tidiness.
+- **Caveat:** figures come from search summaries; CPC, IRI and arXiv were all
+  blocked by network egress policy. ENSO products are revised monthly. U-20.
+
+---
+
+## H-18 — The models accommodate the complexity they describe
+
+> The repo describes a "non-equilibrium coupled system" analysed with
+> "complexity economics", contrasting itself with institutional models that
+> fail by treating coupled systems as separate silos.
+
+- **Run:** `python Structural-audit.py`
+- **Status:** **`FALSIFIED`** — by code inspection, not by opinion.
+
+χ is a function of exactly two scalars: `calculate_coupling_coefficient(
+burden_mt, solar_activity_index)`. And the three modules added specifically to
+represent *coupling domains* reference it **zero** times:
+
+| Module | Loads χ model | χ references |
+|---|---|---|
+| `Chemical-interactions.py` | no | **0** |
+| `Geomagnetic-dynamics.py` | no | **0** |
+| `Orbital-coupling.py` | no | **0** |
+
+They are parallel calculators sharing a directory. Data flow is strictly
+one-way — `injection → burden → χ → label` — with no quantity re-entering
+anything upstream.
+
+**A feed-forward pipeline cannot produce the phenomena the project is named
+for.** Emergent thresholds, hysteresis, multiple stable states and critical
+slowing down all require loops. There are none. Whatever nonlinearity appears
+in the output was written into the transfer function by hand (H-04, S-9).
+
+- **Recorded as:** S-5, S-6 in the new `STRUCTURAL_LIMITS.md`.
+- **The general point, which is larger than any single entry:** this log has
+  been tracking *parametric* unknowns exclusively (U-1…U-22 — "we don't know
+  this number"). It had no category for *structural* ones ("the model has no
+  variable for this"). Every improvement over the last several revisions ran
+  along the parametric axis while the structural axis stayed fixed. Sourcing
+  every parameter in a model whose state space is wrong yields a well-cited
+  wrong answer, and the citation quality makes it read as rigour.
+- **Revision:** `STRUCTURAL_LIMITS.md` opens an S-register (S-1…S-11) as a
+  separate axis, and `Structural-audit.py` machine-checks the parts that can
+  be checked.
+
+---
+
+## H-19 — Al₂O₃ loading raises stratospheric conductivity
+
+> The core mechanism of H-00, stated throughout: metallic nanoparticles
+> "increase atmospheric conductivity", forming a conductive "mesh" in the
+> mesosphere that supports "geometric resonance" with solar EM flux.
+
+- **Run:** `python Structural-audit.py`; literature check 2026-08-21
+- **Status:** **`CHALLENGED`** on two independent grounds. Not falsified — but
+  this is now the deepest open question in the project, ahead of U-2.
+
+### 1. The mesh is not geometrically available
+
+Testing "conductive mesh" against a percolation threshold (φ ≈ 0.29 for random
+spheres), with 100 nm particles in a 15–50 km stratospheric shell:
+
+| Burden | Volume fraction | Mean spacing | In particle diameters |
+|---|---|---|---|
+| 22 MT (today) | 3.1×10⁻¹⁶ | 11.9 mm | 118,838 |
+| **1,000 MT (the critical threshold)** | **1.4×10⁻¹⁴** | **3.3 mm** | **33,299** |
+| 39,552 MT (the χ = 5 cascade burden) | 5.6×10⁻¹³ | 1.0 mm | 9,773 |
+
+At the threshold the volume fraction is short of percolation by **13.3 orders
+of magnitude**, with ~33,000 diameters of empty air between neighbours. Even
+the χ = 5 cascade burden misses by ~12 orders.
+
+The mesh is not a weak effect at these loadings. It is not a mechanism.
+
+### 2. The available mechanism has the opposite sign
+
+Air conductivity is σ = Σ nᵢqᵢμᵢ — carried by mobile charge carriers *in the
+gas*, not by the bulk conductivity of suspended particles. The repo computes it
+nowhere (`ion_density`, `mobility`, `conductivity` appear as identifiers in no
+module).
+
+The established ion–aerosol result runs the other way: aerosol particles
+**scavenge small ions**, converting high-mobility molecular ions into
+low-mobility charged aerosol, and conductivity **falls**. Conductivity and
+aerosol loading are inversely related, and this has been studied at
+stratospheric heights.
+
+### Why "but they're metallic" does not obviously rescue it
+
+- Mobility of a charged 100 nm particle is orders of magnitude below a
+  molecular ion **regardless of composition** — it is a mass-and-drag
+  question, not a conductivity-of-the-material question.
+- Bulk conductivity of the particle material only matters if charge can move
+  *through a connected path* of particles, which is what §1 rules out.
+- So a conductive particle still acts as an ion sink, the same as a dielectric
+  one.
+
+### Status and what would settle it
+
+Marked `CHALLENGED`, not `FALSIFIED`, because there may be a real conductivity
+pathway that is neither percolation nor ion scavenging — space-charge effects,
+surface chemistry altering ion production rates, or triboelectric charging are
+all conceivable and none has been examined here.
+
+But the two mechanisms actually named in the repo are one that is geometrically
+unavailable and one that points the wrong way. **Settling the sign is now the
+single highest-value action available to this project** — it decides whether
+the central mechanism is pointing forwards or backwards, and one literature
+review answers it. It is promoted above U-2 on the next-runs list.
+
+- **Caveat:** the ion–aerosol result comes from search summaries; publisher
+  domains remain blocked (U-14, U-20). The percolation arithmetic is computed
+  here and does not depend on that.
+
+---
+
+## H-20 — The forcing is unprecedented
+
+> Implicit in the framing throughout: satellite-derived atmospheric
+> modification is a novel perturbation to a system that was previously
+> undisturbed. The repo's title — *Non-Equilibrium Atmospheric Forcing* —
+> treats non-equilibrium as the thing humans introduced.
+
+- **Run:** literature search 2026-08-21; `python Structural-audit.py`
+- **Status:** **`FALSIFIED`** — but the correction strengthens the project
+  rather than weakening it.
+
+The atmosphere has never been in equilibrium, and it has absorbed
+electrical/ionisation forcings far larger than anything under discussion here.
+The record is in ocean sediments, ice cores and lunar regolith, and this repo
+uses none of it — forward horizon 40 years, backward horizon zero.
+
+### The two bounding natural experiments
+
+**Nearby supernovae, ~2.3 and ~1.5 Myr ago.** ⁶⁰Fe in Pacific, Atlantic and
+Indian Ocean sediments, concentrated 3.2–1.7 Myr, from sources <300 ly away.
+Delivered a **~100-fold cosmic ray increase sustained for centuries**, driving
+atmospheric ionisation, NOx production and ozone depletion — a direct analogue
+of the repo's own proposed mechanism, two to three orders of magnitude larger.
+
+Outcome: a 2024 *Communications Earth & Environment* study finds biosphere
+impacts were **limited by compensating effects** — partially self-cancelling
+ozone catalytic cycles, offsetting cloud and aerosol response. **That is a
+measurement of negative feedback**, under a forcing far exceeding anything
+nanoparticle loading could produce.
+
+**The Laschamp excursion, ~41 kyr ago.** Field strength fell to **~10% of
+modern**, poles migrated, the auroral oval reached low latitudes, and the
+excursion lasted ~2,000 years. Documented: reduced cutoff rigidity, cosmic
+radiation surge, ozone depletion, mid-latitude UV-B increase.
+
+This one cuts the other way and is recorded as such. Cooper et al. (2021,
+*Science*) argue for a wider cascade — climate reorganisation, megafaunal
+extinction, Neanderthal disappearance. **That broader chain is contested**; the
+ozone/UV-B and geomagnetic components are far better established than the
+biological and cultural attributions. Cite the former, not the latter.
+
+### What this constrains
+
+`Geomagnetic-dynamics.py` treats ~5%/century dipole decay as heading somewhere
+unprecedented. **Laschamp was a ~90% reduction.** The record already answers
+"what happens when shielding largely fails": significant, regionally severe
+ozone and UV effects, recovery within ~2,000 years, **no runaway**.
+
+That is an upper-bound calibration on χ, and it is available for the cost of a
+literature review. If χ predicts cascade at electrical perturbations far
+smaller than Laschamp's, and Laschamp produced no cascade, **χ is too steep.**
+
+### The revision — and why it is an upgrade
+
+The forcing is not unprecedented. **The exposure is.**
+
+None of these events happened to a civilisation dependent on GPS timing,
+transformer networks vulnerable to GICs, or nanometre-scale semiconductors. The
+biosphere buffered these forcings; there is no record whatsoever of how a
+technological substrate responds, because none existed.
+
+> **"An ordinary forcing meeting an unprecedented vulnerability" is defensible,
+> testable, and survives the paleo record. "An unprecedented forcing" is not,
+> and the record contradicts it.**
+
+It also points the project at infrastructure vulnerability — which is what the
+logistics-fragility thread was always actually about, and the part of this work
+with the least competition from existing literature.
+
+### The framing bias behind it
+
+Recorded as S-12 (no deep-time baseline), S-13 (the modelled world can only
+amplify — zero damping, recovery, saturation or homeostasis terms anywhere,
+against a paleo record whose dominant signal is buffering), and S-14
+(asymmetric skepticism — SAI is scrutinised as a hazard while the repo's own
+proposed remedies, stratospheric particle collection and EM harvesting, get no
+coupling analysis or failure-mode accounting).
+
+S-13 and S-14 compound: **a model that represents only amplification, and
+considers only engineered remedies, will conclude that intervention is
+necessary regardless of its inputs.** Part of the conclusion is in the
+architecture, not the data.
+
+- **Full treatment:** [`DEEP_TIME.md`](DEEP_TIME.md).
+- **Caveat:** sources from search summaries; publisher domains blocked (U-23).
+
+---
+
+## H-21 — Subject substitution, and the level/derivative conflation
+
+Two error classes, identified from outside this repo and then found inside it.
+Recorded together because both are *category* errors — the arithmetic is fine
+and the quantity is wrong.
+
+- **Source:** claim-audit framework contributed by the repo author, 2026-08-21
+- **Run:** `python Structural-audit.py`; van Westen et al. verified by search
+- **Status:** **`FALSIFIED`** for the repo's own instances of both.
+
+### The unstated subject
+
+A paper measures one variable; a headline implies a category. The substitution
+is where reassurance is manufactured.
+
+Worked case — the 2026 Utrecht AMOC study. Measured quantity: AMOC circulation
+continuity, one subsystem, one variable. Implied quantity: ocean systems
+generally, biosphere tolerance, human consequence. Same ocean state, different
+subjects: AMOC may persist under slower forcing; coral is already past bleaching
+thresholds; upwelling is suppressed; stratification blocks nutrient flux to
+fisheries; subsurface heat has no representation in an AMOC model at all.
+"Handles it" is true for the modelled variable and false for nearly every
+coupled one.
+
+**This repo has done the same thing twice**, and one instance was in this log:
+
+- **H-15** — the natural meteoric background was written up here as a
+  counter-argument to the thesis. The question was **conductivity**; the answer
+  supplied was **bulk mass fraction**. Wrong subject entirely — mass fraction is
+  not the metric for a doped-population conductivity problem. Corrected only
+  after challenge.
+- **H-12** — Al₂O₃ → ozone was modelled as direct catalysis. The actual subject
+  is chlorine activation with Al₂O₃ as an unconsumed surface. A rate law for the
+  wrong reactant cannot be rescued by better parameters.
+
+### Level or derivative
+
+van Westen et al. (*Nature Climate Change*, 2026), "Failure to track a stable
+AMOC state under rapid climate change": a slow CO₂ ramp (+0.5 ppm/yr) leaves the
+AMOC stable past **+5.5 °C**; faster ramps collapse it at **+2 °C**. Lead
+author: *"there is not necessarily a fixed temperature beyond which the AMOC
+inevitably collapses."*
+
+**There is no safe temperature number — the collapse condition is a
+derivative.** The reassuring headline holds only for the slow-ramp case, which
+is not the observed condition. The "one big catch" is the finding, not a caveat
+on it.
+
+**This repo's threshold is a level.** χ = f(burden), 1,000 MT, no rate term
+anywhere. Recorded as **S-15**, with the computed consequence: on a
+surge-then-saturate deployment trajectory the model says "Systemic Fragility"
+permanently, while a rate reading says risk peaked in 2035 and fell. Opposite
+qualitative predictions from one burden history. Under constant exponential
+growth the two are degenerate (dB/dt ÷ B = 0.130 throughout), which is why the
+deficiency stayed invisible.
+
+- **Revision:** [`CLAIM_AUDIT.md`](CLAIM_AUDIT.md) records the full protocol —
+  baseline choice, depth exclusion, spatial averaging, comparator, unstated
+  subject, level-vs-derivative, plus instrument-record discontinuities.
+- **The uncomfortable result:** a checklist written to audit *outside*
+  literature catches this project's own published numbers at the same rate —
+  H-01, H-02, H-06, H-09, H-11, H-12, H-15 and S-1 all fall out of it. None
+  hypothetical; all previously documented.
+- **Opened:** U-25 (does a rate-dependent tipping condition apply to
+  stratospheric aerosol loading at all, or only to circulation systems with a
+  slow manifold?).
+
+---
+
 ## Open unknowns
 
 Ranked by how much the repo's conclusions move if the answer changes.
@@ -672,6 +1023,12 @@ Ranked by how much the repo's conclusions move if the answer changes.
 | **U-15** | The Al/S catalytic synergism claim (README, executive summary) has no supporting run, model, or citation anywhere in the repo. | policy brief | It is stated as a central mechanism and is entirely unbacked. |
 | **U-16** | Effect of "Design for Demise" and the 5-year deorbit rule on injection rates. Debris-mitigation policy deliberately increases ablation and shortens orbital lifetimes. | H-09, projections | Policy designed to fix the debris problem may be increasing the atmospheric one. Nobody here has modelled the sign, let alone the size. |
 | **U-17** | **What does the 1,000 MT threshold actually measure?** Natural burden alone (~1,970 MT at 5-yr residence) already exceeds it by ~2x, permanently and throughout geological history. So it cannot be absolute total burden. Anthropogenic excess? Particle number? Surface area? Dopant fraction? | H-15, U-2 | Promoted from a sub-point to a headline unknown. The model's central parameter is not merely unsourced — as an absolute burden figure it is inconsistent with the repo's own natural-background number. Everything downstream of the branch point depends on this. |
+| **U-20** | None of the 2026-08-21 ENSO figures were verified against primary sources (CPC, IRI, arXiv all blocked by egress policy), and one retrieved probability (~60% chance of "strong") is arithmetically inconsistent with the >90%/81% very-strong figures. ENSO products are also revised monthly. | H-17 | Cheap to fix with network access, and the figures decay on their own. |
+| **U-21** | How much does a given Niño-3.4 anomaly change stratospheric aerosol residence time via the Brewer–Dobson circulation? | H-17, H-13 | The only ENSO→model coupling that could be wired in without inventing anything. Stacks on H-13's unresolved 6× baseline. Note the rectangular kernel cannot resolve sub-year changes at all (U-3). |
+| **U-22** | Can the 2026-27 El Niño be used as a **natural experiment** — a known large transport perturbation against which to test whether stratospheric aerosol responds as the model implies? | H-17 | Turns the confounder into an instrument. This is the rare unknown with a deadline: the window is open now and closes when the event decays. |
+| **U-25** | Does rate-induced tipping apply to this system? The AMOC result concerns a circulation with a slow manifold and two stable states. Stratospheric aerosol loading may have neither, in which case a level threshold is the right form and S-15 is moot. | H-21, S-15 | Decides whether the model's functional form needs a rate term or merely a better level. Cheap to reason about, and it determines whether S-15 is a defect or a non-issue. |
+| **U-23** | Calibrate χ against the Laschamp excursion (~90% field reduction, measured ozone/UV response, ~2,000 yr, full recovery) and against the ~100x supernova cosmic-ray increase. Also: none of the 2026-08-21 deep-time sources verified against primaries. | H-20 | The only empirical calibration available to this project, at the cost of a literature review rather than an instrument. Cooper et al. 2021's broader cascade claims are contested — do not lean on them. |
+| **U-24** | Does the system have stabilising feedbacks the model omits (S-13)? The paleo record's dominant signal is buffering; the model has zero damping terms. | H-20, S-13 | If real homeostasis exists at any relevant strength, the cascade projections are wrong in form, not just in magnitude. |
 | **U-19** | Reconcile the ~394 t/yr bulk meteoric Al₂O₃ figure against Murphy et al.'s element-wise finding that reentry Li/Al/Cu/Pb already exceed cosmic dust influx. | H-15 | The two cannot both be straightforwardly true as stated. The difference is probably in the accounting — bulk Al₂O₃ versus elemental Al, or different altitude bands — and finding out which is cheap and clarifying. |
 | **U-18** | Whether meteoric and satellite-derived particles are equivalent for coupling purposes (morphology, size distribution, deposition altitude, oxidation state) — and whether the anthropogenic fraction acts as a **dopant** in the meteoric host population rather than as added bulk. | H-15 | Murphy et al. find spacecraft metals inside the SAME sulfate particles as meteoric metals, so this is one doped population, not two. Dopant effects on conductivity are not mass-weighted. Cuts both ways: if the populations ARE equivalent, then geological-time exposure at above-threshold burdens with no observed transition puts a hard upper bound on chi — turning the natural background into a calibration dataset. |
 | **U-9** | The five React simulations parse but have never been run. Their economic and coupling outputs are unverified. | H-07 | They are the repo's most visible artefacts and nothing confirms their numbers. |
@@ -679,37 +1036,54 @@ Ranked by how much the repo's conclusions move if the answer changes.
 
 ### Suggested next runs
 
-1. **U-17 / U-2** — establish what the 1,000 MT threshold measures. The
+1. **H-19 / S-7** — **settle the sign of the conductivity response.** Does
+   metallic nanoparticle loading raise or lower stratospheric conductivity?
+   The established ion–aerosol result says it falls; the repo assumes it rises.
+   One literature review decides whether the project's central mechanism points
+   forwards or backwards, and nothing else on this list matters if it is
+   backwards. Newly first.
+2. **S-8** — replace the "conductive mesh" mechanism or retire the claim. It is
+   short of percolation by ~13 orders of magnitude at every burden this repo
+   projects, including the cascade burden.
+3. **U-23** — calibrate χ against Laschamp. A ~90% shielding reduction with a
+   measured, bounded, recovered response is the closest thing to empirical
+   validation this project can get, and it is a literature review. Deep time
+   has already run the experiment.
+4. **U-17 / U-2** — establish what the 1,000 MT threshold measures. The
    natural population already sits at ~2x it, permanently, with no phase
    transition on record, so as an absolute burden figure it cannot be right.
    Until this is settled every date the repo prints is keyed to a number whose
    meaning is unknown. Newly the sharpest item on the list, and it came from
    taking the natural background seriously as a baseline rather than as a
    rival (H-15).
-2. **U-18** — test the doping hypothesis: does a small anthropogenic fraction
+5. **U-22** — treat the 2026-27 El Niño as a natural experiment while it is
+   happening. A known large transport perturbation is exactly what is needed to
+   test the residence-time question (H-13, U-21), and unlike everything else on
+   this list it expires. Worth doing out of order for that reason alone.
+6. **U-18** — test the doping hypothesis: does a small anthropogenic fraction
    inside a meteoric host population change conductivity disproportionately?
    If yes, the whole mass-fraction framing is beside the point and chi should
    be a function of composition, not burden. If no, geological-time exposure
    gives a hard upper bound on chi. **Either answer is worth more than another
    burden projection**, because both are decisive and neither is expensive.
-3. **U-14** — re-verify every 2026-08-14 citation against the primary papers
+7. **U-14** — re-verify every 2026-08-14 citation, and the 2026-08-21 ENSO figures (U-20), against the primary papers
    from an unrestricted network. Cheapest item on the list and everything
    added that round depends on it.
-4. **U-2 (χ law)** — replace the piecewise χ law with a continuous one and see
+8. **U-2 (χ law)** — replace the piecewise χ law with a continuous one and see
    whether any threshold behaviour survives (H-04).
-5. **U-13 / H-12** — resolve the ozone tension. The repo says catastrophic;
+9. **U-13 / H-12** — resolve the ozone tension. The repo says catastrophic;
    the retrieved chlorine sensitivity says 0.23% at 52× emissions. One of
    those is wrong, and it is the claim a policymaker will act on.
-6. **U-11 / U-12** — the multi-species model is built and empty. Per-element
+10. **U-11 / U-12** — the multi-species model is built and empty. Per-element
    fluxes would fill it; coupling weights would make χ meaningful across
    species. Weights are the harder and more valuable of the two.
-7. **U-8** — source the 15%/yr growth rate. Over a 20-year projection the
+11. **U-8** — source the 15%/yr growth rate. Over a 20-year projection the
    growth rate dominates the baseline, and it is still a bare assertion.
-8. **U-9** — stand up a minimal `package.json` + Vite harness so the React
+12. **U-9** — stand up a minimal `package.json` + Vite harness so the React
    models can actually be rendered and their outputs checked.
-9. **U-5 / U-10 / U-15** — write down the damage-function and Al/S synergism
+13. **U-5 / U-10 / U-15** — write down the damage-function and Al/S synergism
    derivations, or mark them as placeholders in the policy brief.
-10. **U-3** — demoted after testing (see table). Fix the comment; note the
+14. **U-3** — demoted after testing, but see H-17: the whole-year kernel puts a hard floor on the smallest transport perturbation this model can represent. (see table). Fix the comment; note the
    sharper framing from H-10 — the error is treating the 30-year descent as
    inert when the source describes it as the destructive phase.
 
@@ -721,6 +1095,10 @@ Ranked by how much the repo's conclusions move if the answer changes.
 |---|---|
 | 2025-12-16 | Initial models, config, README, executive summary committed. |
 | 2026-08-14 | H-01 through H-08 run and recorded. `legacy/` created. Config series made generated-not-authored. Five React sources repaired to parse. Unknowns U-1…U-10 opened. |
+| 2026-08-21 | **H-21 added; claim-audit protocol adopted.** Two category-error classes identified from outside and then found inside: subject substitution (H-15 and H-12 are both instances — one of them in this log) and level-vs-derivative conflation. van Westen et al. 2026 verified: AMOC stable past +5.5 C under a slow CO2 ramp, collapsing at +2 C under fast ones — the tipping condition is a derivative, not a level. This repo's threshold is a level with no rate term (S-15); on a surge-then-saturate trajectory that inverts the qualitative prediction. `CLAIM_AUDIT.md` added. U-25 opened. |
+| 2026-08-21 | **H-20 added: the forcing is not unprecedented — the exposure is.** Deep-time record introduced (`DEEP_TIME.md`): nearby supernovae ~2.3/1.5 Myr delivered a ~100x cosmic-ray increase for centuries and the atmosphere showed *compensating* effects; the Laschamp excursion took the field to ~10% of modern for ~2,000 years with bounded ozone/UV consequences and full recovery. Both are usable as upper-bound calibrations on chi. S-12, S-13 (the model has zero stabilising terms, against a record whose dominant signal is buffering), S-14 (asymmetric skepticism) added. U-23, U-24 opened. |
+| 2026-08-21 | **H-18 and H-19 added; structural register opened.** H-18: there is no coupling in the coupling model — chi takes two scalars and the three domain modules reference it zero times; flow is feed-forward with no loops. H-19: the "conductive mesh" is ~13 orders of magnitude short of percolation, and the available ion-aerosol mechanism has the OPPOSITE sign to the repo's premise. `STRUCTURAL_LIMITS.md` (S-1…S-11) and `Structural-audit.py` added. Settling the conductivity sign is now the top next-run, ahead of U-2. |
+| 2026-08-21 | H-17 added. Repo had no ENSO, QBO or seasonality content at all; a very strong El Niño (Niño-3.4 +2.7 °C weekly, 69% chance of a historic OND event) made that gap consequential. Added `enso_state.json` and `ENSO-coupling.py`. Key finding: the model's own χ for 2026-27 is ~0.003, ~72x below its lowest regime, so it rules out satellite attribution for anything observed in that window — recorded in advance. No χ modifier invented. U-20, U-21, U-22 opened. |
 | 2026-08-17 | **H-15 corrected after challenge.** The natural meteoric population was written up as a counter-argument to the thesis; it is a baseline offset and a coupling factor. Corrected framing shows the natural burden alone already exceeds the 1,000 MT threshold by ~2x, which reframes U-2 into U-17: the threshold cannot mean absolute total burden. Also opened U-19 and rewrote U-18 around the doping hypothesis. `reproduce.py` now computes the baseline offset every run. |
 | 2026-08-17 | Merged with `main` (PR #2). Adopted `main`'s physics corrections: residence time 30→5 yr, gyrofrequency fix (closes U-4), Pre-Cascade regime (settles H-05 as anticipated), 730/yr and 15%/yr standardisation, revised economic ranges. Kept this branch's structure: `legacy/`, generated series, species inventory. New findings from the merge itself — H-13 (residence time contested 6×), H-14 (H-01 recurred independently on `main`), H-15 (natural meteoric Al₂O₃ ~18× the satellite contribution), H-16 (`main`'s claimed np.roll bug was not a bug). U-17, U-18 opened. |
 | 2026-08-14 | H-09 through H-12 added from external sourcing. Species inventory widened from 1 to 13 across both emission pathways (`species_inventory.json`, `Multi-species-accumulation.py`). **U-1 closed** — the 30 kg/satellite figure is Ferreira et al. 2024 and the model's implied flux is within 12% of the published 2022 total. U-8 partly resolved. U-11…U-16 opened, including U-14: none of this round's citations could be verified against primary sources from this environment. |

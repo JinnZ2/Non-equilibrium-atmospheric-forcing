@@ -30,6 +30,32 @@
 > trustworthy artefact here and the prose was not. See
 > [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-02/H-10.
 
+> **The forcing described here is not unprecedented — the exposure is.** Nearby
+> supernovae (~2.3 and ~1.5 Myr ago) delivered a ~100× cosmic-ray increase
+> sustained for centuries, and the atmosphere's response was *compensating*, not
+> cascading. The Laschamp excursion (~41 kyr) took the geomagnetic field to ~10%
+> of modern strength for ~2,000 years, with real but bounded ozone/UV effects and
+> full recovery. What has **no** precedent is a civilisation dependent on GPS
+> timing and nanometre semiconductors. See [`DEEP_TIME.md`](DEEP_TIME.md) and
+> [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-20.
+
+> **Two of the mechanisms described below are challenged and unrebutted.** The
+> conductive "mesh" supporting "geometric resonance" is short of a percolating
+> network by **~13 orders of magnitude** at every burden this repo projects, and
+> the established ion–aerosol result is that aerosol loading *reduces*
+> atmospheric conductivity — the opposite sign to the premise here. Neither is
+> settled against the project, but neither has been answered. Run
+> `python Structural-audit.py`; see [`STRUCTURAL_LIMITS.md`](STRUCTURAL_LIMITS.md)
+> and [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-19.
+
+> **A very strong El Niño is running through 2026-27** (Niño-3.4 +2.7 °C weekly
+> as of 12 Aug 2026; 69% chance of an OND event exceeding every El Niño back to
+> 1950). None of it is in any model here — the models carry no interannual
+> variability at all. The model puts χ at ~0.003 for that window, ~72× below its
+> own lowest risk regime, so **it rules out satellite attribution for anything
+> observed in 2026-27.** Stated in advance, so a natural event is not read later
+> as confirmation. See [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-17.
+
 > **Aluminum is not the only species.** The models in this repo track Al₂O₃ and
 > nothing else — 1 of 13 known species, across only 1 of 2 emission pathways
 > (satellite reentry; rocket launch exhaust is not modelled at all). See
@@ -52,9 +78,9 @@ Traditional cost-benefit analysis: “Atmospheric disposal = $0, Controlled disp
 ## Visual Abstract
 
 ```
-Satellite Reentries (8,400/year)
+Satellite Reentries (730/yr now -> 8,400/yr projected)
          ↓
-Aluminum Oxide Nanoparticles (450 tons/year)
+Aluminum Oxide Nanoparticles (~17 t/yr now -> >360 t/yr projected)
          ↓
 ┌────────────────────────────────────────┐
 │   Electromagnetic Coupling Effects     │
@@ -147,7 +173,8 @@ These nanoparticles have long atmospheric lifetimes:
 
 |Scenario               |Reentries/Year|Aluminum (tons/year)|
 |-----------------------|--------------|--------------------|
-|Current (2024)         |730           |~40                 |
+|Current (2022, sourced)|~570          |~17                 |
+|Current (2024)         |730           |~22 (730 x 30 kg)   |
 |Starlink Full Deploy   |8,400         |~460                |
 |All Mega-Constellations|15,000+       |~800+               |
 
@@ -244,9 +271,12 @@ Multi-species-accumulation.py       All 13 species, both emission pathways; repo
 Chemical-interactions.py            Heterogeneous chemistry: Al2O3 catalysis, SAI synergy, EPP-NOx-O3
 Geomagnetic-dynamics.py             Field evolution, South Atlantic Anomaly, geomagnetic jerks
 Orbital-coupling.py                 Cometary dust, close gravitational passes, solar cycle geometry
+ENSO-coupling.py                    Current El Nino state; attribution guard for the 2026-27 window
+Structural-audit.py                 Machine-checks what the model's form cannot represent
 reproduce.py                        Regenerates every published number; re-runs the consistency checks
 coupling_config.json                Parameters and the projected series (generated, not hand-edited)
 species_inventory.json              Species across both pathways, with per-field epistemic status
+enso_state.json                     Current ENSO figures + coupling mechanisms, with per-field status
 
 Atmospheric-coupling.js             Agent-based visualisation of coupling effects
 Atmospheric-economics.js            Economic impact simulation (ozone, agriculture, health, climate)
@@ -257,6 +287,9 @@ integrated-atmospheric-system.jsx   Multi-domain system: EM harvesting + atmosph
 README.md                           This file
 RESEARCH_LOG.md                     Claim -> run -> result -> revision, plus open unknowns
 SPECIES.md                          Pathways, the chlorine coupling, industry proposals
+STRUCTURAL_LIMITS.md                S-1..S-15: model-form limits no parameter value can fix
+DEEP_TIME.md                        Paleo natural experiments: the constraint data this repo never used
+CLAIM_AUDIT.md                      Protocol for reading a headline number, including this repo's own
 Coupling-Physics.md                 Mathematical foundations for the EM coupling physics
 FAQ.md                              Scientific FAQ: skepticism and methodology
 EXECUTIVE_SUMMARY_STRATEGIC_RISK.md Policy-maker brief
@@ -266,7 +299,8 @@ LICENSE.md                          MIT
 legacy/                             Superseded artefacts, kept verbatim for precedence
 ```
 
-**Before citing a number from this repo, check
+**Before citing a number from this repo — or from anywhere else — run the
+checklist in [`CLAIM_AUDIT.md`](CLAIM_AUDIT.md), then check
 [`RESEARCH_LOG.md`](RESEARCH_LOG.md).** Several figures that appeared in
 earlier revisions did not reproduce from the models that were supposed to have
 produced them. The ones that have been re-derived are marked there; the ones
