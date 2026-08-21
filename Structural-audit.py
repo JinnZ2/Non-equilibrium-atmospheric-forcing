@@ -147,6 +147,37 @@ def missing_state_variables():
     return out
 
 
+def temporal_horizon():
+    """S-12: how far forward and backward does any model reach?"""
+    import re
+    fwd, deep = 0, {}
+    deep_terms = ("paleo", "holocene", "pleistocene", "ice core", "myr",
+                  "excursion", "laschamp", "supernova", "milankovitch")
+    for p in sorted(HERE.glob("*.py")):
+        if p.name == "Structural-audit.py":
+            continue
+        src = p.read_text().lower()
+        for m in re.findall(r"years_to_run\s*=\s*(\d+)", src):
+            fwd = max(fwd, int(m))
+        for term in deep_terms:
+            deep[term] = deep.get(term, 0) + src.count(term)
+    return fwd, deep
+
+
+def stabilising_terms():
+    """S-13: does anything in the models damp, saturate, or recover?"""
+    terms = ("recovery", "damping", "relaxation", "equilibrat", "saturat",
+             "resilien", "self_limit", "homeostas", "negative_feedback")
+    counts = {}
+    for p in sorted(HERE.glob("*.py")):
+        if p.name == "Structural-audit.py":
+            continue
+        src = p.read_text().lower()
+        for term in terms:
+            counts[term] = counts.get(term, 0) + src.count(term)
+    return counts
+
+
 def main():
     print("=" * 76)
     print("STRUCTURAL AUDIT — limits of the model's FORM, not its parameters")
@@ -263,6 +294,38 @@ def main():
     print("  it: mobility of a charged 100 nm particle is orders of magnitude")
     print("  below a molecular ion regardless of composition, and S-8 rules out")
     print("  a percolating path. See RESEARCH_LOG.md H-19.")
+
+    # ---- S-12 / S-13 -----------------------------------------------------
+    print("\nS-12  TEMPORAL HORIZON")
+    print("-" * 76)
+    fwd, deep = temporal_horizon()
+    total_deep = sum(deep.values())
+    print(f"  Forward horizon (longest years_to_run): {fwd} years")
+    print(f"  Backward horizon: {total_deep} deep-time references across all models")
+    print("    " + " · ".join(f"{k} {v}" for k, v in deep.items()))
+    print()
+    print("  Processes at issue have characteristic times of 10^3-10^6 years.")
+    print("  The satellite record is ~50 years. That is too short to establish")
+    print("  natural variance, and it discards the only empirical constraint")
+    print("  available: the planet has run this experiment repeatedly at far")
+    print("  larger amplitude. See DEEP_TIME.md.")
+
+    print("\nS-13  STABILISING TERMS — CAN THE MODELLED SYSTEM RECOVER?")
+    print("-" * 76)
+    counts = stabilising_terms()
+    for k, v in counts.items():
+        print(f"  {k:<20} {v}")
+    if sum(counts.values()) == 0:
+        print()
+        print("  ZERO. There is no damping, saturation, recovery or homeostasis")
+        print("  anywhere. Combined with S-6 (no loops), the modelled system can")
+        print("  accumulate and amplify and do nothing else.")
+        print()
+        print("  The paleo record's dominant signal is the opposite. A ~100x")
+        print("  cosmic-ray increase from nearby supernovae, sustained for")
+        print("  centuries, produced impacts LIMITED BY COMPENSATING EFFECTS.")
+        print("  This is not merely an omission — the model form encodes an")
+        print("  assumption the empirical record contradicts. See H-20.")
 
     print("\n" + "=" * 76)
     print("These are STRUCTURAL limits. No value of any parameter in")

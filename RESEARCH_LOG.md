@@ -845,6 +845,94 @@ review answers it. It is promoted above U-2 on the next-runs list.
 
 ---
 
+## H-20 — The forcing is unprecedented
+
+> Implicit in the framing throughout: satellite-derived atmospheric
+> modification is a novel perturbation to a system that was previously
+> undisturbed. The repo's title — *Non-Equilibrium Atmospheric Forcing* —
+> treats non-equilibrium as the thing humans introduced.
+
+- **Run:** literature search 2026-08-21; `python Structural-audit.py`
+- **Status:** **`FALSIFIED`** — but the correction strengthens the project
+  rather than weakening it.
+
+The atmosphere has never been in equilibrium, and it has absorbed
+electrical/ionisation forcings far larger than anything under discussion here.
+The record is in ocean sediments, ice cores and lunar regolith, and this repo
+uses none of it — forward horizon 40 years, backward horizon zero.
+
+### The two bounding natural experiments
+
+**Nearby supernovae, ~2.3 and ~1.5 Myr ago.** ⁶⁰Fe in Pacific, Atlantic and
+Indian Ocean sediments, concentrated 3.2–1.7 Myr, from sources <300 ly away.
+Delivered a **~100-fold cosmic ray increase sustained for centuries**, driving
+atmospheric ionisation, NOx production and ozone depletion — a direct analogue
+of the repo's own proposed mechanism, two to three orders of magnitude larger.
+
+Outcome: a 2024 *Communications Earth & Environment* study finds biosphere
+impacts were **limited by compensating effects** — partially self-cancelling
+ozone catalytic cycles, offsetting cloud and aerosol response. **That is a
+measurement of negative feedback**, under a forcing far exceeding anything
+nanoparticle loading could produce.
+
+**The Laschamp excursion, ~41 kyr ago.** Field strength fell to **~10% of
+modern**, poles migrated, the auroral oval reached low latitudes, and the
+excursion lasted ~2,000 years. Documented: reduced cutoff rigidity, cosmic
+radiation surge, ozone depletion, mid-latitude UV-B increase.
+
+This one cuts the other way and is recorded as such. Cooper et al. (2021,
+*Science*) argue for a wider cascade — climate reorganisation, megafaunal
+extinction, Neanderthal disappearance. **That broader chain is contested**; the
+ozone/UV-B and geomagnetic components are far better established than the
+biological and cultural attributions. Cite the former, not the latter.
+
+### What this constrains
+
+`Geomagnetic-dynamics.py` treats ~5%/century dipole decay as heading somewhere
+unprecedented. **Laschamp was a ~90% reduction.** The record already answers
+"what happens when shielding largely fails": significant, regionally severe
+ozone and UV effects, recovery within ~2,000 years, **no runaway**.
+
+That is an upper-bound calibration on χ, and it is available for the cost of a
+literature review. If χ predicts cascade at electrical perturbations far
+smaller than Laschamp's, and Laschamp produced no cascade, **χ is too steep.**
+
+### The revision — and why it is an upgrade
+
+The forcing is not unprecedented. **The exposure is.**
+
+None of these events happened to a civilisation dependent on GPS timing,
+transformer networks vulnerable to GICs, or nanometre-scale semiconductors. The
+biosphere buffered these forcings; there is no record whatsoever of how a
+technological substrate responds, because none existed.
+
+> **"An ordinary forcing meeting an unprecedented vulnerability" is defensible,
+> testable, and survives the paleo record. "An unprecedented forcing" is not,
+> and the record contradicts it.**
+
+It also points the project at infrastructure vulnerability — which is what the
+logistics-fragility thread was always actually about, and the part of this work
+with the least competition from existing literature.
+
+### The framing bias behind it
+
+Recorded as S-12 (no deep-time baseline), S-13 (the modelled world can only
+amplify — zero damping, recovery, saturation or homeostasis terms anywhere,
+against a paleo record whose dominant signal is buffering), and S-14
+(asymmetric skepticism — SAI is scrutinised as a hazard while the repo's own
+proposed remedies, stratospheric particle collection and EM harvesting, get no
+coupling analysis or failure-mode accounting).
+
+S-13 and S-14 compound: **a model that represents only amplification, and
+considers only engineered remedies, will conclude that intervention is
+necessary regardless of its inputs.** Part of the conclusion is in the
+architecture, not the data.
+
+- **Full treatment:** [`DEEP_TIME.md`](DEEP_TIME.md).
+- **Caveat:** sources from search summaries; publisher domains blocked (U-23).
+
+---
+
 ## Open unknowns
 
 Ranked by how much the repo's conclusions move if the answer changes.
@@ -869,6 +957,8 @@ Ranked by how much the repo's conclusions move if the answer changes.
 | **U-20** | None of the 2026-08-21 ENSO figures were verified against primary sources (CPC, IRI, arXiv all blocked by egress policy), and one retrieved probability (~60% chance of "strong") is arithmetically inconsistent with the >90%/81% very-strong figures. ENSO products are also revised monthly. | H-17 | Cheap to fix with network access, and the figures decay on their own. |
 | **U-21** | How much does a given Niño-3.4 anomaly change stratospheric aerosol residence time via the Brewer–Dobson circulation? | H-17, H-13 | The only ENSO→model coupling that could be wired in without inventing anything. Stacks on H-13's unresolved 6× baseline. Note the rectangular kernel cannot resolve sub-year changes at all (U-3). |
 | **U-22** | Can the 2026-27 El Niño be used as a **natural experiment** — a known large transport perturbation against which to test whether stratospheric aerosol responds as the model implies? | H-17 | Turns the confounder into an instrument. This is the rare unknown with a deadline: the window is open now and closes when the event decays. |
+| **U-23** | Calibrate χ against the Laschamp excursion (~90% field reduction, measured ozone/UV response, ~2,000 yr, full recovery) and against the ~100x supernova cosmic-ray increase. Also: none of the 2026-08-21 deep-time sources verified against primaries. | H-20 | The only empirical calibration available to this project, at the cost of a literature review rather than an instrument. Cooper et al. 2021's broader cascade claims are contested — do not lean on them. |
+| **U-24** | Does the system have stabilising feedbacks the model omits (S-13)? The paleo record's dominant signal is buffering; the model has zero damping terms. | H-20, S-13 | If real homeostasis exists at any relevant strength, the cascade projections are wrong in form, not just in magnitude. |
 | **U-19** | Reconcile the ~394 t/yr bulk meteoric Al₂O₃ figure against Murphy et al.'s element-wise finding that reentry Li/Al/Cu/Pb already exceed cosmic dust influx. | H-15 | The two cannot both be straightforwardly true as stated. The difference is probably in the accounting — bulk Al₂O₃ versus elemental Al, or different altitude bands — and finding out which is cheap and clarifying. |
 | **U-18** | Whether meteoric and satellite-derived particles are equivalent for coupling purposes (morphology, size distribution, deposition altitude, oxidation state) — and whether the anthropogenic fraction acts as a **dopant** in the meteoric host population rather than as added bulk. | H-15 | Murphy et al. find spacecraft metals inside the SAME sulfate particles as meteoric metals, so this is one doped population, not two. Dopant effects on conductivity are not mass-weighted. Cuts both ways: if the populations ARE equivalent, then geological-time exposure at above-threshold burdens with no observed transition puts a hard upper bound on chi — turning the natural background into a calibration dataset. |
 | **U-9** | The five React simulations parse but have never been run. Their economic and coupling outputs are unverified. | H-07 | They are the repo's most visible artefacts and nothing confirms their numbers. |
@@ -885,41 +975,45 @@ Ranked by how much the repo's conclusions move if the answer changes.
 2. **S-8** — replace the "conductive mesh" mechanism or retire the claim. It is
    short of percolation by ~13 orders of magnitude at every burden this repo
    projects, including the cascade burden.
-3. **U-17 / U-2** — establish what the 1,000 MT threshold measures. The
+3. **U-23** — calibrate χ against Laschamp. A ~90% shielding reduction with a
+   measured, bounded, recovered response is the closest thing to empirical
+   validation this project can get, and it is a literature review. Deep time
+   has already run the experiment.
+4. **U-17 / U-2** — establish what the 1,000 MT threshold measures. The
    natural population already sits at ~2x it, permanently, with no phase
    transition on record, so as an absolute burden figure it cannot be right.
    Until this is settled every date the repo prints is keyed to a number whose
    meaning is unknown. Newly the sharpest item on the list, and it came from
    taking the natural background seriously as a baseline rather than as a
    rival (H-15).
-4. **U-22** — treat the 2026-27 El Niño as a natural experiment while it is
+5. **U-22** — treat the 2026-27 El Niño as a natural experiment while it is
    happening. A known large transport perturbation is exactly what is needed to
    test the residence-time question (H-13, U-21), and unlike everything else on
    this list it expires. Worth doing out of order for that reason alone.
-5. **U-18** — test the doping hypothesis: does a small anthropogenic fraction
+6. **U-18** — test the doping hypothesis: does a small anthropogenic fraction
    inside a meteoric host population change conductivity disproportionately?
    If yes, the whole mass-fraction framing is beside the point and chi should
    be a function of composition, not burden. If no, geological-time exposure
    gives a hard upper bound on chi. **Either answer is worth more than another
    burden projection**, because both are decisive and neither is expensive.
-6. **U-14** — re-verify every 2026-08-14 citation, and the 2026-08-21 ENSO figures (U-20), against the primary papers
+7. **U-14** — re-verify every 2026-08-14 citation, and the 2026-08-21 ENSO figures (U-20), against the primary papers
    from an unrestricted network. Cheapest item on the list and everything
    added that round depends on it.
-7. **U-2 (χ law)** — replace the piecewise χ law with a continuous one and see
+8. **U-2 (χ law)** — replace the piecewise χ law with a continuous one and see
    whether any threshold behaviour survives (H-04).
-8. **U-13 / H-12** — resolve the ozone tension. The repo says catastrophic;
+9. **U-13 / H-12** — resolve the ozone tension. The repo says catastrophic;
    the retrieved chlorine sensitivity says 0.23% at 52× emissions. One of
    those is wrong, and it is the claim a policymaker will act on.
-9. **U-11 / U-12** — the multi-species model is built and empty. Per-element
+10. **U-11 / U-12** — the multi-species model is built and empty. Per-element
    fluxes would fill it; coupling weights would make χ meaningful across
    species. Weights are the harder and more valuable of the two.
-10. **U-8** — source the 15%/yr growth rate. Over a 20-year projection the
+11. **U-8** — source the 15%/yr growth rate. Over a 20-year projection the
    growth rate dominates the baseline, and it is still a bare assertion.
-11. **U-9** — stand up a minimal `package.json` + Vite harness so the React
+12. **U-9** — stand up a minimal `package.json` + Vite harness so the React
    models can actually be rendered and their outputs checked.
-12. **U-5 / U-10 / U-15** — write down the damage-function and Al/S synergism
+13. **U-5 / U-10 / U-15** — write down the damage-function and Al/S synergism
    derivations, or mark them as placeholders in the policy brief.
-13. **U-3** — demoted after testing, but see H-17: the whole-year kernel puts a hard floor on the smallest transport perturbation this model can represent. (see table). Fix the comment; note the
+14. **U-3** — demoted after testing, but see H-17: the whole-year kernel puts a hard floor on the smallest transport perturbation this model can represent. (see table). Fix the comment; note the
    sharper framing from H-10 — the error is treating the 30-year descent as
    inert when the source describes it as the destructive phase.
 
@@ -931,6 +1025,7 @@ Ranked by how much the repo's conclusions move if the answer changes.
 |---|---|
 | 2025-12-16 | Initial models, config, README, executive summary committed. |
 | 2026-08-14 | H-01 through H-08 run and recorded. `legacy/` created. Config series made generated-not-authored. Five React sources repaired to parse. Unknowns U-1…U-10 opened. |
+| 2026-08-21 | **H-20 added: the forcing is not unprecedented — the exposure is.** Deep-time record introduced (`DEEP_TIME.md`): nearby supernovae ~2.3/1.5 Myr delivered a ~100x cosmic-ray increase for centuries and the atmosphere showed *compensating* effects; the Laschamp excursion took the field to ~10% of modern for ~2,000 years with bounded ozone/UV consequences and full recovery. Both are usable as upper-bound calibrations on chi. S-12, S-13 (the model has zero stabilising terms, against a record whose dominant signal is buffering), S-14 (asymmetric skepticism) added. U-23, U-24 opened. |
 | 2026-08-21 | **H-18 and H-19 added; structural register opened.** H-18: there is no coupling in the coupling model — chi takes two scalars and the three domain modules reference it zero times; flow is feed-forward with no loops. H-19: the "conductive mesh" is ~13 orders of magnitude short of percolation, and the available ion-aerosol mechanism has the OPPOSITE sign to the repo's premise. `STRUCTURAL_LIMITS.md` (S-1…S-11) and `Structural-audit.py` added. Settling the conductivity sign is now the top next-run, ahead of U-2. |
 | 2026-08-21 | H-17 added. Repo had no ENSO, QBO or seasonality content at all; a very strong El Niño (Niño-3.4 +2.7 °C weekly, 69% chance of a historic OND event) made that gap consequential. Added `enso_state.json` and `ENSO-coupling.py`. Key finding: the model's own χ for 2026-27 is ~0.003, ~72x below its lowest regime, so it rules out satellite attribution for anything observed in that window — recorded in advance. No χ modifier invented. U-20, U-21, U-22 opened. |
 | 2026-08-17 | **H-15 corrected after challenge.** The natural meteoric population was written up as a counter-argument to the thesis; it is a baseline offset and a coupling factor. Corrected framing shows the natural burden alone already exceeds the 1,000 MT threshold by ~2x, which reframes U-2 into U-17: the threshold cannot mean absolute total burden. Also opened U-19 and rewrote U-18 around the doping hypothesis. `reproduce.py` now computes the baseline offset every run. |

@@ -30,6 +30,15 @@
 > trustworthy artefact here and the prose was not. See
 > [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-02/H-10.
 
+> **The forcing described here is not unprecedented — the exposure is.** Nearby
+> supernovae (~2.3 and ~1.5 Myr ago) delivered a ~100× cosmic-ray increase
+> sustained for centuries, and the atmosphere's response was *compensating*, not
+> cascading. The Laschamp excursion (~41 kyr) took the geomagnetic field to ~10%
+> of modern strength for ~2,000 years, with real but bounded ozone/UV effects and
+> full recovery. What has **no** precedent is a civilisation dependent on GPS
+> timing and nanometre semiconductors. See [`DEEP_TIME.md`](DEEP_TIME.md) and
+> [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-20.
+
 > **Two of the mechanisms described below are challenged and unrebutted.** The
 > conductive "mesh" supporting "geometric resonance" is short of a percolating
 > network by **~13 orders of magnitude** at every burden this repo projects, and
@@ -278,7 +287,8 @@ integrated-atmospheric-system.jsx   Multi-domain system: EM harvesting + atmosph
 README.md                           This file
 RESEARCH_LOG.md                     Claim -> run -> result -> revision, plus open unknowns
 SPECIES.md                          Pathways, the chlorine coupling, industry proposals
-STRUCTURAL_LIMITS.md                S-1..S-11: model-form limits no parameter value can fix
+STRUCTURAL_LIMITS.md                S-1..S-14: model-form limits no parameter value can fix
+DEEP_TIME.md                        Paleo natural experiments: the constraint data this repo never used
 Coupling-Physics.md                 Mathematical foundations for the EM coupling physics
 FAQ.md                              Scientific FAQ: skepticism and methodology
 EXECUTIVE_SUMMARY_STRATEGIC_RISK.md Policy-maker brief

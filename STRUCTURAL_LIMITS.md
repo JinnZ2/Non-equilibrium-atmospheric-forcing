@@ -169,6 +169,63 @@ uncertainty bounds on Python submissions. Given U-2, U-5, U-8, U-12 and U-21 are
 all unconstrained, honest error bars would likely span orders of magnitude —
 which is itself the most useful thing they could show.
 
+## S-12 — No deep-time baseline
+
+Forward horizon: 40 years (longest `years_to_run`). Backward horizon: **zero**.
+
+Grep across every model file: `paleo` 0 · `Holocene` 0 · `ice core` 0 · `Myr` 0 ·
+`excursion` 0 · `Laschamp` 0 · `supernova` 0 · `Milankovitch` 0.
+
+The processes at issue have characteristic times of 10³–10⁶ years. The
+instrumental record is ~150 years and the satellite record ~50. That is far too
+short to establish what natural variance looks like, which makes attribution
+structurally hard — the same problem H-17 hit with ENSO, several timescales up.
+
+Worse, it discards the only empirical constraint available. Earth has run this
+experiment repeatedly at far larger amplitude, and the results are in ocean
+sediments, ice cores and lunar regolith. See [`DEEP_TIME.md`](DEEP_TIME.md).
+
+## S-13 — The modelled world can only amplify
+
+Grep for stabilising terms across every model file:
+
+| Term | Occurrences |
+|---|---|
+| `recovery` | 0 |
+| `damping` | 0 |
+| `relaxation` | 0 |
+| `equilibration` | 0 |
+| `saturation` | 0 |
+| `resilience` | 0 |
+| `self-limiting` | 0 |
+| `homeostasis` | 0 |
+
+Not one negative feedback anywhere. (`buffer` appears, but it is the
+residence-time array, not a feedback.) Combined with S-6 — no loops at all —
+the model represents a system that can accumulate and amplify and do nothing
+else.
+
+The paleo record's dominant signal is the opposite: **buffering**. A 2024 study
+of nearby-supernova effects finds biosphere impacts *limited by compensating
+effects* — self-cancelling ozone catalytic cycles and offsetting cloud/aerosol
+response — under a ~100× cosmic ray increase sustained for centuries.
+
+So this is not merely an omission. **The model form encodes an assumption the
+empirical record contradicts.**
+
+## S-14 — Asymmetric skepticism
+
+SAI is scrutinised as a hazard, correctly and at length. The README's own "Next
+Steps" propose stratospheric particle collection technology and atmospheric EM
+energy harvesting with **no equivalent scrutiny** — no coupling analysis, no
+failure modes, no unintended-consequence accounting. Natural variability is
+treated as background; engineered intervention is treated as solution.
+
+This has a structural consequence, not just a rhetorical one: **a model that
+represents only amplification (S-13) and considers only engineered remedies
+will conclude intervention is necessary regardless of its inputs.** Part of the
+conclusion lives in the architecture rather than in the data.
+
 ---
 
 ## What this does and does not mean
@@ -177,7 +234,9 @@ which is itself the most useful thing they could show.
 et al. 2023). Al₂O₃ catalysing chlorine-mediated ozone loss is a documented
 mechanism (Ferreira et al. 2024). Those stand independently of anything here.
 
-**It does mean the current models cannot test H-00.** They have no state space
+**It does mean the current models cannot test H-00** — and that the data which
+*could* start to test it already exists, unused, in the paleo record
+([`DEEP_TIME.md`](DEEP_TIME.md)). They have no state space
 for the physics that would decide it, no coupling between the domains they
 name, and at least one mechanism (S-8) that the geometry rules out. The gap
 between "this repository" and "a model that could evaluate this hypothesis" is
@@ -210,5 +269,12 @@ In descending order of value per unit effort:
 4. **Connect the domain modules to χ, or stop calling them coupling** (S-5).
    Cheap, and it either produces the project's first real coupling or makes the
    naming honest.
-5. **Ground χ in units** (S-10). Until then it cannot be checked against any
+5. **Calibrate χ against Laschamp** (S-12). A ~90% geomagnetic shielding
+   reduction with a measured ozone response is an upper-bound constraint on any
+   coupling coefficient. If χ predicts cascade at electrical perturbations far
+   smaller than Laschamp's, and Laschamp produced no cascade, χ is too steep.
+   Closest thing to an empirical calibration available, and it costs a
+   literature review rather than an instrument.
+6. **Add a stabilising term, or defend its absence** (S-13).
+7. **Ground χ in units** (S-10). Until then it cannot be checked against any
    observation, which makes the whole risk-regime table unfalsifiable.
