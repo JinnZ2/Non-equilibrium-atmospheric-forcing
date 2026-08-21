@@ -12,6 +12,8 @@ This repository models the atmospheric effects of aluminum oxide (Al2O3) nanopar
 
 ## Epistemic Status — read this before citing any number
 
+**Two registers.** `RESEARCH_LOG.md` tracks *parametric* unknowns (U-1…U-22): we don't know this number. `STRUCTURAL_LIMITS.md` tracks *structural* ones (S-1…S-11): the model has no variable for this, and no parameter value fixes it. The repo's parametric hygiene is now good and its structural limits are largely untouched — don't mistake the first for the second (H-18).
+
 `RESEARCH_LOG.md` is the authority on which figures in this repo have been re-derived and which are unsourced. Several numbers that appeared in earlier revisions did not reproduce from the models supposed to have produced them — **twice, independently** (H-01 and H-14). Open unknowns are tracked as U-1…U-22.
 
 **Working rules for this repo:**
@@ -22,6 +24,8 @@ This repository models the atmospheric effects of aluminum oxide (Al2O3) nanopar
 - ENSO figures in `enso_state.json` are revised monthly and go stale fast. Re-check before quoting (U-20).
 - `coupling_config.json`'s `projected_time_series` is **generated** by `reproduce.py --write`, not hand-authored. Never hand-edit it; change the model and regenerate.
 - When a claim is revised, add or update its `RESEARCH_LOG.md` entry with the run that settled it. Don't silently edit numbers.
+- **Two mechanisms in the README are challenged and unrebutted (H-19).** The "conductive mesh" is ~13 orders of magnitude short of percolation at every burden projected here, and the established ion-aerosol result is that aerosol loading *lowers* conductivity — the opposite sign to this repo's premise. Don't restate either mechanism as settled.
+- There is no coupling in the coupling model: Chi takes two scalars, and Chemical/Geomagnetic/Orbital reference it zero times (H-18, S-5). If you add a domain module, wire it to Chi or don't call it coupling.
 - Superseded artefacts go to `legacy/` verbatim via `git mv` — never deleted, never tidied on the way in. Precedence carries. See `legacy/README.md`.
 
 ## Repository Structure
@@ -33,11 +37,13 @@ This repository models the atmospheric effects of aluminum oxide (Al2O3) nanopar
 ├── Geomagnetic-dynamics.py         # Magnetic field evolution, SAA growth, geomagnetic jerks, EPP coupling
 ├── Orbital-coupling.py             # Cometary dust, close passes, solar cycle, heliospheric geometry
 ├── ENSO-coupling.py                # Current El Nino state; attribution guard for the 2026-27 window
+├── Structural-audit.py             # Machine-checks what the model's FORM cannot represent (S-register)
 ├── reproduce.py                    # Regenerates published numbers; re-runs the consistency checks
 ├── coupling_config.json            # Parameters, risk thresholds, generated projected series
 ├── species_inventory.json          # Species across reentry + launch pathways, with per-field epistemic status
 ├── enso_state.json                 # Current ENSO figures + coupling mechanisms, with per-field status
 ├── SPECIES.md                      # Narrative: pathways, the chlorine coupling, industry proposals
+├── STRUCTURAL_LIMITS.md            # S-1..S-11: model-form limits no parameter value can fix
 ├── Atmospheric-coupling.js         # Agent-based interactive visualization of coupling effects
 ├── Atmospheric-economics.js        # Economic impact simulation (ozone, agriculture, health, climate)
 ├── Satellite-pollution-model.js    # Satellite reentry pollution model with economic cost calculations
@@ -60,7 +66,7 @@ This repository models the atmospheric effects of aluminum oxide (Al2O3) nanopar
 
 ### Python (simulations)
 - **NumPy** — numerical computation
-- Files: `Accumulation-with-coupling.py`, `Multi-species-accumulation.py`, `Chemical-interactions.py`, `Geomagnetic-dynamics.py`, `Orbital-coupling.py`, `ENSO-coupling.py`, `reproduce.py`
+- Files: `Accumulation-with-coupling.py`, `Multi-species-accumulation.py`, `Chemical-interactions.py`, `Geomagnetic-dynamics.py`, `Orbital-coupling.py`, `ENSO-coupling.py`, `Structural-audit.py`, `reproduce.py`
 
 `Accumulation-with-coupling.py` exposes `calculate_coupling_coefficient()`, `risk_level()` and `run()` behind an `if __name__ == "__main__"` guard, so it can be imported. It is the single source of truth for Chi — do not reimplement the coupling law elsewhere.
 
@@ -128,6 +134,7 @@ pip install numpy
 python Accumulation-with-coupling.py   # burden + Chi, 20-year projection
 python Multi-species-accumulation.py   # all 13 species, both pathways, coverage gaps
 python ENSO-coupling.py                # ENSO state, attribution guard, residence sensitivity
+python Structural-audit.py             # what the model's form cannot represent
 python reproduce.py                    # regenerate published numbers, re-run checks
 python reproduce.py --write            # also rewrite coupling_config.json's series
 ```

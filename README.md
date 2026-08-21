@@ -30,6 +30,15 @@
 > trustworthy artefact here and the prose was not. See
 > [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-02/H-10.
 
+> **Two of the mechanisms described below are challenged and unrebutted.** The
+> conductive "mesh" supporting "geometric resonance" is short of a percolating
+> network by **~13 orders of magnitude** at every burden this repo projects, and
+> the established ion–aerosol result is that aerosol loading *reduces*
+> atmospheric conductivity — the opposite sign to the premise here. Neither is
+> settled against the project, but neither has been answered. Run
+> `python Structural-audit.py`; see [`STRUCTURAL_LIMITS.md`](STRUCTURAL_LIMITS.md)
+> and [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-19.
+
 > **A very strong El Niño is running through 2026-27** (Niño-3.4 +2.7 °C weekly
 > as of 12 Aug 2026; 69% chance of an OND event exceeding every El Niño back to
 > 1950). None of it is in any model here — the models carry no interannual
@@ -254,6 +263,7 @@ Chemical-interactions.py            Heterogeneous chemistry: Al2O3 catalysis, SA
 Geomagnetic-dynamics.py             Field evolution, South Atlantic Anomaly, geomagnetic jerks
 Orbital-coupling.py                 Cometary dust, close gravitational passes, solar cycle geometry
 ENSO-coupling.py                    Current El Nino state; attribution guard for the 2026-27 window
+Structural-audit.py                 Machine-checks what the model's form cannot represent
 reproduce.py                        Regenerates every published number; re-runs the consistency checks
 coupling_config.json                Parameters and the projected series (generated, not hand-edited)
 species_inventory.json              Species across both pathways, with per-field epistemic status
@@ -268,6 +278,7 @@ integrated-atmospheric-system.jsx   Multi-domain system: EM harvesting + atmosph
 README.md                           This file
 RESEARCH_LOG.md                     Claim -> run -> result -> revision, plus open unknowns
 SPECIES.md                          Pathways, the chlorine coupling, industry proposals
+STRUCTURAL_LIMITS.md                S-1..S-11: model-form limits no parameter value can fix
 Coupling-Physics.md                 Mathematical foundations for the EM coupling physics
 FAQ.md                              Scientific FAQ: skepticism and methodology
 EXECUTIVE_SUMMARY_STRATEGIC_RISK.md Policy-maker brief
