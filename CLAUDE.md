@@ -12,12 +12,14 @@ This repository models the atmospheric effects of aluminum oxide (Al2O3) nanopar
 
 ## Epistemic Status — read this before citing any number
 
-`RESEARCH_LOG.md` is the authority on which figures in this repo have been re-derived and which are unsourced. Several numbers that appeared in earlier revisions did not reproduce from the models supposed to have produced them — **twice, independently** (H-01 and H-14). Open unknowns are tracked as U-1…U-16.
+`RESEARCH_LOG.md` is the authority on which figures in this repo have been re-derived and which are unsourced. Several numbers that appeared in earlier revisions did not reproduce from the models supposed to have produced them — **twice, independently** (H-01 and H-14). Open unknowns are tracked as U-1…U-22.
 
 **Working rules for this repo:**
 - Run `python reproduce.py` before quoting a projected figure.
 - **Never invent a coupling weight or a flux to make a calculation runnable.** `species_inventory.json` uses explicit `status` fields (`sourced` / `repo_assumption` / `unquantified` / `speculative`); leave a field `null` with status `unquantified` rather than filling it. `Multi-species-accumulation.py` deliberately refuses to produce a combined Chi for this reason — the blank is the finding (U-11, U-12).
 - Al2O3 is 1 of 13 known species and reentry is 1 of 2 pathways. Don't write "total atmospheric burden" when you mean Al2O3-from-reentry (H-09, H-11).
+- **The models carry no interannual variability** — no ENSO, no QBO, no seasonality (H-17). A very strong El Nino is running through 2026-27; the model puts chi at ~0.003 for that window, ~72x below its lowest regime, so it rules out satellite attribution for anything observed there. Don't let a natural event be read as confirmation.
+- ENSO figures in `enso_state.json` are revised monthly and go stale fast. Re-check before quoting (U-20).
 - `coupling_config.json`'s `projected_time_series` is **generated** by `reproduce.py --write`, not hand-authored. Never hand-edit it; change the model and regenerate.
 - When a claim is revised, add or update its `RESEARCH_LOG.md` entry with the run that settled it. Don't silently edit numbers.
 - Superseded artefacts go to `legacy/` verbatim via `git mv` — never deleted, never tidied on the way in. Precedence carries. See `legacy/README.md`.
@@ -30,9 +32,11 @@ This repository models the atmospheric effects of aluminum oxide (Al2O3) nanopar
 ├── Chemical-interactions.py        # Heterogeneous chemistry: Al2O3 catalysis, SAI synergy, EPP-NOx
 ├── Geomagnetic-dynamics.py         # Magnetic field evolution, SAA growth, geomagnetic jerks, EPP coupling
 ├── Orbital-coupling.py             # Cometary dust, close passes, solar cycle, heliospheric geometry
+├── ENSO-coupling.py                # Current El Nino state; attribution guard for the 2026-27 window
 ├── reproduce.py                    # Regenerates published numbers; re-runs the consistency checks
 ├── coupling_config.json            # Parameters, risk thresholds, generated projected series
 ├── species_inventory.json          # Species across reentry + launch pathways, with per-field epistemic status
+├── enso_state.json                 # Current ENSO figures + coupling mechanisms, with per-field status
 ├── SPECIES.md                      # Narrative: pathways, the chlorine coupling, industry proposals
 ├── Atmospheric-coupling.js         # Agent-based interactive visualization of coupling effects
 ├── Atmospheric-economics.js        # Economic impact simulation (ozone, agriculture, health, climate)
@@ -56,7 +60,7 @@ This repository models the atmospheric effects of aluminum oxide (Al2O3) nanopar
 
 ### Python (simulations)
 - **NumPy** — numerical computation
-- Files: `Accumulation-with-coupling.py`, `Multi-species-accumulation.py`, `Chemical-interactions.py`, `Geomagnetic-dynamics.py`, `Orbital-coupling.py`, `reproduce.py`
+- Files: `Accumulation-with-coupling.py`, `Multi-species-accumulation.py`, `Chemical-interactions.py`, `Geomagnetic-dynamics.py`, `Orbital-coupling.py`, `ENSO-coupling.py`, `reproduce.py`
 
 `Accumulation-with-coupling.py` exposes `calculate_coupling_coefficient()`, `risk_level()` and `run()` behind an `if __name__ == "__main__"` guard, so it can be imported. It is the single source of truth for Chi — do not reimplement the coupling law elsewhere.
 
@@ -123,6 +127,7 @@ There is no formal build system. To run:
 pip install numpy
 python Accumulation-with-coupling.py   # burden + Chi, 20-year projection
 python Multi-species-accumulation.py   # all 13 species, both pathways, coverage gaps
+python ENSO-coupling.py                # ENSO state, attribution guard, residence sensitivity
 python reproduce.py                    # regenerate published numbers, re-run checks
 python reproduce.py --write            # also rewrite coupling_config.json's series
 ```

@@ -30,6 +30,14 @@
 > trustworthy artefact here and the prose was not. See
 > [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-02/H-10.
 
+> **A very strong El Niño is running through 2026-27** (Niño-3.4 +2.7 °C weekly
+> as of 12 Aug 2026; 69% chance of an OND event exceeding every El Niño back to
+> 1950). None of it is in any model here — the models carry no interannual
+> variability at all. The model puts χ at ~0.003 for that window, ~72× below its
+> own lowest risk regime, so **it rules out satellite attribution for anything
+> observed in 2026-27.** Stated in advance, so a natural event is not read later
+> as confirmation. See [`RESEARCH_LOG.md`](RESEARCH_LOG.md) H-17.
+
 > **Aluminum is not the only species.** The models in this repo track Al₂O₃ and
 > nothing else — 1 of 13 known species, across only 1 of 2 emission pathways
 > (satellite reentry; rocket launch exhaust is not modelled at all). See
@@ -52,9 +60,9 @@ Traditional cost-benefit analysis: “Atmospheric disposal = $0, Controlled disp
 ## Visual Abstract
 
 ```
-Satellite Reentries (8,400/year)
+Satellite Reentries (730/yr now -> 8,400/yr projected)
          ↓
-Aluminum Oxide Nanoparticles (450 tons/year)
+Aluminum Oxide Nanoparticles (~17 t/yr now -> >360 t/yr projected)
          ↓
 ┌────────────────────────────────────────┐
 │   Electromagnetic Coupling Effects     │
@@ -147,7 +155,8 @@ These nanoparticles have long atmospheric lifetimes:
 
 |Scenario               |Reentries/Year|Aluminum (tons/year)|
 |-----------------------|--------------|--------------------|
-|Current (2024)         |730           |~40                 |
+|Current (2022, sourced)|~570          |~17                 |
+|Current (2024)         |730           |~22 (730 x 30 kg)   |
 |Starlink Full Deploy   |8,400         |~460                |
 |All Mega-Constellations|15,000+       |~800+               |
 
@@ -244,9 +253,11 @@ Multi-species-accumulation.py       All 13 species, both emission pathways; repo
 Chemical-interactions.py            Heterogeneous chemistry: Al2O3 catalysis, SAI synergy, EPP-NOx-O3
 Geomagnetic-dynamics.py             Field evolution, South Atlantic Anomaly, geomagnetic jerks
 Orbital-coupling.py                 Cometary dust, close gravitational passes, solar cycle geometry
+ENSO-coupling.py                    Current El Nino state; attribution guard for the 2026-27 window
 reproduce.py                        Regenerates every published number; re-runs the consistency checks
 coupling_config.json                Parameters and the projected series (generated, not hand-edited)
 species_inventory.json              Species across both pathways, with per-field epistemic status
+enso_state.json                     Current ENSO figures + coupling mechanisms, with per-field status
 
 Atmospheric-coupling.js             Agent-based visualisation of coupling effects
 Atmospheric-economics.js            Economic impact simulation (ozone, agriculture, health, climate)

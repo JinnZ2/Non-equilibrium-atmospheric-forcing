@@ -140,5 +140,20 @@
   "species_inventory": {
     "see": "species_inventory.json",
     "note": "Al2O3 is 1 of 13 known species, across 1 of 2 emission pathways. Every parameter in this file describes that one species on that one pathway."
+  },
+  "enso_parameters": {
+    "see": "enso_state.json",
+    "as_of": "2026-08-21",
+    "alert_status": "El Nino Advisory",
+    "nino34_weekly_c": 2.7,
+    "nino34_weekly_centered_on": "2026-08-12",
+    "oni_mjj_2026_c": 1.39,
+    "very_strong_ond_2026_pct": 81,
+    "historic_event_ond_2026_pct": 69,
+    "wired_into_model": false,
+    "note": "A very strong and possibly record El Nino is developing over 2026-27. NONE of it is wired into any model here: the models carry no interannual variability at all \u2014 no ENSO, no QBO, no seasonality. Listed so the gap is explicit.",
+    "attribution_note": "The model puts chi at ~0.003 across 2026-27, a factor of ~72 below its own lowest risk regime. It therefore RULES OUT satellite-driven attribution for anything observed in that window \u2014 ozone anomalies, PNT degradation, supply-chain disruption. Stated in advance so a natural event cannot later be read as confirmation. See RESEARCH_LOG.md H-17.",
+    "staleness_warning": "ENSO figures are revised monthly and go stale fast. Re-check the CPC diagnostic discussion before using any value here.",
+    "confidence": "MEDIUM for the reported state (search summaries, not primary products \u2014 U-20); ZERO for coupling magnitude, which is unquantified (U-21)"
   }
 }
