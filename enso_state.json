@@ -2,7 +2,7 @@
   "_schema": {
     "purpose": "Current ENSO state and the mechanisms by which it couples to this project's subject matter. Consumed by ENSO-coupling.py.",
     "why_this_file_exists": "This repo had no ENSO content of any kind before 2026-08-21. That is a gap, because a very strong El Nino modulates stratospheric transport, column ozone, and the logistics fragility this project treats as its outcome variable. It is also an attribution hazard: anything observed in the 2026-27 window has a large natural driver that must be removed before attributing it to satellite reentry.",
-    "reading_this_file": "Every quantitative field carries a `status`. Nothing here is a coupling coefficient. ENSO-coupling.py will not multiply chi by anything from this file — see `coupling_status` on each mechanism, and RESEARCH_LOG.md U-21.",
+    "reading_this_file": "Every quantitative field carries a `status`. Nothing here is a coupling coefficient. ENSO-coupling.py will not multiply chi by anything from this file \u2014 see `coupling_status` on each mechanism, and RESEARCH_LOG.md U-21.",
     "status_values": {
       "sourced": "From a named external product. See `reference`.",
       "mechanism_established": "The physical mechanism is standard in the literature, but its magnitude for THIS aerosol population is not quantified here.",
@@ -10,9 +10,8 @@
       "speculative": "Plausible, unestablished. Never cite."
     },
     "last_updated": "2026-08-21",
-    "verification_warning": "Gathered by web search on 2026-08-21. NOAA CPC (cpc.ncep.noaa.gov), arxiv.org and other primary domains were blocked by this environment's network egress policy, so these figures come from SEARCH SUMMARIES of the CPC/IRI products, not from the products themselves. Every value is marked verified_against_primary: false. ENSO figures are updated monthly and go stale fast — re-check before use. Same caveat class as RESEARCH_LOG.md U-14."
+    "verification_warning": "Gathered by web search on 2026-08-21. NOAA CPC (cpc.ncep.noaa.gov), arxiv.org and other primary domains were blocked by this environment's network egress policy, so these figures come from SEARCH SUMMARIES of the CPC/IRI products, not from the products themselves. Every value is marked verified_against_primary: false. ENSO figures are updated monthly and go stale fast \u2014 re-check before use. Same caveat class as RESEARCH_LOG.md U-14."
   },
-
   "references": {
     "cpc_enso_diagnostic_discussion_2026_08": {
       "citation": "NOAA Climate Prediction Center, El Nino/Southern Oscillation (ENSO) Diagnostic Discussion, August 2026.",
@@ -29,10 +28,9 @@
       "citation": "\"Climate network and complexity based ENSO forecast for 2026\", arXiv:2602.14773.",
       "url": "https://arxiv.org/html/2602.14773v1",
       "verified_against_primary": false,
-      "note": "POINTER ONLY — contents not read; arxiv.org was blocked. Flagged because a climate-network/complexity-based ENSO forecast is methodologically adjacent to this project's own complexity framing, and is worth reading when network access allows. Do not cite anything as coming from it until someone has actually read it."
+      "note": "POINTER ONLY \u2014 contents not read; arxiv.org was blocked. Flagged because a climate-network/complexity-based ENSO forecast is methodologically adjacent to this project's own complexity framing, and is worth reading when network access allows. Do not cite anything as coming from it until someone has actually read it."
     }
   },
-
   "current_state": {
     "as_of": "2026-08-21",
     "alert_status": "El Nino Advisory",
@@ -61,7 +59,7 @@
         "season": "May-July 2026",
         "status": "sourced",
         "reference": "iri_quick_look_2026_08",
-        "note": "ONI and the raw Nino-3.4 seasonal mean are different indices — ONI is a running mean referenced to centred 30-year base periods — so +1.39 and +1.51 for the same season are not necessarily in conflict. Recorded separately rather than reconciled."
+        "note": "ONI and the raw Nino-3.4 seasonal mean are different indices \u2014 ONI is a running mean referenced to centred 30-year base periods \u2014 so +1.39 and +1.51 for the same season are not necessarily in conflict. Recorded separately rather than reconciled."
       }
     },
     "outlook": {
@@ -86,17 +84,32 @@
     "conflicting_figure_not_reconciled": {
       "claim": "roughly 60% chance of reaching 'strong' (Nino-3.4 above +1.5 C)",
       "source": "an earlier search summary on 2026-08-21",
-      "problem": "Inconsistent with the >90% very-strong and 81% OND very-strong figures above — a very strong event is a subset of a strong one, so P(strong) cannot be below P(very strong). Most likely a stale forecast from an earlier issuance, or a garbled summary.",
+      "problem": "Inconsistent with the >90% very-strong and 81% OND very-strong figures above \u2014 a very strong event is a subset of a strong one, so P(strong) cannot be below P(very strong). Most likely a stale forecast from an earlier issuance, or a garbled summary.",
       "resolution": "NOT resolved. The internally consistent set (90 / 81 / 69) is used, and this figure is recorded so the discrepancy is visible rather than silently dropped. Check the primary product. See RESEARCH_LOG.md U-20."
+    },
+    "subsurface_structure": {
+      "as_of": "2026-08-21",
+      "observation": "Exceptional subsurface heat anomaly in the central-eastern equatorial Pacific at ~50-150 m depth, with a deepened thermocline and suppressed coastal upwelling.",
+      "peak_anomaly_c": 11.1,
+      "peak_anomaly_status": "secondary_source_only",
+      "peak_anomaly_note": "The +11.1 C figure is reported by secondary news aggregators, not by a primary product this environment could reach. A firmer and independently reported figure is >8 C at 50-150 m between 150W and 80W. Treat +11.1 as indicative, not citable, until checked against CPC/BOM subsurface analyses.",
+      "firmer_corroboration": "Australian Bureau of Meteorology reports equatorial upper-ocean heat content for July 2026 as the highest for any month in its record back to 1979. This is the load-bearing number \u2014 a record in a 47-year series \u2014 and it does not depend on the +11.1 figure.",
+      "phase_change_question": "Open, and the sharpest question in this file. Normal El Nino: surface anomaly plus thermocline depression, heat moves east. Reported now: a warm surface lens with cold upwelling STILL ACTIVE beneath it \u2014 layers decoupled rather than a single displaced structure. If vertical mixing is suppressed TEMPORARILY, this is a large excursion within the existing attractor. If suppressed STRUCTURALLY, the system's heat budget has changed and the amplitude is a symptom, not the event.",
+      "why_it_matters_here": "This repo has no mechanism that reads subsurface ocean structure, and no reason to \u2014 but the question is the same one the repo cannot answer about itself: is an anomaly a large excursion within a regime, or a change of regime? See STRUCTURAL_LIMITS S-15 (the model can only express level thresholds, not rate or structural ones) and CLAIM_AUDIT.md section 2 (depth exclusion: a subsurface anomaly does not appear in a surface headline number).",
+      "audit_flags": [
+        "depth exclusion \u2014 surface-only products miss this entirely",
+        "baseline choice \u2014 anomaly magnitude depends on reference period",
+        "spatial averaging \u2014 a regional structure dilutes in a basin or global mean"
+      ],
+      "status": "unquantified"
     }
   },
-
   "coupling_mechanisms": [
     {
       "id": "brewer_dobson_transport",
       "name": "Brewer-Dobson circulation / tropical upwelling modulation",
       "description": "El Nino is associated with enhanced tropical upwelling and a strengthened Brewer-Dobson circulation in the lower stratosphere, altering stratosphere-troposphere exchange and poleward transport.",
-      "why_it_matters_here": "This modulates the residence time of stratospheric aerosol — the single most contested parameter in this repo (H-13, where two cited sources disagree by 6x). ENSO is a periodic modulator ON TOP of that already-unresolved baseline.",
+      "why_it_matters_here": "This modulates the residence time of stratospheric aerosol \u2014 the single most contested parameter in this repo (H-13, where two cited sources disagree by 6x). ENSO is a periodic modulator ON TOP of that already-unresolved baseline.",
       "status": "mechanism_established",
       "magnitude_for_this_aerosol": null,
       "magnitude_status": "unquantified",
@@ -116,11 +129,11 @@
       "id": "logistics_fragility",
       "name": "Drought / flood teleconnections to supply chain",
       "description": "El Nino drives well-documented regional drought and flood patterns affecting agriculture, inland waterways, and port operations.",
-      "why_it_matters_here": "This is the repo's own outcome variable. The README's central 'Logistics-Fragility Feedback' claim is that PNT and grid disruption propagate into just-in-time supply chains. A historic El Nino is a live, independent stress test of that same supply chain — which makes it both an opportunity to calibrate the logistics model and a source of effects that could be misread as coupling-driven.",
+      "why_it_matters_here": "This is the repo's own outcome variable. The README's central 'Logistics-Fragility Feedback' claim is that PNT and grid disruption propagate into just-in-time supply chains. A historic El Nino is a live, independent stress test of that same supply chain \u2014 which makes it both an opportunity to calibrate the logistics model and a source of effects that could be misread as coupling-driven.",
       "status": "mechanism_established",
       "magnitude_for_this_aerosol": null,
       "magnitude_status": "unquantified",
-      "coupling_status": "NOT WIRED IN. The logistics coupling is narrative only — no code implements it (it has never been implemented for any driver, ENSO or otherwise)."
+      "coupling_status": "NOT WIRED IN. The logistics coupling is narrative only \u2014 no code implements it (it has never been implemented for any driver, ENSO or otherwise)."
     },
     {
       "id": "ionospheric_pnt",
@@ -130,13 +143,13 @@
       "status": "speculative",
       "magnitude_for_this_aerosol": null,
       "magnitude_status": "unquantified",
-      "coupling_status": "NOT WIRED IN. Marked speculative — the mechanism chain is long and the repo has verified none of it."
+      "coupling_status": "NOT WIRED IN. Marked speculative \u2014 the mechanism chain is long and the repo has verified none of it."
     },
     {
       "id": "attribution_confound",
       "name": "Attribution hazard over the 2026-27 window",
       "description": "A record or near-record El Nino supplies a large natural forcing to every observable this project cares about: stratospheric transport, column ozone, PNT reliability, and supply-chain performance.",
-      "why_it_matters_here": "This is the most immediately consequential item in this file, and it cuts AGAINST the project's thesis being credited for anything in 2026-27. See RESEARCH_LOG.md H-17 — the repo's own model predicts chi ~0.003 for that window, three orders of magnitude below its lowest risk regime, which means the model itself rules out satellite attribution for anything observed there.",
+      "why_it_matters_here": "This is the most immediately consequential item in this file, and it cuts AGAINST the project's thesis being credited for anything in 2026-27. See RESEARCH_LOG.md H-17 \u2014 the repo's own model predicts chi ~0.003 for that window, three orders of magnitude below its lowest risk regime, which means the model itself rules out satellite attribution for anything observed there.",
       "status": "mechanism_established",
       "coupling_status": "Now documented. This is the one item here that required no new physics, only reading the model's own output."
     }

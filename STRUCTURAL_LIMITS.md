@@ -9,7 +9,7 @@ the code, not asserted.
 
 ## Why this file is separate from RESEARCH_LOG.md
 
-`RESEARCH_LOG.md` tracks **parametric** unknowns, U-1 … U-22: *we don't know
+`RESEARCH_LOG.md` tracks **parametric** unknowns, U-1 … U-25: *we do not know
 this number.* Every one is fixable by finding a better value.
 
 This file tracks **structural** limits, S-1 … S-11: *the model has no variable
@@ -226,6 +226,42 @@ represents only amplification (S-13) and considers only engineered remedies
 will conclude intervention is necessary regardless of its inputs.** Part of the
 conclusion lives in the architecture rather than in the data.
 
+## S-15 — The threshold is a level, not a rate
+
+χ = f(burden). There is no `dburden/dt` term anywhere in the model, so the only
+tipping condition it can express is **crossing a level**.
+
+Rate-induced tipping is a distinct and well-documented failure mode: a system
+tracks a slowly-moving equilibrium fine and loses track if forced too fast, with
+no fixed level ever being the trigger. van Westen et al. (*Nature Climate
+Change*, 2026) demonstrate exactly this for the AMOC — a +0.5 ppm/yr CO₂ ramp
+leaves it stable past **+5.5 °C**, while faster ramps collapse it at **+2 °C**.
+There is no safe temperature; the collapse condition is a derivative.
+
+**Why this is not academic here.** Two trajectories through this model:
+
+| | Constant 15 %/yr | Surge to 2035, then saturate |
+|---|---|---|
+| Burden 2040 | 687 MT | 1,510 MT |
+| Burden 2080 | 184,012 MT | **1,510 MT (plateau)** |
+| dB/dt 2035 | 45 MT/yr | **221 MT/yr (peak)** |
+| dB/dt 2080 | 24,002 MT/yr | **~0** |
+| Model verdict, 2080 | Cascade | **"Systemic Fragility" — permanently** |
+
+Under constant exponential growth the two framings are **degenerate**: dB/dt ÷ B
+sits at 0.130 across the whole run, so nothing is lost by using a level. That is
+why the deficiency has been invisible.
+
+It bites when the growth rate changes — the realistic case, since constellations
+deploy and then saturate. On the surge trajectory a level model says risk is
+permanently maxed; a rate model says risk peaked during deployment and fell as
+the system re-equilibrated. **Opposite qualitative predictions from the same
+burden history, and this model cannot represent the second one.**
+
+Compounds with S-13: a system with no relaxation term cannot re-equilibrate
+after a forcing rate drops, so the model has no way to represent recovery from
+a deployment surge even in principle.
+
 ---
 
 ## What this does and does not mean
@@ -241,6 +277,12 @@ for the physics that would decide it, no coupling between the domains they
 name, and at least one mechanism (S-8) that the geometry rules out. The gap
 between "this repository" and "a model that could evaluate this hypothesis" is
 structural, not parametric.
+
+A **claim-audit protocol** derived from these failures — baseline choice, depth
+exclusion, spatial averaging, comparator, unstated subject, level-vs-derivative —
+is in [`CLAIM_AUDIT.md`](CLAIM_AUDIT.md). It was written to read outside
+literature and turns out to catch this repo's own published numbers at the same
+rate.
 
 **Two structural items are also substantive claims about the world**, and both
 cut against the thesis as written:

@@ -178,6 +178,29 @@ def stabilising_terms():
     return counts
 
 
+def rate_vs_level():
+    """S-15: can the model express a rate-dependent tipping condition?"""
+    import numpy as np
+
+    def series(growth_fn, years=56, res=None):
+        res = res or model.RESIDENCE_TIME_YEARS
+        buf = np.zeros(int(res)); out = []
+        for y in range(years):
+            buf[0] += (model.BASE_REENTRIES_PER_YEAR * growth_fn(y)
+                       * model.AL2O3_KG_PER_SATELLITE) / 1000
+            b = buf.sum()
+            out.append((model.START_YEAR + y, b,
+                        model.calculate_coupling_coefficient(
+                            b, model.SOLAR_ACTIVITY_INDEX)))
+            buf[1:] = buf[:-1]; buf[0] = 0
+        return out
+
+    g = model.GROWTH_RATE
+    const = series(lambda y: (1 + g) ** y)
+    surge = series(lambda y: (1.30 ** y) if y <= 10 else (1.30 ** 10))
+    return const, surge
+
+
 def main():
     print("=" * 76)
     print("STRUCTURAL AUDIT — limits of the model's FORM, not its parameters")
@@ -326,6 +349,47 @@ def main():
         print("  centuries, produced impacts LIMITED BY COMPENSATING EFFECTS.")
         print("  This is not merely an omission — the model form encodes an")
         print("  assumption the empirical record contradicts. See H-20.")
+
+    # ---- S-15 ------------------------------------------------------------
+    print("\nS-15  LEVEL OR DERIVATIVE?")
+    print("-" * 76)
+    print("  chi = f(burden). There is no dburden/dt term anywhere, so the only")
+    print("  tipping condition the model can express is CROSSING A LEVEL.")
+    print()
+    print("  Rate-induced tipping is a distinct, documented mode. van Westen et al.")
+    print("  (Nature Climate Change 2026): the AMOC stays stable past +5.5 C under a")
+    print("  +0.5 ppm/yr CO2 ramp but collapses at +2 C under faster ones. No safe")
+    print("  temperature exists — the collapse condition is a derivative.")
+    print()
+    const, surge = rate_vs_level()
+    d_const = {const[i][0]: const[i][1] - const[i-1][1] for i in range(1, len(const))}
+    d_surge = {surge[i][0]: surge[i][1] - surge[i-1][1] for i in range(1, len(surge))}
+    print(f"  {'year':<7}{'A burden':>11}{'A dB/dt':>10}{'A chi':>8}"
+          f"   |{'B burden':>11}{'B dB/dt':>10}{'B chi':>8}")
+    print("  A = constant growth      B = surge to 2035, then saturate")
+    for i, (y, b, c) in enumerate(const):
+        if y in (2035, 2045, 2060, 2080):
+            yb, bb, bc = surge[i]
+            print(f"  {y:<7}{b:>11,.0f}{d_const.get(y, 0):>10,.0f}{c:>8.2f}"
+                  f"   |{bb:>11,.0f}{d_surge.get(y, 0):>10,.0f}{bc:>8.2f}")
+    print()
+    ratios = [d_const[y] / dict((a, b) for a, b, _ in const)[y]
+              for y in (2040, 2050, 2060)]
+    print(f"  Under constant growth, dB/dt / B = "
+          f"{', '.join(f'{r:.3f}' for r in ratios)} — degenerate.")
+    print("  Level and rate say the same thing, so nothing is lost. That is why")
+    print("  this deficiency has been invisible.")
+    print()
+    print("  On trajectory B the growth rate CHANGES and they diverge completely:")
+    print(f"    burden plateaus at {surge[-1][1]:,.0f} MT, dB/dt falls to ~0")
+    print(f"    level model  -> '{model.risk_level(surge[-1][2])}', permanently")
+    print("    rate model   -> risk PEAKED in 2035 and then fell as the system")
+    print("                    re-equilibrated to a new steady state")
+    print("  Opposite qualitative predictions from one burden history, and this")
+    print("  model cannot represent the second. Compounds with S-13: with no")
+    print("  relaxation term it cannot re-equilibrate even in principle.")
+    print("  See CLAIM_AUDIT.md section 6, and U-25 on whether rate-tipping")
+    print("  applies to aerosol loading at all.")
 
     print("\n" + "=" * 76)
     print("These are STRUCTURAL limits. No value of any parameter in")

@@ -96,6 +96,18 @@ def main():
     print(f"  HISTORIC (RONI >= +2.5 C), OND:     {out['historic_event_ond_2026_pct']['value']}%"
           f"  — would exceed every El Nino back to 1950")
 
+    sub = cur.get("subsurface_structure")
+    if sub:
+        print()
+        print("  SUBSURFACE STRUCTURE — the phase-change question")
+        print(f"    peak anomaly ~{sub['peak_anomaly_c']} C at 50-150 m  "
+              f"[{sub['peak_anomaly_status']}]")
+        print(f"    firmer: {sub['firmer_corroboration'][:78]}...")
+        print("    Q: is vertical mixing suppressed TEMPORARILY (large excursion")
+        print("       within the attractor) or STRUCTURALLY (heat budget changed,")
+        print("       amplitude is a symptom not the event)?  Open.")
+        print("    Audit flags: " + "; ".join(f[:34] for f in sub["audit_flags"]))
+
     conf = cur["conflicting_figure_not_reconciled"]
     print()
     print("  [!] UNRECONCILED FIGURE")

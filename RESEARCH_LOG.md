@@ -933,6 +933,75 @@ architecture, not the data.
 
 ---
 
+## H-21 — Subject substitution, and the level/derivative conflation
+
+Two error classes, identified from outside this repo and then found inside it.
+Recorded together because both are *category* errors — the arithmetic is fine
+and the quantity is wrong.
+
+- **Source:** claim-audit framework contributed by the repo author, 2026-08-21
+- **Run:** `python Structural-audit.py`; van Westen et al. verified by search
+- **Status:** **`FALSIFIED`** for the repo's own instances of both.
+
+### The unstated subject
+
+A paper measures one variable; a headline implies a category. The substitution
+is where reassurance is manufactured.
+
+Worked case — the 2026 Utrecht AMOC study. Measured quantity: AMOC circulation
+continuity, one subsystem, one variable. Implied quantity: ocean systems
+generally, biosphere tolerance, human consequence. Same ocean state, different
+subjects: AMOC may persist under slower forcing; coral is already past bleaching
+thresholds; upwelling is suppressed; stratification blocks nutrient flux to
+fisheries; subsurface heat has no representation in an AMOC model at all.
+"Handles it" is true for the modelled variable and false for nearly every
+coupled one.
+
+**This repo has done the same thing twice**, and one instance was in this log:
+
+- **H-15** — the natural meteoric background was written up here as a
+  counter-argument to the thesis. The question was **conductivity**; the answer
+  supplied was **bulk mass fraction**. Wrong subject entirely — mass fraction is
+  not the metric for a doped-population conductivity problem. Corrected only
+  after challenge.
+- **H-12** — Al₂O₃ → ozone was modelled as direct catalysis. The actual subject
+  is chlorine activation with Al₂O₃ as an unconsumed surface. A rate law for the
+  wrong reactant cannot be rescued by better parameters.
+
+### Level or derivative
+
+van Westen et al. (*Nature Climate Change*, 2026), "Failure to track a stable
+AMOC state under rapid climate change": a slow CO₂ ramp (+0.5 ppm/yr) leaves the
+AMOC stable past **+5.5 °C**; faster ramps collapse it at **+2 °C**. Lead
+author: *"there is not necessarily a fixed temperature beyond which the AMOC
+inevitably collapses."*
+
+**There is no safe temperature number — the collapse condition is a
+derivative.** The reassuring headline holds only for the slow-ramp case, which
+is not the observed condition. The "one big catch" is the finding, not a caveat
+on it.
+
+**This repo's threshold is a level.** χ = f(burden), 1,000 MT, no rate term
+anywhere. Recorded as **S-15**, with the computed consequence: on a
+surge-then-saturate deployment trajectory the model says "Systemic Fragility"
+permanently, while a rate reading says risk peaked in 2035 and fell. Opposite
+qualitative predictions from one burden history. Under constant exponential
+growth the two are degenerate (dB/dt ÷ B = 0.130 throughout), which is why the
+deficiency stayed invisible.
+
+- **Revision:** [`CLAIM_AUDIT.md`](CLAIM_AUDIT.md) records the full protocol —
+  baseline choice, depth exclusion, spatial averaging, comparator, unstated
+  subject, level-vs-derivative, plus instrument-record discontinuities.
+- **The uncomfortable result:** a checklist written to audit *outside*
+  literature catches this project's own published numbers at the same rate —
+  H-01, H-02, H-06, H-09, H-11, H-12, H-15 and S-1 all fall out of it. None
+  hypothetical; all previously documented.
+- **Opened:** U-25 (does a rate-dependent tipping condition apply to
+  stratospheric aerosol loading at all, or only to circulation systems with a
+  slow manifold?).
+
+---
+
 ## Open unknowns
 
 Ranked by how much the repo's conclusions move if the answer changes.
@@ -957,6 +1026,7 @@ Ranked by how much the repo's conclusions move if the answer changes.
 | **U-20** | None of the 2026-08-21 ENSO figures were verified against primary sources (CPC, IRI, arXiv all blocked by egress policy), and one retrieved probability (~60% chance of "strong") is arithmetically inconsistent with the >90%/81% very-strong figures. ENSO products are also revised monthly. | H-17 | Cheap to fix with network access, and the figures decay on their own. |
 | **U-21** | How much does a given Niño-3.4 anomaly change stratospheric aerosol residence time via the Brewer–Dobson circulation? | H-17, H-13 | The only ENSO→model coupling that could be wired in without inventing anything. Stacks on H-13's unresolved 6× baseline. Note the rectangular kernel cannot resolve sub-year changes at all (U-3). |
 | **U-22** | Can the 2026-27 El Niño be used as a **natural experiment** — a known large transport perturbation against which to test whether stratospheric aerosol responds as the model implies? | H-17 | Turns the confounder into an instrument. This is the rare unknown with a deadline: the window is open now and closes when the event decays. |
+| **U-25** | Does rate-induced tipping apply to this system? The AMOC result concerns a circulation with a slow manifold and two stable states. Stratospheric aerosol loading may have neither, in which case a level threshold is the right form and S-15 is moot. | H-21, S-15 | Decides whether the model's functional form needs a rate term or merely a better level. Cheap to reason about, and it determines whether S-15 is a defect or a non-issue. |
 | **U-23** | Calibrate χ against the Laschamp excursion (~90% field reduction, measured ozone/UV response, ~2,000 yr, full recovery) and against the ~100x supernova cosmic-ray increase. Also: none of the 2026-08-21 deep-time sources verified against primaries. | H-20 | The only empirical calibration available to this project, at the cost of a literature review rather than an instrument. Cooper et al. 2021's broader cascade claims are contested — do not lean on them. |
 | **U-24** | Does the system have stabilising feedbacks the model omits (S-13)? The paleo record's dominant signal is buffering; the model has zero damping terms. | H-20, S-13 | If real homeostasis exists at any relevant strength, the cascade projections are wrong in form, not just in magnitude. |
 | **U-19** | Reconcile the ~394 t/yr bulk meteoric Al₂O₃ figure against Murphy et al.'s element-wise finding that reentry Li/Al/Cu/Pb already exceed cosmic dust influx. | H-15 | The two cannot both be straightforwardly true as stated. The difference is probably in the accounting — bulk Al₂O₃ versus elemental Al, or different altitude bands — and finding out which is cheap and clarifying. |
@@ -1025,6 +1095,7 @@ Ranked by how much the repo's conclusions move if the answer changes.
 |---|---|
 | 2025-12-16 | Initial models, config, README, executive summary committed. |
 | 2026-08-14 | H-01 through H-08 run and recorded. `legacy/` created. Config series made generated-not-authored. Five React sources repaired to parse. Unknowns U-1…U-10 opened. |
+| 2026-08-21 | **H-21 added; claim-audit protocol adopted.** Two category-error classes identified from outside and then found inside: subject substitution (H-15 and H-12 are both instances — one of them in this log) and level-vs-derivative conflation. van Westen et al. 2026 verified: AMOC stable past +5.5 C under a slow CO2 ramp, collapsing at +2 C under fast ones — the tipping condition is a derivative, not a level. This repo's threshold is a level with no rate term (S-15); on a surge-then-saturate trajectory that inverts the qualitative prediction. `CLAIM_AUDIT.md` added. U-25 opened. |
 | 2026-08-21 | **H-20 added: the forcing is not unprecedented — the exposure is.** Deep-time record introduced (`DEEP_TIME.md`): nearby supernovae ~2.3/1.5 Myr delivered a ~100x cosmic-ray increase for centuries and the atmosphere showed *compensating* effects; the Laschamp excursion took the field to ~10% of modern for ~2,000 years with bounded ozone/UV consequences and full recovery. Both are usable as upper-bound calibrations on chi. S-12, S-13 (the model has zero stabilising terms, against a record whose dominant signal is buffering), S-14 (asymmetric skepticism) added. U-23, U-24 opened. |
 | 2026-08-21 | **H-18 and H-19 added; structural register opened.** H-18: there is no coupling in the coupling model — chi takes two scalars and the three domain modules reference it zero times; flow is feed-forward with no loops. H-19: the "conductive mesh" is ~13 orders of magnitude short of percolation, and the available ion-aerosol mechanism has the OPPOSITE sign to the repo's premise. `STRUCTURAL_LIMITS.md` (S-1…S-11) and `Structural-audit.py` added. Settling the conductivity sign is now the top next-run, ahead of U-2. |
 | 2026-08-21 | H-17 added. Repo had no ENSO, QBO or seasonality content at all; a very strong El Niño (Niño-3.4 +2.7 °C weekly, 69% chance of a historic OND event) made that gap consequential. Added `enso_state.json` and `ENSO-coupling.py`. Key finding: the model's own χ for 2026-27 is ~0.003, ~72x below its lowest regime, so it rules out satellite attribution for anything observed in that window — recorded in advance. No χ modifier invented. U-20, U-21, U-22 opened. |

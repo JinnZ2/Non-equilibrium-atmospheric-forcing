@@ -287,8 +287,9 @@ integrated-atmospheric-system.jsx   Multi-domain system: EM harvesting + atmosph
 README.md                           This file
 RESEARCH_LOG.md                     Claim -> run -> result -> revision, plus open unknowns
 SPECIES.md                          Pathways, the chlorine coupling, industry proposals
-STRUCTURAL_LIMITS.md                S-1..S-14: model-form limits no parameter value can fix
+STRUCTURAL_LIMITS.md                S-1..S-15: model-form limits no parameter value can fix
 DEEP_TIME.md                        Paleo natural experiments: the constraint data this repo never used
+CLAIM_AUDIT.md                      Protocol for reading a headline number, including this repo's own
 Coupling-Physics.md                 Mathematical foundations for the EM coupling physics
 FAQ.md                              Scientific FAQ: skepticism and methodology
 EXECUTIVE_SUMMARY_STRATEGIC_RISK.md Policy-maker brief
@@ -298,7 +299,8 @@ LICENSE.md                          MIT
 legacy/                             Superseded artefacts, kept verbatim for precedence
 ```
 
-**Before citing a number from this repo, check
+**Before citing a number from this repo — or from anywhere else — run the
+checklist in [`CLAIM_AUDIT.md`](CLAIM_AUDIT.md), then check
 [`RESEARCH_LOG.md`](RESEARCH_LOG.md).** Several figures that appeared in
 earlier revisions did not reproduce from the models that were supposed to have
 produced them. The ones that have been re-derived are marked there; the ones
