@@ -294,7 +294,7 @@ Coupling-Physics.md                 Mathematical foundations for the EM coupling
 FAQ.md                              Scientific FAQ: skepticism and methodology
 EXECUTIVE_SUMMARY_STRATEGIC_RISK.md Policy-maker brief
 CONTRIBUTING.md                     Contribution guidelines and technical standards
-LICENSE.md                          MIT
+LICENSE.md                          CC0-1.0
 
 legacy/                             Superseded artefacts, kept verbatim for precedence
 ```
@@ -345,7 +345,7 @@ See <CONTRIBUTING.md> for details.
 
 ## License
 
-MIT License (c) 2025 JinnZ2 — see [LICENSE.md](LICENSE.md) for details.
+CC0 1.0 Universal (c) 2025 JinnZ2 — see [LICENSE.md](LICENSE.md) for details.
 
 -----
 
