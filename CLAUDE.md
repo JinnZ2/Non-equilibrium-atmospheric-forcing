@@ -159,10 +159,11 @@ This project has no test suite or CI/CD pipeline. `reproduce.py` is the closest 
 - **No shared constants module** — most files define their own copies of physical constants. `Accumulation-with-coupling.py` is the exception and is the single source of truth for Chi.
 - **React simulation pattern:** All JS components use `setInterval` inside `useEffect` with state in the dependency array, meaning the interval is recreated each tick. Functional but not performance-optimal for large particle counts.
 
-<!-- clone-refspec-note v1 -->
+<!-- clone-refspec-note v1.1 -->
 ## Cloning and pushing
 Shallow clones are single-branch by default.
-Before pushing any branch other than main, run:
+Before pushing any branch other than the default
+branch, run:
 
     git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
     git fetch --depth 1
@@ -171,4 +172,4 @@ Or clone with: git clone --depth 1 --no-single-branch <url>
 Without this, the first push of a new branch
 fails the tracking-ref check even when the
 commit landed.
-<!-- /clone-refspec-note v1 -->
+<!-- /clone-refspec-note v1.1 -->
