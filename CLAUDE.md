@@ -158,3 +158,17 @@ This project has no test suite or CI/CD pipeline. `reproduce.py` is the closest 
 - **Several documented equations are not implemented:** solar wind flux, magnetic shielding, coupling efficiency, full A_field formula (Coupling-Physics.md sections 2.1-2.3, 3.1). The power-law damage function in section 5.1 is also unimplemented — no code produces the headline economic figure (U-5, U-10).
 - **No shared constants module** — most files define their own copies of physical constants. `Accumulation-with-coupling.py` is the exception and is the single source of truth for Chi.
 - **React simulation pattern:** All JS components use `setInterval` inside `useEffect` with state in the dependency array, meaning the interval is recreated each tick. Functional but not performance-optimal for large particle counts.
+
+<!-- clone-refspec-note v1 -->
+## Cloning and pushing
+Shallow clones are single-branch by default.
+Before pushing any branch other than main, run:
+
+    git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+    git fetch --depth 1
+
+Or clone with: git clone --depth 1 --no-single-branch <url>
+Without this, the first push of a new branch
+fails the tracking-ref check even when the
+commit landed.
+<!-- /clone-refspec-note v1 -->
