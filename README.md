@@ -1,3 +1,6 @@
+> Read first: [READING_PROTOCOL.md](READING_PROTOCOL.md) (how to read this repo).
+> Map, not prescription. Errors are data. Check it. Built for the need, revisable.
+
 # Non-Equilibrium Atmospheric Forcing: A Complexity Economics Analysis
 
 ## What This Is (In Plain English)
